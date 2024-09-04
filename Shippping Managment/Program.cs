@@ -2,6 +2,9 @@ using Data_Access_Layer;
 using Data_Access_Layer.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Shippping_Managment
 {
@@ -22,7 +25,19 @@ namespace Shippping_Managment
             }); 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ShippingDataBase>();
-
+            builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "mySchema")
+            .AddJwtBearer("mySchema", op =>
+            {
+                var JwtSetting = builder.Configuration.GetSection("JwtSetting");
+                string? key = JwtSetting["SecretKey"];
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+                op.TokenValidationParameters = new TokenValidationParameters() { 
+                IssuerSigningKey=secretKey , 
+                ValidateIssuer=false , 
+                ValidateAudience=false
+                
+                }; 
+            });
                  var app = builder.Build();
 
             // Configure the HTTP request pipeline.
