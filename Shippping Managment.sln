@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shippping Managment", "Shippping Managment\Shippping Managment.csproj", "{8F63D33F-5421-436A-B4FC-D81EFB370103}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipping Management", "Shippping Managment\Shipping Management.csproj", "{8F63D33F-5421-436A-B4FC-D81EFB370103}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data Access Layer", "Data Access Layer\Data Access Layer.csproj", "{F6F3352C-8605-4705-981B-58C8785359C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data Access Layer", "Data Access Layer\Data Access Layer.csproj", "{F6F3352C-8605-4705-981B-58C8785359C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business Layer", "Business Layer\Business Layer.csproj", "{6434469D-2014-4782-8B13-768F59792CF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business Layer", "Business Layer\Business Layer.csproj", "{6434469D-2014-4782-8B13-768F59792CF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
