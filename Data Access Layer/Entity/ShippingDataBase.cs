@@ -10,6 +10,8 @@ namespace Data_Access_Layer.Entity
 {
     public  class ShippingDataBase : IdentityDbContext<ApplicationUser>
     {
+        internal object User;
+
         public ShippingDataBase(DbContextOptions<ShippingDataBase> option) :base(option)
         {
             
