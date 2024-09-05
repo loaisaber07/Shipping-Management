@@ -21,7 +21,7 @@ namespace Data_Access_Layer.Repositry
         }
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-           return await dbSet.ToListAsync();
+           return await dbSet.AsNoTracking().ToListAsync();
         }
         public async Task<T?> GetAsyncById(int id)
         {
@@ -34,7 +34,7 @@ namespace Data_Access_Layer.Repositry
             
         }
 
-        public async Task UpdateAsync(T entity)
+        public void  Update(T entity)
         {
             
             dbSet.Update(entity);
