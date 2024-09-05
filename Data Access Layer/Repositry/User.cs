@@ -1,5 +1,7 @@
 ﻿using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +13,27 @@ namespace Data_Access_Layer.Repositry
     public class User:Repository<User>,IUser
     {
         private readonly ShippingDataBase db;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public User(ShippingDataBase db):base(db)
+        public User(ShippingDataBase db,UserManager<ApplicationUser> userManager):base(db)
         {
             this.db = db;
+            this.userManager = userManager;
         }
+
+        public async Task<ApplicationUser?> GetUserAsyncById(string id)
+        {
+            ApplicationUser? entity = await userManager.FindByIdAsync(id);
+            return entity;
+        }
+        public async Task DeleteUserAsync(string id)
+        {
+            ApplicationUser? entity = await userManager.FindByIdAsync(id);
+            if (entity != null)
+            {
+                db.Remove(entity);
+            }
+        }
+
     }
 }

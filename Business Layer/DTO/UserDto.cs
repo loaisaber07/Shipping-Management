@@ -9,7 +9,8 @@ namespace Business_Layer.DTO
 {
     public class UserLogingRequistDto
     {
-        [Required]
+        public string UserName { get; set; }
+
         [DataType(DataType.EmailAddress)]
         public string Email {  get; set; }
         [Required]

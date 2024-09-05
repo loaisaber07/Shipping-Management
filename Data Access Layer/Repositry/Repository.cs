@@ -37,14 +37,17 @@ namespace Data_Access_Layer.Repositry
         public async Task UpdateAsync(T entity)
         {
             
-            db.Entry(entity).State = EntityState.Modified;
+            dbSet.Update(entity);
             
             
         }
         public async Task DeleteAsync(int id)
         {
             T? entity = await dbSet.FindAsync(id);
-            dbSet.Remove(entity);
+            if (entity != null)
+            {
+                dbSet.Remove(entity);
+            }
             
         }
 
