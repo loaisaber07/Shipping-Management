@@ -11,6 +11,7 @@ namespace Data_Access_Layer.Entity
     public class FieldJob
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required] 
         public string Name { get; set; }
@@ -21,6 +22,15 @@ namespace Data_Access_Layer.Entity
         public string ApplicationUserID { get; set; }
         [ForeignKey("ApplicationUserID")]
         public virtual ApplicationUser User { get; set; }
+        #endregion
+
+        #region   
+        [ForeignKey("Privilege")]
+        public int PrivilegeID { get; set; }
+        [ForeignKey("PrivilegeID")]
+        public  virtual Privilege Privilege { get; set; }
+
+
         #endregion
     }
 }
