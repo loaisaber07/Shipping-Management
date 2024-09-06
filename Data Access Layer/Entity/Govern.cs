@@ -15,5 +15,13 @@ namespace Data_Access_Layer.Entity
         public int ID { get; set; }
         [Required]
         public string Name { get; set; }
+
+        #region  
+        [ForeignKey("Seller")]
+        public string SellerID { get; set; }
+        [ForeignKey("SellerID")] 
+        public virtual Seller Seller { get; set; }
+
+        #endregion
     }
 }

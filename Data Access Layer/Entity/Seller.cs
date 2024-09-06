@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,16 @@ namespace Data_Access_Layer.Entity
 
         [Required]
         public string StoreName { get; set; }
-        public int PickUp { get; set; } = 0;
-        public int? ValueOfRejectedOrder { get; set; } 
+        public int? PickUp { get; set; } 
+        public int? ValueOfRejectedOrder { get; set; }
+
+        #region mapping the relation between seller govern  
+        [ForeignKey("Govern")]
+        public int GovernID { get; set; }
+        [ForeignKey("GovernID")]
+        public virtual Govern Govern { get; set; }
+
+
+        #endregion
     }
 }
