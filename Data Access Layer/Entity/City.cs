@@ -21,5 +21,12 @@ namespace Data_Access_Layer.Entity
         public int PickUpCharge { get; set; }
 
         public int? SpecialChargeForSeller { get; set; }
+
+        #region  mapping the relation between city and govern 
+        [ForeignKey("Govern")]
+        public int GovernID { get; set; }
+        [ForeignKey("GovernID")]
+        public virtual Govern Govern { get; set; }
+        #endregion
     }
 }

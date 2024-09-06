@@ -19,9 +19,15 @@ namespace Data_Access_Layer.Entity
         #region  
         [ForeignKey("Seller")]
         public string SellerID { get; set; }
-        [ForeignKey("SellerID")] 
+        [ForeignKey("SellerID")]
+        
         public virtual Seller Seller { get; set; }
 
+        #endregion
+
+        #region  mapping the relation between goven and city
+        [InverseProperty("Govern")]
+        public virtual ICollection<City> Cities { get; set; }
         #endregion
     }
 }
