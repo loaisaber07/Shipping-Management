@@ -23,7 +23,7 @@ namespace Shippping_Managment
             builder.Services.AddDbContext<ShippingDataBase>(option => {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("default"));
             }); 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ShippingDataBase>();
             builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "mySchema")
             .AddJwtBearer("mySchema", op =>

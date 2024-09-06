@@ -1,4 +1,5 @@
-﻿using Data_Access_Layer.Entity;
+﻿using Business_Layer.DTO;
+using Data_Access_Layer.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,21 +16,63 @@ namespace Shippping_Managment.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public AccountController(UserManager<ApplicationUser> userManager ,
-            IConfiguration configuration)
+            IConfiguration configuration , SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
             this.configuration = configuration;
+            this.signInManager = signInManager;
         }
 
         [HttpPost]
-        public ActionResult Login(/*Login Dto Here!*/)  
+        public async Task<ActionResult> Login(LoginRequestDTO loginRequest)
+        {
+            if (!ModelState.IsValid)
             {
+                return BadRequest("Invalid data");
+            }
 
+            // Determine if this is an admin login or a regular user login
+            var isAdminLogin = loginRequest.EmailOrUsername.Equals("admin", StringComparison.OrdinalIgnoreCase);
+
+            ApplicationUser user = null;
+
+            if (isAdminLogin)
+            {
+               
+                user = await userManager.FindByNameAsync("admin");
+            }
+            else
+            {
+                if (loginRequest.EmailOrUsername.Contains("@"))
+                {
+                    user = await userManager.FindByEmailAsync(loginRequest.EmailOrUsername);
+                }
+                else
+                {
+                    user = await userManager.FindByNameAsync(loginRequest.EmailOrUsername);
+                }
+            }
+
+            // Case : user not found
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var result = await signInManager.PasswordSignInAsync(user, loginRequest.Password, false, false);
+            if (!result.Succeeded)
+            {
+                return Unauthorized();
+            }
+
+            // Generate token and return success response
             string token = GetTokenString();
-            return Ok(token); 
+            return Ok(token);
         }
+
 
         private string GetTokenString() {
 
@@ -37,11 +80,31 @@ namespace Shippping_Managment.Controllers
             string? key = JwtSetting["SecretKey"];
             var secretKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var signingCredination = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-          signingCredentials:signingCredination      
-                ); 
-var tokenObj = new JwtSecurityTokenHandler().WriteToken(token);
+            var token = new JwtSecurityToken( signingCredentials:signingCredination  ); 
+            var tokenObj = new JwtSecurityTokenHandler().WriteToken(token);
             return tokenObj;
+        }
+
+        // add admin data ( For testing purposes only)
+        [HttpGet]
+        public async Task<ActionResult> AddAdmin()
+        {
+            var user = new ApplicationUser
+            {
+                UserName = "admin",
+                Email = "admin",
+                EmailConfirmed = true
+            };
+
+            var result = await userManager.CreateAsync(user, "Admin_123456");
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
     }
