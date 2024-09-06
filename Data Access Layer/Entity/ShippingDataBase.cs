@@ -19,7 +19,8 @@ namespace Data_Access_Layer.Entity
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ApplicationUser>().Property<bool>("Status").IsRequired()
-                .HasDefaultValue(true); 
+                .HasDefaultValue(true);
+     
             base.OnModelCreating(builder);
         }
     }
