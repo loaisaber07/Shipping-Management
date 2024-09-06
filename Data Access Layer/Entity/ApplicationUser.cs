@@ -14,7 +14,7 @@ namespace Data_Access_Layer.Entity
     {
         [UniqueUserName]
         [Required]
-        public string UserName { get; set; }
+        public override string UserName { get; set; }
         [StringLength(maximumLength:100)]
         public string? Address { get; set; }
 
