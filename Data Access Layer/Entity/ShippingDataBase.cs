@@ -20,7 +20,9 @@ namespace Data_Access_Layer.Entity
         {
             builder.Entity<ApplicationUser>().Property<bool>("Status").IsRequired()
                 .HasDefaultValue(true);  
-            
+            builder.Entity<Govern>().Property<bool>("Status").IsRequired().HasDefaultValue(true);
+            builder.Entity<Branch>().Property<bool>("Status").IsRequired().HasDefaultValue(true);
+
      
             base.OnModelCreating(builder);
         }
