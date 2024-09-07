@@ -40,5 +40,12 @@ namespace Data_Access_Layer.Entity
         [ForeignKey("GovernID")]
         public virtual  Govern Govern { get; set; }
         #endregion
+
+        #region mapping the relation between agent and typeofoffer
+        [ForeignKey("TypeOfOffer")]
+        public int TypeOfOfferID { get; set; }
+        [ForeignKey("TypeOfOfferID")]
+        public virtual TypeOfOffer TypeOfOffer { get; set; }
+        #endregion
     }
 }
