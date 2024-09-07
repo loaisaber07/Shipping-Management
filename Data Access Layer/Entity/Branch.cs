@@ -16,6 +16,13 @@ namespace Data_Access_Layer.Entity
         [Required]
         public string Name { get; set; }
 
-        public DateTime DataAdding => DateTime.Now; 
+        public DateTime DataAdding => DateTime.Now;
+
+        #region 
+        [ForeignKey("Agent")]
+        public int AgentID { get; set; }
+        [ForeignKey("AgentID")]
+        public virtual Agent  Agent { get; set; }
+        #endregion
     }
 }

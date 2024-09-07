@@ -25,5 +25,13 @@ namespace Data_Access_Layer.Entity
         public string Address { get; set; }
         [Required]
         public int ThePrecentageOfCompanyFromOffer { get; set; }
+
+        #region  mapping the realtion between agent and branch 
+        [ForeignKey("Branch")]
+        public int BranchID { get; set; }
+        [ForeignKey("BranchID")]
+        public virtual Branch Branch { get; set; }
+
+        #endregion
     }
 }
