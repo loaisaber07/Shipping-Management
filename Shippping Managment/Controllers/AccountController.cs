@@ -17,13 +17,16 @@ namespace Shippping_Managment.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
         public AccountController(UserManager<ApplicationUser> userManager ,
-            IConfiguration configuration , SignInManager<ApplicationUser> signInManager)
+            IConfiguration configuration , SignInManager<ApplicationUser> signInManager ,
+           RoleManager<IdentityRole> roleManager )
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         [HttpPost]
@@ -105,6 +108,25 @@ namespace Shippping_Managment.Controllers
             {
                 return BadRequest();
             }
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddRole(string Name)
+        {
+            if (string.IsNullOrEmpty(Name))
+            {
+                return BadRequest("Role name cannot be empty.");
+            }
+            else if (await roleManager.RoleExistsAsync(Name))
+            {
+                return BadRequest("Role already exists.");
+            }
+            else if (!(await roleManager.RoleExistsAsync(Name)))
+            {
+
+               var result = await roleManager.CreateAsync(new IdentityRole(Name));
+                return Ok("Role created successfully.");
+            }
+            return BadRequest("An error occurred while creating the role.");
         }
 
     }
