@@ -25,10 +25,8 @@ namespace Data_Access_Layer.Entity
         #endregion
 
         #region  mapping the realtion between field and pivilege 
-        [ForeignKey("Privilege")]
-        public int PrivilegeID { get; set; }
-        [ForeignKey("PrivilegeID")]
-        public  virtual Privilege Privileges { get; set; }
+        [InverseProperty("FieldJob")]
+        public virtual ICollection<Privilege> Privileges { get; set; }
 
 
         #endregion
