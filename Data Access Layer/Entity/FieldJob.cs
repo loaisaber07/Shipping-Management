@@ -24,9 +24,11 @@ namespace Data_Access_Layer.Entity
         public virtual ApplicationUser User { get; set; }
         #endregion
 
-        #region mapping relation between filedjob and privilege
-        [InverseProperty("FieldJob")]
-        public  virtual ICollection<Privilege> Privileges { get; set; }
+        #region  mapping the realtion between field and pivilege 
+        [ForeignKey("Privilege")]
+        public int PrivilegeID { get; set; }
+        [ForeignKey("PrivilegeID")]
+        public  virtual Privilege Privileges { get; set; }
 
 
         #endregion
