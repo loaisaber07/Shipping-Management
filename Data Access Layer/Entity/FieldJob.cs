@@ -27,8 +27,7 @@ namespace Data_Access_Layer.Entity
         #region  mapping the realtion between field and pivilege 
         [InverseProperty("FieldJob")]
         public virtual ICollection<Privilege> Privileges { get; set; }
+        #endregion  
 
-
-        #endregion
     }
 }
