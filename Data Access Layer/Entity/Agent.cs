@@ -33,5 +33,12 @@ namespace Data_Access_Layer.Entity
         public virtual Branch Branch { get; set; }
 
         #endregion
+
+        #region mapping the relation between agent and govern 
+        [ForeignKey("Govern")]
+        public int GovernID { get; set; }
+        [ForeignKey("GovernID")]
+        public virtual  Govern Govern { get; set; }
+        #endregion
     }
 }

@@ -29,5 +29,12 @@ namespace Data_Access_Layer.Entity
         [InverseProperty("Govern")]
         public virtual ICollection<City> Cities { get; set; }
         #endregion
+
+        #region 
+        [ForeignKey("Agent")]
+        public int AgentID { get; set; }
+        [ForeignKey("AgentID")]
+        public virtual Agent Agent { get; set; }
+        #endregion
     }
 }
