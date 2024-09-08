@@ -36,5 +36,12 @@ namespace Data_Access_Layer.Entity
         [ForeignKey("AgentID")]
         public virtual Agent Agent { get; set; }
         #endregion
+
+        #region mapping the relation between product and govern
+        [ForeignKey("Product")]
+        public int ProductID { get; set; }
+        [ForeignKey("ProductID")]
+        public virtual Product Product { get; set; }
+        #endregion
     }
 }
