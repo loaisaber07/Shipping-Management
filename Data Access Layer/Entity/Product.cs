@@ -69,5 +69,12 @@ namespace Data_Access_Layer.Entity
         [ForeignKey("TypeOfChargeID")]
         public virtual TypeOfCharge TypeOfCharge { get; set; }
         #endregion
+
+        #region 
+        [ForeignKey("ProductStatus")]
+        public int ProductStatusID { get; set; }
+        [ForeignKey("ProductStatusID")]
+        public virtual ProductStatus  ProductStatus { get; set; }
+        #endregion
     }
 }
