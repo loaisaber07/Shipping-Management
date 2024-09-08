@@ -53,5 +53,11 @@ namespace Data_Access_Layer.Entity
         public virtual TypeOfPayment TypeOfPayment { get; set; }
         #endregion
 
+        #region mapping the relation between this and typeofcharge
+        [ForeignKey("TypeOfCharge")]
+        public int TypeOfChargeID { get; set; }
+        [ForeignKey("TypeOfChargeID")]
+        public virtual TypeOfCharge TypeOfCharge { get; set; }
+        #endregion
     }
 }
