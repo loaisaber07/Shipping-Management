@@ -18,9 +18,11 @@ namespace Data_Access_Layer.Entity
         [Required]
         public int Cost { get; set; }
 
-        #region mapping the relation between this and product 
+        #region mapping the relation between this and product s
+        [ForeignKey("Product")]
+
         public int ProductID { get; set; }
-        [ForeignKey("")]
+        [ForeignKey("ProductID")]
         public virtual Product Product { get; set; } 
         #endregion
     }

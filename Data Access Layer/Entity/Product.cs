@@ -50,7 +50,7 @@ namespace Data_Access_Layer.Entity
 
         #region mapping the relation between product and seller 
         [ForeignKey("Seller")]
-        public int SellerID { get; set; }
+        public string SellerID { get; set; }
         [ForeignKey("SellerID")]
 
         public virtual Seller Seller { get; set; }
