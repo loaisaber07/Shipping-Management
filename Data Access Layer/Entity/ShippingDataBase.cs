@@ -10,12 +10,27 @@ namespace Data_Access_Layer.Entity
 {
     public  class ShippingDataBase : IdentityDbContext<ApplicationUser>
     {
-        public  object User; 
+        public  object User;  
 
         public ShippingDataBase(DbContextOptions<ShippingDataBase> option) :base(option)
         {
             
         }
+
+        public DbSet<Agent> agents { get; set; }
+        public DbSet<Branch> branches { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<FieldJob> fieldJobs { get; set; }
+        public DbSet<Govern> governs { get; set; }
+        public DbSet<Privilege> privileges { get; set; }
+
+        public DbSet<Product> products { get; set; }
+        public DbSet<ProductStatus> productStatuses { get; set; }
+        public DbSet<Seller> sellers { get; set; }
+        public DbSet<TypeOfCharge> typeOfCharges { get; set; }
+        public DbSet<TypeOfOffer> typeOfOffers { get; set; }
+        public DbSet<TypeOfPayment> typeOfPayments { get; set; }
+        public DbSet<Weight> weights { get; set; }      
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ApplicationUser>().Property<bool>("Status").IsRequired()
