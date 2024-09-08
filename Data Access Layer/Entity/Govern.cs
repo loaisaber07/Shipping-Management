@@ -34,7 +34,7 @@ namespace Data_Access_Layer.Entity
 
         #region mapping the relation between product and govern
         [InverseProperty("Govern")]
-       public virtual ICollection<Product> Product { get; set; }
+       public virtual ICollection<Order> Product { get; set; }
         #endregion
     }
 }

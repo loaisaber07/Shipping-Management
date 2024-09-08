@@ -18,7 +18,7 @@ namespace Data_Access_Layer.Entity
 
         #region mapping the relation between this and product
         [InverseProperty("ProductStatus")]
-      public virtual ICollection<Product> Product { get; set; }
+      public virtual ICollection<Order> Product { get; set; }
 
 
         #endregion

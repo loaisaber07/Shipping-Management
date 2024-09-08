@@ -19,7 +19,7 @@ namespace Data_Access_Layer.Entity
 
         #region mapping the relation between product and typeofPayment
         [InverseProperty("TypeOfPayment")]
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
         #endregion
     }
 }

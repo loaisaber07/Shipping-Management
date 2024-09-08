@@ -25,7 +25,7 @@ namespace Data_Access_Layer.Entity
 
         #region mapping the relation between product and branch
         [InverseProperty("Branch")]
-      public virtual ICollection<Product> Products { get; set; }
+      public virtual ICollection<Order> Orders { get; set; }
         #endregion
     }
 }
