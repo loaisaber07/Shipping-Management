@@ -77,5 +77,9 @@ namespace Data_Access_Layer.Entity
         [ForeignKey("OrderStatusID")]
         public virtual OrderStatus  OrderStatus { get; set; }
         #endregion
+        #region mapping relation between product and order
+        [InverseProperty("Order")]
+        public virtual ICollection<Product> Products { get; set; }
+        #endregion
     }
 }

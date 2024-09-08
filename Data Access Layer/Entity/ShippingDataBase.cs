@@ -31,7 +31,8 @@ namespace Data_Access_Layer.Entity
         public DbSet<TypeOfCharge> typeOfCharges { get; set; }
         public DbSet<TypeOfOffer> typeOfOffers { get; set; }
         public DbSet<TypeOfPayment> typeOfPayments { get; set; }
-        public DbSet<Weight> weights { get; set; }      
+        public DbSet<Weight> weights { get; set; }       
+        public DbSet<Product> products { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ApplicationUser>().Property<bool>("Status").IsRequired()
