@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Entity
 {
+    [Table("Order")]
     public  class Order
     {
         [Key]
@@ -71,10 +72,10 @@ namespace Data_Access_Layer.Entity
         #endregion
 
         #region 
-        [ForeignKey("ProductStatus")]
-        public int ProductStatusID { get; set; }
-        [ForeignKey("ProductStatusID")]
-        public virtual ProductStatus  ProductStatus { get; set; }
+        [ForeignKey("OrderStatus")]
+        public int OrderStatusID { get; set; }
+        [ForeignKey("OrderStatusID")]
+        public virtual OrderStatus  OrderStatus { get; set; }
         #endregion
     }
 }

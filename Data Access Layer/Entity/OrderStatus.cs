@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Entity
 {
-    public  class ProductStatus
+    public  class OrderStatus
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,7 +17,7 @@ namespace Data_Access_Layer.Entity
         public string Name { get; set; }
 
         #region mapping the relation between this and product
-        [InverseProperty("ProductStatus")]
+        [InverseProperty("OrderStatus")]
       public virtual ICollection<Order> Orders { get; set; }
 
 

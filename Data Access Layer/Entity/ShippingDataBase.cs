@@ -26,7 +26,7 @@ namespace Data_Access_Layer.Entity
         public DbSet<Privilege> privileges { get; set; }
 
         public DbSet<Order> Orders { get; set; }
-        public DbSet<ProductStatus> productStatuses { get; set; }
+        public DbSet<OrderStatus> productStatuses { get; set; }
         public DbSet<Seller> sellers { get; set; }
         public DbSet<TypeOfCharge> typeOfCharges { get; set; }
         public DbSet<TypeOfOffer> typeOfOffers { get; set; }
