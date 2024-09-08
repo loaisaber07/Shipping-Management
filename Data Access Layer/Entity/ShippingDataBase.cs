@@ -38,6 +38,7 @@ namespace Data_Access_Layer.Entity
                 .HasDefaultValue(true);  
             builder.Entity<Govern>().Property<bool>("Status").IsRequired().HasDefaultValue(true);
             builder.Entity<Branch>().Property<bool>("Status").IsRequired().HasDefaultValue(true);
+            builder.Entity<Order>().ToTable("Order");
 
      
             base.OnModelCreating(builder);
