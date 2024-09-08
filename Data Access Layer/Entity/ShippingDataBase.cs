@@ -40,6 +40,7 @@ namespace Data_Access_Layer.Entity
             builder.Entity<Govern>().Property<bool>("Status").IsRequired().HasDefaultValue(true);
             builder.Entity<Branch>().Property<bool>("Status").IsRequired().HasDefaultValue(true);
             builder.Entity<Order>().ToTable("Order");
+            builder.Entity<OrderStatus>().HasIndex(s => s.Name).IsUnique();
 
      
             base.OnModelCreating(builder);
