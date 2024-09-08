@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Entity
 {
-    public  class Product
+    public  class Order
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
