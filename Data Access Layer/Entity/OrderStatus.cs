@@ -14,6 +14,7 @@ namespace Data_Access_Layer.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
+        
         public string Name { get; set; } = "new"; 
 
         #region mapping the relation between this and product
