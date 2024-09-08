@@ -25,5 +25,13 @@ namespace Data_Access_Layer.Entity
 
 
         #endregion
+
+        #region mapping the relation between seller and product 
+        [ForeignKey("Product")]
+        public int ProductID  { get; set; }
+        [ForeignKey("ProductID")]
+
+        public virtual Product Product { get; set; }
+        #endregion
     }
 }

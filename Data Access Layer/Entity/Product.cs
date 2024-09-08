@@ -38,5 +38,13 @@ namespace Data_Access_Layer.Entity
         public virtual  Govern Govern  { get; set; }
         #endregion
 
+        #region mapping the relation between product and seller 
+        [ForeignKey("Seller")]
+        public int SellerID { get; set; }
+        [ForeignKey("SellerID")]
+
+        public virtual Seller Seller { get; set; }
+        #endregion
+
     }
 }
