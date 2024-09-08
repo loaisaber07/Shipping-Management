@@ -17,12 +17,9 @@ namespace Data_Access_Layer.Entity
         [AllowedValues("Prepaid","Exchange","CashOnDelivery")]
         public string Name { get; set; }
 
-        #region mapping the relation between product and typeofPayment 
-        [ForeignKey("Product")]
-        public int ProductID { get; set; }
-        [ForeignKey("ProductID")]
-
-        public virtual Product Product { get; set; }
+        #region mapping the relation between product and typeofPayment
+        [InverseProperty("TypeOfPayment")]
+        public virtual ICollection<Product> Products { get; set; }
         #endregion
     }
 }

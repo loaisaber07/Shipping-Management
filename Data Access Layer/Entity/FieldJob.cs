@@ -18,10 +18,8 @@ namespace Data_Access_Layer.Entity
         public DateTime DateAdding  => DateTime.Now;  //Read only property that is delivered filed holding the date of adding
 
         #region mapping relation between fieldJob  and application user 
-        [ForeignKey("User")]
-        public string ApplicationUserID { get; set; }
-        [ForeignKey("ApplicationUserID")]
-        public virtual ApplicationUser User { get; set; }
+        [InverseProperty("FieldJob")]
+        public virtual ICollection<ApplicationUser> Users { get; set; } 
         #endregion
 
         #region  mapping the realtion between field and pivilege 

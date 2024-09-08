@@ -19,11 +19,8 @@ namespace Data_Access_Layer.Entity
         public int Cost { get; set; }
 
         #region mapping the relation between this and product s
-        [ForeignKey("Product")]
-
-        public int ProductID { get; set; }
-        [ForeignKey("ProductID")]
-        public virtual Product Product { get; set; } 
+        [InverseProperty("TypeOfCharge")]
+        public virtual ICollection<Product> Products { get; set; }
         #endregion
     }
 }

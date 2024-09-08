@@ -17,10 +17,8 @@ namespace Data_Access_Layer.Entity
         public string Name { get; set; }
 
         #region  
-        [ForeignKey("Agent")]
-        public int AgentID { get; set; }
-        [ForeignKey("AgentID")] 
-        public virtual Agent Agent { get; set; }
+        [InverseProperty("TypeOfOffer")]
+       public virtual ICollection<Agent> Agents { get; set; }   
         #endregion
     }
 }

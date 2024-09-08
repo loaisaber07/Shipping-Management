@@ -17,10 +17,8 @@ namespace Data_Access_Layer.Entity
         public string Name { get; set; }
 
         #region mapping the relation between this and product
-        [ForeignKey("Product")]
-        public int ProductID { get; set; }
-        [ForeignKey("ProductID")]
-        public virtual Product Product { get; set; }
+        [InverseProperty("ProductStatus")]
+      public virtual ICollection<Product> Product { get; set; }
 
 
         #endregion

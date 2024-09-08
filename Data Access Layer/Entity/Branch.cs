@@ -18,18 +18,14 @@ namespace Data_Access_Layer.Entity
 
         public DateTime DataAdding => DateTime.Now;
 
-        #region 
-        [ForeignKey("Agent")]
-        public int AgentID { get; set; }
-        [ForeignKey("AgentID")]
-        public virtual Agent  Agent { get; set; }
+        #region  
+        [InverseProperty("Branch")]
+        public virtual ICollection<Agent> Agents { get; set; }  
         #endregion
 
         #region mapping the relation between product and branch
-        [ForeignKey("Product")]
-        public int ProductID { get; set; }
-        [ForeignKey("ProductID")]
-        public virtual Product Product { get; set; }    
+        [InverseProperty("Branch")]
+      public virtual ICollection<Product> Products { get; set; }
         #endregion
     }
 }

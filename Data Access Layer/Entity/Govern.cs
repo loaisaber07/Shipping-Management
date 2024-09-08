@@ -17,11 +17,8 @@ namespace Data_Access_Layer.Entity
         public string Name { get; set; }
 
         #region  
-        [ForeignKey("Seller")]
-        public string SellerID { get; set; }
-        [ForeignKey("SellerID")]
-        
-        public virtual Seller Seller { get; set; }
+        [InverseProperty("Govern")]
+        public virtual ICollection<Seller> Sellers { get; set; }
 
         #endregion
 
@@ -30,18 +27,14 @@ namespace Data_Access_Layer.Entity
         public virtual ICollection<City> Cities { get; set; }
         #endregion
 
-        #region 
-        [ForeignKey("Agent")]
-        public int AgentID { get; set; }
-        [ForeignKey("AgentID")]
-        public virtual Agent Agent { get; set; }
+        #region MAPPING between govern and agent
+        [InverseProperty("Govern")]
+        public virtual ICollection<Agent> Agents { get; set; }
         #endregion
 
         #region mapping the relation between product and govern
-        [ForeignKey("Product")]
-        public int ProductID { get; set; }
-        [ForeignKey("ProductID")]
-        public virtual Product Product { get; set; }
+        [InverseProperty("Govern")]
+       public virtual ICollection<Product> Product { get; set; }
         #endregion
     }
 }
