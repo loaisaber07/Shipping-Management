@@ -46,5 +46,12 @@ namespace Data_Access_Layer.Entity
         public virtual Seller Seller { get; set; }
         #endregion
 
+        #region mapping the relation between product and typeofPayment 
+        [ForeignKey("TypeOfPayment")]
+        public int TypeOfPaymentID { get; set; }
+        [ForeignKey("TypeOfPaymentID")]
+        public virtual TypeOfPayment TypeOfPayment { get; set; }
+        #endregion
+
     }
 }
