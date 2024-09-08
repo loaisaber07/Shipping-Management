@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Entity
 {
-    public  class Seller :ApplicationUser
+    public  class Seller :IdentityUser
     { 
 
         [Required]
