@@ -10,18 +10,28 @@ namespace Data_Access_Layer.Entity
 {
     public  class Product
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        [Required]
 
         public string ClientName { get; set; }
         [DataType(DataType.PhoneNumber)]
+        [Required]
         public int ClientNumber { get; set; }
         [DataType(DataType.PhoneNumber)]
         public int? ClientNumber2 { get; set; }
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        [Required]
         public int Cost { get; set; }
+        [Required]
         public bool IsForVillage { get; set; } = false;
+        
         public string? Note { get; set; }
+        [Required]
         public int Weight { get; set; }
+
         public string? VillageOrStreet { get; set; }
 
         #region mapping the relation between product and branch 
