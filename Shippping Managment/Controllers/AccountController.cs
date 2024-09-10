@@ -40,6 +40,10 @@ namespace Shippping_Managment.Controllers
                 if (user is null) {
                     return BadRequest(new { Message = "No userName founded!" });
                 }
+                bool adminCheck = await userManager.IsInRoleAsync(user, "Admin");
+                if (!adminCheck) {
+                    return BadRequest(new { Message = $"you are not authorize to use this feature please use Email instead!" });
+                }
                 bool result = await userManager.CheckPasswordAsync(user ,log.Password);
                 if (!result) {
                     return BadRequest(new { Message = "Incorrect Password" }); 
