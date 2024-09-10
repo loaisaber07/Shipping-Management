@@ -39,6 +39,17 @@ namespace Shippping_Managment
                 
                 }; 
             });
+
+            builder.Services.AddCors(option => {
+                option.AddPolicy("Allow", builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyMethod();
+
+                });
+            
+            });
                  var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -47,7 +58,8 @@ namespace Shippping_Managment
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseCors("Allow");
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
