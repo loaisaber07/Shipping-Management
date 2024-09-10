@@ -9,10 +9,11 @@ namespace Business_Layer.DTO
 {
     public class LoginRequestDTO
     {
-        [Required]
-        public string EmailOrUsername { get; set; }
+        [DataType(DataType.EmailAddress)]
+        public string? Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        public string? Username { get; set; }    
     }
 }

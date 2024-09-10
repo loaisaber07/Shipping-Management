@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Entity
 {
-    public  class ShippingDataBase : IdentityDbContext<IdentityUser>
+    public  class ShippingDataBase : IdentityDbContext<ApplicationUser>
     {
         public  object User;  
 
@@ -17,7 +17,7 @@ namespace Data_Access_Layer.Entity
         {
             
         }
-        public DbSet<ApplicationUser> applicationUsers { get; set; }
+
         public DbSet<Agent> agents { get; set; }
         public DbSet<Branch> branches { get; set; }
         public DbSet<City> Cities { get; set; }
