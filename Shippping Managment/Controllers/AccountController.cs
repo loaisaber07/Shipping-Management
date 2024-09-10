@@ -109,7 +109,7 @@ namespace Shippping_Managment.Controllers
                 return BadRequest();
             }
         }
-        [HttpPost]
+        [HttpPost ("AddRole")]
         public async Task<ActionResult> AddRole(string Name)
         {
             if (string.IsNullOrEmpty(Name))

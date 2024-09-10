@@ -1,5 +1,7 @@
 using Data_Access_Layer;
 using Data_Access_Layer.Entity;
+using Data_Access_Layer.Interfaces;
+using Data_Access_Layer.Repositry;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,8 +12,10 @@ namespace Shippping_Managment
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -22,12 +26,22 @@ namespace Shippping_Managment
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ShippingDataBase>(option => {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("default"));
-            }); 
+            });
+            builder.Services.AddScoped(typeof(IRepositry<>), typeof(Repository<>));
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ShippingDataBase>();
-            builder.Services.AddIdentity<Seller, IdentityRole>()
+            /*builder.Services.AddIdentity<Seller, IdentityRole>()
                 .AddEntityFrameworkStores<ShippingDataBase>();
-    
+    */      builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                              .AllowAnyMethod()
+                              .AllowAnyHeader();
+                    });
+            });
             builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "mySchema")
             .AddJwtBearer("mySchema", op =>
             {
@@ -41,7 +55,8 @@ namespace Shippping_Managment
                 
                 }; 
             });
-                 var app = builder.Build();
+            var app = builder.Build();
+            app.UseCors("AllowAllOrigins");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

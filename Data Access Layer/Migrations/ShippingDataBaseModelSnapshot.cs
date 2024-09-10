@@ -77,15 +77,9 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("AgentID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
 
                     b.Property<bool>("Status")
                         .ValueGeneratedOnAdd()
@@ -93,10 +87,6 @@ namespace Data_Access_Layer.Migrations
                         .HasDefaultValue(true);
 
                     b.HasKey("ID");
-
-                    b.HasIndex("AgentID");
-
-                    b.HasIndex("ProductID");
 
                     b.ToTable("branches");
                 });
@@ -140,17 +130,11 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("ApplicationUserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("ApplicationUserID");
 
                     b.ToTable("fieldJobs");
                 });
@@ -163,19 +147,9 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("AgentID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SellerID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("Status")
                         .ValueGeneratedOnAdd()
@@ -184,13 +158,100 @@ namespace Data_Access_Layer.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("AgentID");
+                    b.ToTable("governs");
+                });
 
-                    b.HasIndex("ProductID");
+            modelBuilder.Entity("Data_Access_Layer.Entity.Order", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("BranchID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientNumber2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Cost")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GovernID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsForVillage")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderStatusID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SellerID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TypeOfChargeID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeOfPaymentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VillageOrStreet")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BranchID");
+
+                    b.HasIndex("GovernID");
+
+                    b.HasIndex("OrderStatusID");
 
                     b.HasIndex("SellerID");
 
-                    b.ToTable("governs");
+                    b.HasIndex("TypeOfChargeID");
+
+                    b.HasIndex("TypeOfPaymentID");
+
+                    b.ToTable("Order", (string)null);
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.OrderStatus", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("productStatuses");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Privilege", b =>
@@ -235,91 +296,24 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("BranchID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClientName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ClientNumber")
+                    b.Property<int>("OrderID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ClientNumber2")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<int>("Cost")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GovernID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsForVillage")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductStatusID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SellerID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("TypeOfChargeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TypeOfPaymentID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("VillageOrStreet")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Weight")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("BranchID");
-
-                    b.HasIndex("GovernID");
-
-                    b.HasIndex("ProductStatusID");
-
-                    b.HasIndex("SellerID");
-
-                    b.HasIndex("TypeOfChargeID");
-
-                    b.HasIndex("TypeOfPaymentID");
+                    b.HasIndex("OrderID");
 
                     b.ToTable("products");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.ProductStatus", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("productStatuses");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfCharge", b =>
@@ -337,12 +331,7 @@ namespace Data_Access_Layer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("ProductID");
 
                     b.ToTable("typeOfCharges");
                 });
@@ -355,16 +344,11 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("AgentID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("AgentID");
 
                     b.ToTable("typeOfOffers");
                 });
@@ -381,12 +365,7 @@ namespace Data_Access_Layer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("ProductID");
 
                     b.ToTable("typeOfPayments");
                 });
@@ -625,6 +604,9 @@ namespace Data_Access_Layer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("BranchID")
+                        .HasColumnType("int");
+
                     b.Property<int>("FiledJobID")
                         .HasColumnType("int");
 
@@ -633,9 +615,9 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.HasIndex("FiledJobID")
-                        .IsUnique()
-                        .HasFilter("[FiledJobID] IS NOT NULL");
+                    b.HasIndex("BranchID");
+
+                    b.HasIndex("FiledJobID");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -650,9 +632,6 @@ namespace Data_Access_Layer.Migrations
                     b.Property<int?>("PickUp")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
                     b.Property<string>("StoreName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -662,27 +641,25 @@ namespace Data_Access_Layer.Migrations
 
                     b.HasIndex("GovernID");
 
-                    b.HasIndex("ProductID");
-
                     b.HasDiscriminator().HasValue("Seller");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Agent", b =>
                 {
                     b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
-                        .WithMany()
+                        .WithMany("Agents")
                         .HasForeignKey("BranchID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data_Access_Layer.Entity.Govern", "Govern")
-                        .WithMany()
+                        .WithMany("Agents")
                         .HasForeignKey("GovernID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data_Access_Layer.Entity.TypeOfOffer", "TypeOfOffer")
-                        .WithMany()
+                        .WithMany("Agents")
                         .HasForeignKey("TypeOfOfferID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -692,25 +669,6 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("Govern");
 
                     b.Navigation("TypeOfOffer");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.Branch", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.Agent", "Agent")
-                        .WithMany()
-                        .HasForeignKey("AgentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data_Access_Layer.Entity.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Agent");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.City", b =>
@@ -724,42 +682,55 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("Govern");
                 });
 
-            modelBuilder.Entity("Data_Access_Layer.Entity.FieldJob", b =>
+            modelBuilder.Entity("Data_Access_Layer.Entity.Order", b =>
                 {
-                    b.HasOne("Data_Access_Layer.Entity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserID")
+                    b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
+                        .WithMany("Orders")
+                        .HasForeignKey("BranchID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.Govern", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.Agent", "Agent")
-                        .WithMany()
-                        .HasForeignKey("AgentID")
+                    b.HasOne("Data_Access_Layer.Entity.Govern", "Govern")
+                        .WithMany("Orders")
+                        .HasForeignKey("GovernID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data_Access_Layer.Entity.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
+                    b.HasOne("Data_Access_Layer.Entity.OrderStatus", "OrderStatus")
+                        .WithMany("Orders")
+                        .HasForeignKey("OrderStatusID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data_Access_Layer.Entity.Seller", "Seller")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("SellerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Agent");
+                    b.HasOne("Data_Access_Layer.Entity.TypeOfCharge", "TypeOfCharge")
+                        .WithMany("Orders")
+                        .HasForeignKey("TypeOfChargeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Product");
+                    b.HasOne("Data_Access_Layer.Entity.TypeOfPayment", "TypeOfPayment")
+                        .WithMany("Orders")
+                        .HasForeignKey("TypeOfPaymentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Govern");
+
+                    b.Navigation("OrderStatus");
 
                     b.Navigation("Seller");
+
+                    b.Navigation("TypeOfCharge");
+
+                    b.Navigation("TypeOfPayment");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Privilege", b =>
@@ -775,97 +746,13 @@ namespace Data_Access_Layer.Migrations
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Product", b =>
                 {
-                    b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchID")
+                    b.HasOne("Data_Access_Layer.Entity.Order", "Order")
+                        .WithMany("Products")
+                        .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data_Access_Layer.Entity.Govern", "Govern")
-                        .WithMany()
-                        .HasForeignKey("GovernID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data_Access_Layer.Entity.ProductStatus", "ProductStatus")
-                        .WithMany()
-                        .HasForeignKey("ProductStatusID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data_Access_Layer.Entity.Seller", "Seller")
-                        .WithMany()
-                        .HasForeignKey("SellerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data_Access_Layer.Entity.TypeOfCharge", "TypeOfCharge")
-                        .WithMany()
-                        .HasForeignKey("TypeOfChargeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data_Access_Layer.Entity.TypeOfPayment", "TypeOfPayment")
-                        .WithMany()
-                        .HasForeignKey("TypeOfPaymentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Govern");
-
-                    b.Navigation("ProductStatus");
-
-                    b.Navigation("Seller");
-
-                    b.Navigation("TypeOfCharge");
-
-                    b.Navigation("TypeOfPayment");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.ProductStatus", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfCharge", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfOffer", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.Agent", "Agent")
-                        .WithMany()
-                        .HasForeignKey("AgentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Agent");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfPayment", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -921,11 +808,19 @@ namespace Data_Access_Layer.Migrations
 
             modelBuilder.Entity("Data_Access_Layer.Entity.ApplicationUser", b =>
                 {
-                    b.HasOne("Data_Access_Layer.Entity.FieldJob", "FieldJob")
-                        .WithOne()
-                        .HasForeignKey("Data_Access_Layer.Entity.ApplicationUser", "FiledJobID")
+                    b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
+                        .WithMany("ApplicationUsers")
+                        .HasForeignKey("BranchID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Data_Access_Layer.Entity.FieldJob", "FieldJob")
+                        .WithMany("Users")
+                        .HasForeignKey("FiledJobID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
 
                     b.Navigation("FieldJob");
                 });
@@ -933,30 +828,69 @@ namespace Data_Access_Layer.Migrations
             modelBuilder.Entity("Data_Access_Layer.Entity.Seller", b =>
                 {
                     b.HasOne("Data_Access_Layer.Entity.Govern", "Govern")
-                        .WithMany()
+                        .WithMany("Sellers")
                         .HasForeignKey("GovernID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data_Access_Layer.Entity.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Govern");
+                });
 
-                    b.Navigation("Product");
+            modelBuilder.Entity("Data_Access_Layer.Entity.Branch", b =>
+                {
+                    b.Navigation("Agents");
+
+                    b.Navigation("ApplicationUsers");
+
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.FieldJob", b =>
                 {
                     b.Navigation("Privileges");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Govern", b =>
                 {
+                    b.Navigation("Agents");
+
                     b.Navigation("Cities");
+
+                    b.Navigation("Orders");
+
+                    b.Navigation("Sellers");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.Order", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.OrderStatus", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfCharge", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfOffer", b =>
+                {
+                    b.Navigation("Agents");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfPayment", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.Seller", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
