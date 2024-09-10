@@ -3,10 +3,12 @@ using Data_Access_Layer.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Shippping_Managment.Controllers
 {
@@ -109,24 +111,46 @@ namespace Shippping_Managment.Controllers
                 return BadRequest();
             }
         }
-        [HttpPost]
-        public async Task<ActionResult> AddRole(string Name)
+        [HttpGet]
+        [Route("role")]
+        public async Task<IActionResult> AddRole(string name)
         {
-            if (string.IsNullOrEmpty(Name))
+            // Validate role name
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return BadRequest("Role name cannot be empty.");
+                return BadRequest(new { Error = "Role name cannot be empty or whitespace." });
             }
-            else if (await roleManager.RoleExistsAsync(Name))
-            {
-                return BadRequest("Role already exists.");
-            }
-            else if (!(await roleManager.RoleExistsAsync(Name)))
-            {
 
-               var result = await roleManager.CreateAsync(new IdentityRole(Name));
-                return Ok("Role created successfully.");
+            // Additional validation for role name (e.g., length and allowed characters)
+            if (name.Length < 3 || !Regex.IsMatch(name, @"^[a-zA-Z0-9_\-]+$"))
+            {
+                return BadRequest(new { Error = "Role name must be at least 3 characters long and contain only alphanumeric characters, underscores, or hyphens." });
             }
-            return BadRequest("An error occurred while creating the role.");
+            try
+            {
+                // Check if the role already exists
+                if (await roleManager.RoleExistsAsync(name))
+                {
+                    return Conflict(new { Error = $"Role '{name}' already exists." });
+                }
+
+                // Create the new role
+                var result = await roleManager.CreateAsync(new IdentityRole(name));
+
+                // Check if the creation was successful
+                if (result.Succeeded)
+                {
+                    return Ok(new { Message = $"Role '{name}' created successfully." });
+                }
+                else
+                {
+                    return StatusCode(500, new { Error = "An error occurred while creating the role.", Details = result.Errors });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = "Internal server error.", Details = ex.Message });
+            }
         }
 
     }
