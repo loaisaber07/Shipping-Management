@@ -1,5 +1,6 @@
 ﻿using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,24 @@ namespace Data_Access_Layer.Repositry
         {
         await    dataBase.Cities.AddRangeAsync(cities);
          await   dataBase.SaveChangesAsync();
+        }
+
+        public bool BulkRemove(IEnumerable<City> cities)
+        {
+            try
+            {
+                dataBase.Cities.RemoveRange(cities);
+                return true; 
+            }
+            catch {
+                return false;
+            }
+
+        }
+
+        public async Task<IEnumerable<City>> BulkSelect(int governID)
+        {
+    return await  dataBase.Cities.Where(s => s.GovernID == governID).ToListAsync();
         }
     }
 }

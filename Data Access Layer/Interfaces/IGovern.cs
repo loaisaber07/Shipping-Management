@@ -12,6 +12,9 @@ namespace Data_Access_Layer.Interfaces
     {
         Task<IEnumerable<GovernDTO>> GetGovernWithCities();
         bool IsExist(string govern);
-        Govern GetByName(string name); 
+        Govern GetByName(string name);
+        Govern? GetWithID(int id); 
+
+
     }
 }

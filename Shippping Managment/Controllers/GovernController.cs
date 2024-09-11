@@ -61,5 +61,22 @@ foreach(var city in gov.cities)
             return Ok(await govern.GetGovernWithCities());
         
         }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteGovernWithItsCities(int governID) { 
+   Govern? gov = govern.GetWithID(governID);
+            if (gov is null) {
+                return BadRequest(new { Message = "No Govern Founded" }); 
+            }
+   IEnumerable<City> cities=await cityRepo.BulkSelect(governID);
+        bool result=    cityRepo.BulkRemove(cities);
+            if (!result) {
+                return BadRequest(new { Message = "Can't delete Cities" });
+            }
+           await cityRepo.SaveAsync();
+       await   govern.DeleteAsync(governID); 
+         await govern.SaveAsync();
+            return Ok(new { Message = "Successfully Deleted" });  
+        }
     }
 }

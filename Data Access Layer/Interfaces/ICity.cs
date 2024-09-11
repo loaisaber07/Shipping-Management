@@ -9,6 +9,8 @@ namespace Data_Access_Layer.Interfaces
 {
     public interface ICity:IRepositry<City>
     {
-        Task BulkInsert(IEnumerable<City> cities); 
+        Task BulkInsert(IEnumerable<City> cities);
+        bool BulkRemove(IEnumerable<City> cities);
+        Task<IEnumerable<City>> BulkSelect(int governID);
     }
 }
