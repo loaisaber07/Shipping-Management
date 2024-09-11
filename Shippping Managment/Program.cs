@@ -1,5 +1,7 @@
 using Data_Access_Layer;
 using Data_Access_Layer.Entity;
+using Data_Access_Layer.Interfaces;
+using Data_Access_Layer.Repositry;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +27,9 @@ namespace Shippping_Managment
             }); 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ShippingDataBase>();
+            builder.Services.AddScoped<ICity,CityRepository>();
 
-
+            builder.Services.AddScoped<IGovern,GovernRepository>();
             builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "mySchema")
             .AddJwtBearer("mySchema", op =>
             {

@@ -26,14 +26,28 @@ namespace Data_Access_Layer.Repositry
             ApplicationUser? entity = await userManager.FindByIdAsync(id);
             return entity;
         }
-        public async Task DeleteUserAsync(string id)
+        public async Task<bool> DeleteUserAsync(string id)
         {
             ApplicationUser? entity = await userManager.FindByIdAsync(id);
-            if (entity != null)
+            if (entity is not null )
             {
-                db.Remove(entity);
+                try
+                {
+
+                    db.Remove(entity);
+                    return true; 
+                }
+                catch (Exception ex) {
+                    return false; 
+                }
             }
+            return false;
         }
 
+        public async Task<ApplicationUser?> GetByEmail(string email)
+        {
+   var user =await  userManager.FindByEmailAsync(email); 
+            return user;    
+        }
     }
 }

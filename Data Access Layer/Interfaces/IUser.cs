@@ -11,7 +11,8 @@ namespace Data_Access_Layer.Interfaces
     public interface IUser:IRepositry<User>
     {
         Task<ApplicationUser?> GetUserAsyncById(string id);
-        Task DeleteUserAsync(string id);
+        Task<bool> DeleteUserAsync(string id);
+        Task<ApplicationUser?> GetByEmail(string email); 
 
     }
 }

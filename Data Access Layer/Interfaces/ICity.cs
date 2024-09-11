@@ -9,5 +9,6 @@ namespace Data_Access_Layer.Interfaces
 {
     public interface ICity:IRepositry<City>
     {
+        Task BulkInsert(IEnumerable<City> cities); 
     }
 }

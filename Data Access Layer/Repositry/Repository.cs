@@ -21,25 +21,29 @@ namespace Data_Access_Layer.Repositry
         }
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-           return await dbSet.AsNoTracking().ToListAsync();
+          return await dbSet.AsNoTracking().ToListAsync();
         }
         public async Task<T?> GetAsyncById(int id)
         {
             T? entity = await dbSet.FindAsync(id);
-            return entity;
+            return entity ;
         }
         public async Task CreateAsync(T entity)
         {
-            await dbSet.AddAsync(entity);
-            
+            await dbSet.AddAsync(entity);    
         }
 
-        public void  Update(T entity)
+        public bool  Update(T entity)
         {
+            try { 
             
             dbSet.Update(entity);
-            
-            
+                return true;
+            }  
+            catch { 
+                return false; 
+            }
+
         }
         public async Task DeleteAsync(int id)
         {

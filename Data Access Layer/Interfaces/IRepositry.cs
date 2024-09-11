@@ -11,7 +11,7 @@ namespace Data_Access_Layer.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
         Task<T?> GetAsyncById(int id);
         Task CreateAsync(T entity);
-        void  Update(T entity);
+        bool  Update(T entity);
         Task DeleteAsync(int id);
         Task SaveAsync();
     }
