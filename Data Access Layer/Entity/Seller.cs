@@ -14,21 +14,15 @@ namespace Data_Access_Layer.Entity
 
         [Required]
         public string StoreName { get; set; }
-        public int? PickUp { get; set; } 
-        public int? ValueOfRejectedOrder { get; set; }
+        public int PickUp { get; set; } = 0;
+        public int ValueOfRejectedOrder { get; set; } = 0;
 
-        #region mapping the relation between seller govern  
-        [ForeignKey("Govern")]
-        public int GovernID { get; set; }
-        [ForeignKey("GovernID")]
-        public virtual Govern Govern { get; set; }
-
-
-        #endregion
+  
 
         #region mapping the relation between seller and product 
         [InverseProperty("Seller")]
         public virtual ICollection<Order> Orders { get; set; }
         #endregion
+     
     }
 }

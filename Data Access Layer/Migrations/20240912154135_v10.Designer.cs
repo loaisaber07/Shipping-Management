@@ -4,6 +4,7 @@ using Data_Access_Layer.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    partial class ShippingDataBaseModelSnapshot : ModelSnapshot
+    [Migration("20240912154135_v10")]
+    partial class v10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,7 +185,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 12, 18, 46, 2, 572, DateTimeKind.Local).AddTicks(7872));
+                        .HasDefaultValue(new DateTime(2024, 9, 12, 18, 41, 34, 425, DateTimeKind.Local).AddTicks(664));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -240,7 +243,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 12, 18, 46, 2, 573, DateTimeKind.Local).AddTicks(5757));
+                        .HasDefaultValue(new DateTime(2024, 9, 12, 18, 41, 34, 425, DateTimeKind.Local).AddTicks(4682));
 
                     b.Property<string>("Name")
                         .IsRequired()

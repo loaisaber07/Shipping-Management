@@ -30,7 +30,8 @@ namespace Data_Access_Layer.Entity
 
         #region mapping the relation between employee and branch 
         [InverseProperty("Branch")]
-        public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }  
+        public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
         #endregion
+    
     }
 }

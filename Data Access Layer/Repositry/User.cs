@@ -14,11 +14,14 @@ namespace Data_Access_Layer.Repositry
     {
         private readonly ShippingDataBase db;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public User(ShippingDataBase db,UserManager<ApplicationUser> userManager):base(db)
+        public User(ShippingDataBase db,UserManager<ApplicationUser> userManager 
+           ,RoleManager<IdentityRole> roleManager):base(db)
         {
             this.db = db;
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public async Task<ApplicationUser?> GetUserAsyncById(string id)
@@ -48,6 +51,32 @@ namespace Data_Access_Layer.Repositry
         {
    var user =await  userManager.FindByEmailAsync(email); 
             return user;    
+        }
+
+        public async Task<bool> CreateUser(ApplicationUser user , string password)
+        {
+            IdentityResult result = await userManager.CreateAsync(user, password);
+        return result.Succeeded;
+        }
+
+        public async Task<bool> AddRole(string Email, string roleName)
+        {
+        ApplicationUser? user =  await userManager.FindByEmailAsync(Email);
+            if (user is null) {
+                return false; 
+            }
+      bool result= await  roleManager.RoleExistsAsync(roleName);
+            if (!result) {
+                return false; 
+            }
+ result =await userManager.IsInRoleAsync(user , roleName); 
+            if (!result) {
+
+           IdentityResult r= await userManager.AddToRoleAsync(user,roleName);  
+                return r.Succeeded;
+            } 
+            return false;
+
         }
     }
 }

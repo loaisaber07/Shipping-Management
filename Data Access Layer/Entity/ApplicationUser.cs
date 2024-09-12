@@ -18,6 +18,9 @@ namespace Data_Access_Layer.Entity
         public override string UserName { get; set; }
         [StringLength(maximumLength:100)]
         public string? Address { get; set; }
+        public string Govern { get; set; }
+        public string City { get; set; }
+        public bool Status { get; set; } = true; 
 
         #region mappiing relation between this and field Job 
         [ForeignKey("FieldJob")]

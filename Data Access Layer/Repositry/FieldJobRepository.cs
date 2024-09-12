@@ -56,5 +56,14 @@ namespace Data_Access_Layer.Repositry
             }
             return false;
         }
+
+        public async Task<bool> IsExistByIdAsync(int id)
+        {
+       FieldJob? result=    await context.fieldJobs.FirstOrDefaultAsync(s => s.ID == id);
+            if (result is null) {
+                return false; 
+            }
+            return true;
+        }
     }
 }

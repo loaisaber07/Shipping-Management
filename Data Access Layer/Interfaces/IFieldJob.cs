@@ -12,7 +12,8 @@ namespace Data_Access_Layer.Interfaces
     {
         IEnumerable<FieldJobDTO> GetAllFieldWithPrivilege();
         bool IsExist(string name);
-        FieldJob? GetByName(string name);  
+        FieldJob? GetByName(string name);
+        Task<bool> IsExistByIdAsync(int id);
 
     }
 }

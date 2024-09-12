@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTO\Employee\" />
     <Folder Include="DTO\Govern and City\" />
   </ItemGroup>
 

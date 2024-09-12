@@ -12,6 +12,7 @@ namespace Data_Access_Layer.Interfaces
     {
         bool IsExist(string name);
         BranchDTO?  GetByName(string name);
-        IEnumerable<BranchDTO> GetAll(); 
+        IEnumerable<BranchDTO> GetAll();
+        Task<bool> IsExistByID(int id); 
     }
 }

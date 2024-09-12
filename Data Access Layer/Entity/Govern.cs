@@ -16,11 +16,7 @@ namespace Data_Access_Layer.Entity
         [Required]
         public string Name { get; set; }
 
-        #region  
-        [InverseProperty("Govern")]
-        public virtual ICollection<Seller> Sellers { get; set; }
-
-        #endregion
+       
 
         #region  mapping the relation between goven and city
         [InverseProperty("Govern")]

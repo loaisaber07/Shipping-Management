@@ -56,5 +56,14 @@ Date= s.DataAdding
             } 
         return true;
         }
+
+        public async Task<bool> IsExistByID(int id)
+        {
+       Branch? b= await dataBase.branches.FirstOrDefaultAsync(s => s.ID == id);
+            if (b is null) { 
+            return false;
+            } 
+            return true;
+        }
     }
 }
