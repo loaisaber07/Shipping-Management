@@ -4,6 +4,7 @@ using Data_Access_Layer.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    partial class ShippingDataBaseModelSnapshot : ModelSnapshot
+    [Migration("20240911142322_v6")]
+    partial class v6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,9 +175,7 @@ namespace Data_Access_Layer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<DateTime>("DataAdding")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 12, 15, 58, 15, 674, DateTimeKind.Local).AddTicks(9300));
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -229,11 +230,6 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("DateAdding")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 12, 15, 58, 15, 676, DateTimeKind.Local).AddTicks(7735));
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -241,33 +237,6 @@ namespace Data_Access_Layer.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("fieldJobs");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.FieldPrivilege", b =>
-                {
-                    b.Property<int>("PrivilegeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FieldJobID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Add")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Delete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Display")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Edit")
-                        .HasColumnType("bit");
-
-                    b.HasKey("PrivilegeID", "FieldJobID");
-
-                    b.HasIndex("FieldJobID");
-
-                    b.ToTable("fieldPrivileges");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Govern", b =>
@@ -393,11 +362,28 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<bool>("Add")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Delete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Display")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Edit")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("FieldJobID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("FieldJobID");
 
                     b.ToTable("privileges");
                 });
@@ -715,25 +701,6 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("Govern");
                 });
 
-            modelBuilder.Entity("Data_Access_Layer.Entity.FieldPrivilege", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.FieldJob", "FieldJob")
-                        .WithMany("FieldPrivilege")
-                        .HasForeignKey("FieldJobID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data_Access_Layer.Entity.Privilege", "Privilege")
-                        .WithMany("FieldPrivilege")
-                        .HasForeignKey("PrivilegeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FieldJob");
-
-                    b.Navigation("Privilege");
-                });
-
             modelBuilder.Entity("Data_Access_Layer.Entity.Order", b =>
                 {
                     b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
@@ -783,6 +750,17 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("TypeOfCharge");
 
                     b.Navigation("TypeOfPayment");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.Privilege", b =>
+                {
+                    b.HasOne("Data_Access_Layer.Entity.FieldJob", "FieldJob")
+                        .WithMany("Privileges")
+                        .HasForeignKey("FieldJobID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FieldJob");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Product", b =>
@@ -869,7 +847,7 @@ namespace Data_Access_Layer.Migrations
 
             modelBuilder.Entity("Data_Access_Layer.Entity.FieldJob", b =>
                 {
-                    b.Navigation("FieldPrivilege");
+                    b.Navigation("Privileges");
 
                     b.Navigation("Users");
                 });
@@ -893,11 +871,6 @@ namespace Data_Access_Layer.Migrations
             modelBuilder.Entity("Data_Access_Layer.Entity.OrderStatus", b =>
                 {
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.Privilege", b =>
-                {
-                    b.Navigation("FieldPrivilege");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfCharge", b =>

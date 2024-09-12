@@ -61,7 +61,8 @@ namespace Shippping_Managment.Controllers
                     return BadRequest(new { Message = "Incorrect Password try again!" });
                 }
                 string token = await GetTokenAsync(user);
-                return Ok(token);
+                var roles = await userManager.GetRolesAsync(user);
+                return Ok(new { token=token , Role=roles});
 
             }
             return BadRequest();

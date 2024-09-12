@@ -33,6 +33,7 @@ namespace Data_Access_Layer.Entity
         public DbSet<TypeOfPayment> typeOfPayments { get; set; }
         public DbSet<Weight> weights { get; set; }       
         public DbSet<Product> products { get; set; }
+        public DbSet<FieldPrivilege> fieldPrivileges { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ApplicationUser>().Property<bool>("Status").IsRequired()
@@ -41,6 +42,9 @@ namespace Data_Access_Layer.Entity
             builder.Entity<Branch>().Property<bool>("Status").IsRequired().HasDefaultValue(true);
             builder.Entity<Order>().ToTable("Order");
             builder.Entity<OrderStatus>().HasIndex(s => s.Name).IsUnique();
+            builder.Entity<Branch>().Property(s => s.DataAdding).HasDefaultValue(DateTime.Now);
+            builder.Entity<FieldPrivilege>().HasKey(s => new { s.PrivilegeID, s.FieldJobID });
+            builder.Entity<FieldJob>().Property(s => s.DateAdding).HasDefaultValue(DateTime.Now);
 
      
             base.OnModelCreating(builder);

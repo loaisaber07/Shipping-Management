@@ -16,7 +16,7 @@ namespace Data_Access_Layer.Entity
         [Required]
         public string Name { get; set; }
 
-        public DateTime DataAdding => DateTime.Now;
+        public DateTime DataAdding { get; set; } = DateTime.Now;
 
         #region  
         [InverseProperty("Branch")]

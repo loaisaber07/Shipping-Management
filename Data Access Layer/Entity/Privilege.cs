@@ -15,19 +15,11 @@ namespace Data_Access_Layer.Entity
         public int ID { get; set; }
         [Required]
         public string Name { get; set; }
- 
-        public bool Add { get; set; } = false;
-        public bool Edit { get; set; } = false;
-        public bool Display { get; set; } = false;  
-        public bool Delete { get; set; }= false;
+
 
         #region mapping relation between fieldjob and privilege
-        [ForeignKey("FieldJob")]
-        public int FieldJobID { get; set; }
-        [ForeignKey("FieldJobID")]
-        public virtual FieldJob FieldJob { get; set; }
-
-
+        [InverseProperty("Privilege")]
+        public virtual ICollection<FieldPrivilege> FieldPrivilege { get; set; }
         #endregion
     }
 }

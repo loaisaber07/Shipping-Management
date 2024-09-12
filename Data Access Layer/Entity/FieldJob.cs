@@ -15,17 +15,17 @@ namespace Data_Access_Layer.Entity
         public int ID { get; set; }
         [Required] 
         public string Name { get; set; }
-        public DateTime DateAdding  => DateTime.Now;  //Read only property that is delivered filed holding the date of adding
+        public DateTime DateAdding { get; set; }= DateTime.Now;  //Read only property that is delivered filed holding the date of adding
 
         #region mapping relation between fieldJob  and application user 
         [InverseProperty("FieldJob")]
-        public virtual ICollection<ApplicationUser> Users { get; set; } 
+        public virtual ICollection<ApplicationUser> Users { get; set; }
         #endregion
 
-        #region  mapping the realtion between field and pivilege 
+        #region mapping relation between fieldjob and privilege
         [InverseProperty("FieldJob")]
-        public virtual ICollection<Privilege> Privileges { get; set; }
-        #endregion  
+        public virtual ICollection<FieldPrivilege> FieldPrivilege { get; set; }
+        #endregion
 
     }
 }

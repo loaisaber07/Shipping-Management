@@ -7,7 +7,7 @@ namespace Shippping_Managment.Controllers
     [ApiController]
     public class RegisterController : ControllerBase
     {
-        [HttpPost("AddEmployee")]
+        [HttpPost("AddEmployee")]   
         public ActionResult AddEmployee()
         {
             return NoContent();

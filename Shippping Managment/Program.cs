@@ -30,6 +30,9 @@ namespace Shippping_Managment
             builder.Services.AddScoped<ICity,CityRepository>();
 
             builder.Services.AddScoped<IGovern,GovernRepository>();
+            builder.Services.AddScoped<IBranch, BranchRepository>();
+            builder.Services.AddScoped<IFieldJob, FieldJobRepository>();
+            builder.Services.AddScoped<IFieldPrivilege, FiledPrivilegeRepository>();
             builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "mySchema")
             .AddJwtBearer("mySchema", op =>
             {
@@ -49,7 +52,7 @@ namespace Shippping_Managment
                 {
                     builder.AllowAnyOrigin();
                     builder.AllowAnyMethod();
-                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
 
                 });
             

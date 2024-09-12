@@ -1,4 +1,4 @@
-﻿using Data_Access_Layer.DTO.BatchDTO;
+﻿using Data_Access_Layer.DTO.FieldJob;
 using Data_Access_Layer.Entity;
 using System;
 using System.Collections.Generic;
@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Interfaces
 {
-    public interface IBranch:IRepositry<Branch>
+    public interface IFieldJob :IRepositry<FieldJob>
     {
+        IEnumerable<FieldJobDTO> GetAllFieldWithPrivilege();
         bool IsExist(string name);
-        BranchDTO?  GetByName(string name);
-        IEnumerable<BranchDTO> GetAll(); 
+        FieldJob? GetByName(string name); 
     }
 }
