@@ -20,5 +20,17 @@ namespace Data_Access_Layer.Repositry
         {
        await context.fieldPrivileges.AddRangeAsync(p);
         }
+
+        public bool BulkIUpdate(IEnumerable<FieldPrivilege> p)
+        {
+            try { 
+            context.fieldPrivileges.UpdateRange(p);
+                return true;
+            }
+            catch { 
+            return false;
+            }
+            
+        }
     }
 }

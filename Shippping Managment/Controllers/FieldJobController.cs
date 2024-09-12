@@ -52,5 +52,26 @@ namespace Shippping_Managment.Controllers
 
 
         }
+        [HttpPut]
+        public async Task<ActionResult> EditPermissionForField(EditFieldPrivilege obj) {
+
+  FieldJob? fieldResult = await  fieldRepo.GetAsyncById(obj.ID);
+            if (fieldResult is null) {
+                return NotFound(new { Message = "Can't find this fieldJob!" }); 
+            } 
+fieldResult.Name = obj.Name;
+            if (!fieldRepo.Update(fieldResult)) {
+                return BadRequest(new { Message = "Can't update! Try again" }); 
+            }
+            await fieldRepo.SaveAsync();
+            IEnumerable<FieldPrivilege> fieldPriviege = FieldPrivilegeService.EditListOfFieldPrivilege(obj);
+            if (!fieldprivilegeRepo.BulkIUpdate(fieldPriviege)) {
+                return BadRequest(new { Message = "Can't update !!!" }); 
+            }
+            await fieldRepo.SaveAsync();
+            await fieldprivilegeRepo.SaveAsync();
+            return Ok(new { Message="Update Successfully!"}); 
+        
+        }
     }
 }

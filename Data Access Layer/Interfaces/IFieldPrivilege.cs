@@ -10,6 +10,7 @@ namespace Data_Access_Layer.Interfaces
     public  interface IFieldPrivilege  :IRepositry<FieldPrivilege>
     {
         Task BulkInsert(IEnumerable<FieldPrivilege> p); 
-       
+        bool BulkIUpdate(IEnumerable<FieldPrivilege> p);
+
     }
 }

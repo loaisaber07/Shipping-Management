@@ -26,6 +26,25 @@ Display= f.Display
             }
             return list;
         }
-            
+
+
+        public static IEnumerable<FieldPrivilege> EditListOfFieldPrivilege(EditFieldPrivilege fieldPrivilege)
+        {
+            List<FieldPrivilege> list = new List<FieldPrivilege>();
+            foreach (var f in fieldPrivilege.FieldPrivilegeCollection)
+            {
+                list.Add(new FieldPrivilege
+                {
+                    FieldJobID = fieldPrivilege.ID,
+                    PrivilegeID = f.PrivilegeID,
+                    Add = f.Add,
+                    Delete = f.Delete,
+                    Edit = f.Edit,
+                    Display = f.Display
+                });
             }
+            return list;
+        }
+
+    }
 }
