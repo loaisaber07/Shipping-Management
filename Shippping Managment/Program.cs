@@ -33,6 +33,7 @@ namespace Shippping_Managment
             builder.Services.AddScoped<IBranch, BranchRepository>();
             builder.Services.AddScoped<IFieldJob, FieldJobRepository>();
             builder.Services.AddScoped<IFieldPrivilege, FiledPrivilegeRepository>();
+            builder.Services.AddScoped<IPrivilege, PrivilegeRepository>();
             builder.Services.AddScoped<IUser, User>();
             builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "mySchema")
             .AddJwtBearer("mySchema", op =>
