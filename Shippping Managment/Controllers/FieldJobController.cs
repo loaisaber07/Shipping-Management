@@ -38,16 +38,18 @@ namespace Shippping_Managment.Controllers
                 return BadRequest(new {Message="Field is allready exsit"});  
             }
             FieldJob? b = new FieldJob {
-                Name = addFieldJob.Name };
-         await  fieldRepo.CreateAsync(b);
-         await fieldRepo.SaveAsync();
-        b= fieldRepo.GetByName(addFieldJob.Name);
+                Name = addFieldJob.Name,
+                DateAdding = DateTime.Now
+            };
+            await  fieldRepo.CreateAsync(b);
+            await fieldRepo.SaveAsync();
+            b= fieldRepo.GetByName(addFieldJob.Name);
             if (b is null) {
                 return NotFound(new { Message="Field to save Fieldjob!"});
             }
- IEnumerable<FieldPrivilege>FB= FieldPrivilegeService.CreateListOfFieldPrivilege(b.ID, addFieldJob.FieldPrivilegeDTo);
-          await  fieldprivilegeRepo.BulkInsert(FB);
-          await  fieldprivilegeRepo.SaveAsync();
+            IEnumerable<FieldPrivilege>FB= FieldPrivilegeService.CreateListOfFieldPrivilege(b.ID, addFieldJob.FieldPrivilegeDTo);
+            await  fieldprivilegeRepo.BulkInsert(FB);
+            await  fieldprivilegeRepo.SaveAsync();
             return RedirectToAction("Get");
 
 
@@ -55,11 +57,11 @@ namespace Shippping_Managment.Controllers
         [HttpPut]
         public async Task<ActionResult> EditPermissionForField(EditFieldPrivilege obj) {
 
-  FieldJob? fieldResult = await  fieldRepo.GetAsyncById(obj.ID);
+            FieldJob? fieldResult = await  fieldRepo.GetAsyncById(obj.ID);
             if (fieldResult is null) {
                 return NotFound(new { Message = "Can't find this fieldJob!" }); 
             } 
-fieldResult.Name = obj.Name;
+            fieldResult.Name = obj.Name;
             if (!fieldRepo.Update(fieldResult)) {
                 return BadRequest(new { Message = "Can't update! Try again" }); 
             }
@@ -73,5 +75,30 @@ fieldResult.Name = obj.Name;
             return Ok(new { Message="Update Successfully!"}); 
         
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetById(int id)
+        {
+            FieldJobDTO? fieldJobDTO = await fieldRepo.GetByIdAsync(id);
+
+            if (fieldJobDTO == null)
+            {
+                return NotFound(new { Message = "FieldJob not found" });
+            }
+
+            return Ok(fieldJobDTO);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteFieldJob(int id)
+        {
+            var isDeleted = await fieldRepo.DeleteFieldJobAsync(id);
+
+            if (!isDeleted)
+            {
+                return NotFound(new { Message = "FieldJob not found" });
+            }
+
+            return Ok(new { Message = "FieldJob deleted successfully" });
+        }
+
     }
 }

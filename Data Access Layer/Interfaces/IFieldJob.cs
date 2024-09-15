@@ -14,6 +14,8 @@ namespace Data_Access_Layer.Interfaces
         bool IsExist(string name);
         FieldJob? GetByName(string name);
         Task<bool> IsExistByIdAsync(int id);
+        Task<FieldJobDTO?> GetByIdAsync(int id);
+        Task<bool> DeleteFieldJobAsync(int id);
 
     }
 }
