@@ -9,5 +9,7 @@ namespace Data_Access_Layer.Interfaces
 {
     public interface IOrderStatus:IRepositry<OrderStatus>
     {
+        Task<bool> IsExistByName(string name);
+        Task<OrderStatus?> GetByName(string name);
     }
 }

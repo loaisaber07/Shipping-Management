@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Interfaces
 {
-    public interface IOrder:IRepositry<Order>
+    public interface ITypeOfPayment:IRepositry<TypeOfPayment>
     {
-        Task<Order?> GetById(int id);
+        Task<bool> IsExistByName(string name);
+        Task<TypeOfPayment?> GetByName(string name);
     }
 }
