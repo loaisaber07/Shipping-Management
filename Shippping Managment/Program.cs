@@ -1,3 +1,4 @@
+using Business_Layer.Services;
 using Data_Access_Layer;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
@@ -35,6 +36,13 @@ namespace Shippping_Managment
             builder.Services.AddScoped<IFieldPrivilege, FiledPrivilegeRepository>();
             builder.Services.AddScoped<IPrivilege, PrivilegeRepository>();
             builder.Services.AddScoped<IUser, User>();
+            builder.Services.AddScoped<IProduct, ProductRepository>();
+            builder.Services.AddScoped<ITypeOfPayment, TypeOfPaymentRepository>();
+            builder.Services.AddScoped<ITypeOfCharge, TypeOfChargeRepository>();
+            builder.Services.AddScoped<IOrderStatus, OrderStatusRepository>();
+            builder.Services.AddScoped<IOrder,OrderRepository>();
+           
+            builder.Services.AddScoped<InvoiceService>();
             builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "mySchema")
             .AddJwtBearer("mySchema", op =>
             {

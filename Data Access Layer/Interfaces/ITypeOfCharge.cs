@@ -9,5 +9,7 @@ namespace Data_Access_Layer.Interfaces
 {
     public interface ITypeOfCharge:IRepositry<TypeOfCharge>
     {
+        Task<bool> IsExistByName(string name);
+        Task<TypeOfCharge?> GetByName(string name);
     }
 }

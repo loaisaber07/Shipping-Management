@@ -9,23 +9,24 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Repositry
 {
-    public class OrderStatusRepository:Repository<OrderStatus>,IOrderStatus
+    public class TypeOfPaymentRepository:Repository<TypeOfPayment>,ITypeOfPayment
     {
         private readonly ShippingDataBase dataBase;
 
-        public OrderStatusRepository(ShippingDataBase dataBase) : base(dataBase)
+        public TypeOfPaymentRepository(ShippingDataBase dataBase):base(dataBase)
         {
             this.dataBase = dataBase;
         }
-        public async Task<OrderStatus?> GetByName(string name)
+
+        public async Task<TypeOfPayment?> GetByName(string name)
         {
-            OrderStatus? type = await dataBase.productStatuses.AsNoTracking().FirstOrDefaultAsync(p => p.Name == name);
+            TypeOfPayment? type=  await dataBase.typeOfPayments.AsNoTracking().FirstOrDefaultAsync(p => p.Name == name);
             return type;
         }
 
         public async Task<bool> IsExistByName(string name)
         {
-            OrderStatus? type = await dataBase.productStatuses.AsNoTracking().FirstOrDefaultAsync(p => p.Name == name);
+           TypeOfPayment? type = await dataBase.typeOfPayments.AsNoTracking().FirstOrDefaultAsync(p=>p.Name==name);
             if (type == null)
             {
                 return false;
