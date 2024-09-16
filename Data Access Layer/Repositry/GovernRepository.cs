@@ -29,9 +29,12 @@ namespace Data_Access_Layer.Repositry
             {
                 ID = c.ID,
                 Name = c.Name,
+                Status=c.Status,
                 cities = c.Cities.Select(city => new CityDTO {
                 ID= city.ID,
                 Name= city.Name,
+                
+            
                 }).ToList()
 
             });

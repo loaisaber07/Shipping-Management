@@ -15,6 +15,7 @@ namespace Data_Access_Layer.Entity
         public int ID { get; set; }
         [Required]
         public string Name { get; set; }
+        public bool Status { get; set; } = true; 
 
        
 

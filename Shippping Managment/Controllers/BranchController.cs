@@ -13,7 +13,7 @@ namespace Shippping_Managment.Controllers
     {
         private readonly IBranch branchRepo;
 
-        public BranchController(IBranch branchRepo)
+        public BranchController(IBranch branchRepo ,ShippingDataBase context)
         {
             this.branchRepo = branchRepo;
         }
@@ -30,9 +30,11 @@ namespace Shippping_Managment.Controllers
             bool result = branchRepo.IsExist(addBranch.Name);
             if (!result)
             {
-                Branch branch = new Branch() { Name = addBranch.Name };
+
+                Branch branch = new Branch { Name = addBranch.Name  };
                 await branchRepo.CreateAsync(branch);
-                await branchRepo.SaveAsync();
+                await branchRepo.SaveAsync(); 
+               
           BranchDTO? dto=branchRepo.GetByName(addBranch.Name);
                 if (dto is null) {
                     return BadRequest(new { Message = "Not Added Successfully" }); 

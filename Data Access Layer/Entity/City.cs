@@ -28,5 +28,9 @@ namespace Data_Access_Layer.Entity
         [ForeignKey("GovernID")]
         public virtual Govern Govern { get; set; }
         #endregion
+        #region mapping between order and city 
+        [InverseProperty("City")]
+        public virtual ICollection<Order>? Orders { get; set; }
+        #endregion
     }
 }

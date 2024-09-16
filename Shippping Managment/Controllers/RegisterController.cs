@@ -63,7 +63,7 @@ namespace Shippping_Managment.Controllers
             {
                 return BadRequest(new { Message = "Branch Not Exist" });
             }
-            ApplicationUser user = SellerService.GetSeller(sellerDTO);
+            Seller user = SellerService.GetSeller(sellerDTO);
             bool result = await userReo.CreateUser(user, sellerDTO.Password);
             if (!result)
             {
