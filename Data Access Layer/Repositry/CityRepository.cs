@@ -21,7 +21,7 @@ namespace Data_Access_Layer.Repositry
 
         public  async Task BulkInsert(IEnumerable<City> cities)
         {
-        await    dataBase.Cities.AddRangeAsync(cities);
+         await   dataBase.Cities.AddRangeAsync(cities);
          await   dataBase.SaveChangesAsync();
         }
 
