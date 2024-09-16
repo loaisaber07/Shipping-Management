@@ -14,11 +14,15 @@ namespace Shippping_Managment.Controllers
     {
         private readonly IFieldJob fieldRepo;
         private readonly IFieldPrivilege fieldprivilegeRepo;
+        private readonly IPrivilege privilegeRepo;
 
-        public FieldJobController(IFieldJob fieldRepo , IFieldPrivilege fieldprivilegeRepo)
+        public FieldJobController(IFieldJob fieldRepo , IFieldPrivilege fieldprivilegeRepo , 
+            IPrivilege privilegeRepo
+            )
         {
             this.fieldRepo = fieldRepo;
             this.fieldprivilegeRepo = fieldprivilegeRepo;
+            this.privilegeRepo = privilegeRepo;
         }
         [HttpGet]
         public ActionResult Get() {
@@ -31,7 +35,7 @@ namespace Shippping_Managment.Controllers
             if (!ModelState.IsValid) {
                 return BadRequest(new { Message ="Inavlid sent Object something is missed! " }); 
             }
-
+            
             bool result =  fieldRepo.IsExist(addFieldJob.Name);
             if (result)
             {

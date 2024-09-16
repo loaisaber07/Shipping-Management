@@ -11,6 +11,7 @@ namespace Data_Access_Layer.Interfaces
     {
         Task<bool> IsExsitsByName(string Name);
         Task<bool> IsExsitsById(int Id);
-        Task<string> GetNameById(int Id);
+        Task<string> GetNameById(int Id); 
+        Task<Privilege>? GetByName(string Name);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Business_Layer.Services;
+using Business_Layer.Services.Privileges;
 using Data_Access_Layer.DTO.Privilege;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
@@ -12,10 +13,15 @@ namespace Shippping_Managment.Controllers
     public class PrivilegeController : ControllerBase
     {
         private readonly IPrivilege privilegeRepo;
+        private readonly IFieldJob fieldRepo;
+        private readonly IFieldPrivilege fpRepo;
 
-        public PrivilegeController(IPrivilege privilegeRepo)
+        public PrivilegeController(IPrivilege privilegeRepo  ,IFieldJob fieldRepo ,
+            IFieldPrivilege FpRepo)
         {
             this.privilegeRepo = privilegeRepo;
+            this.fieldRepo = fieldRepo;
+            fpRepo = FpRepo;
         }
         [HttpGet]
         public async Task<ActionResult> GetAllPrivilege()
@@ -28,6 +34,9 @@ namespace Shippping_Managment.Controllers
         [HttpPost]
         public async Task<ActionResult> AddPrivilege(AddPrivilegeDTO addPrivilege)
         {
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
           bool check = await privilegeRepo.IsExsitsByName(addPrivilege.Name);
             if (check)
             {
@@ -36,6 +45,17 @@ namespace Shippping_Managment.Controllers
             Privilege privilege = Privilege_Service.AddPrivilege(addPrivilege);
             await privilegeRepo.CreateAsync(privilege);
             await privilegeRepo.SaveAsync();
+            
+        privilege=  await privilegeRepo.GetByName(addPrivilege.Name);
+            IEnumerable<FieldJob> f = await fieldRepo.GetAllAsync();
+            if(f is not null)
+            {
+
+     IEnumerable<FieldPrivilege> fb= PrivilegeService.MappingFieldJob(privilege, f);
+           await fpRepo.BulkInsert(fb);
+           await fpRepo.SaveAsync();
+
+            }
             EditPrivilegeDTO editPrivilegeDTO =Privilege_Service.GetPrivilege(privilege);
             return Ok(editPrivilegeDTO);
         }
@@ -43,12 +63,12 @@ namespace Shippping_Managment.Controllers
         [HttpPut]
         public async Task<ActionResult> EditPrivilege(EditPrivilegeDTO editPrivilege)
         {
-            Privilege privilege = Privilege_Service.EditPrivilege(editPrivilege);
             bool chick = await privilegeRepo.IsExsitsById(editPrivilege.ID);
             if (!chick)
             {
                 return NotFound(new { Message = "Privilege Not Found !!" });
             }
+            Privilege privilege = Privilege_Service.EditPrivilege(editPrivilege);
             string oldName = await privilegeRepo.GetNameById(editPrivilege.ID);
             if (oldName != editPrivilege.Name && oldName is not null)
             {

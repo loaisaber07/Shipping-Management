@@ -1,5 +1,6 @@
 ﻿using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,12 @@ namespace Data_Access_Layer.Repositry
             return false;
             }
             
+        }
+
+        public IQueryable<FieldPrivilege> GetAll()
+        {
+           return  context.fieldPrivileges.Include(s=>s.FieldJob).Include(s=>s.Privilege); 
+
         }
     }
 }
