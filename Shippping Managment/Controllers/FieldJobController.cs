@@ -77,5 +77,24 @@ fieldResult.Name = obj.Name;
             return Ok(new { Message="Update Successfully!"}); 
         
         }
+        [HttpDelete]
+        public async  Task<ActionResult> Delete(int id) {
+            
+           if(! await fieldRepo.IsExistByIdAsync(id))
+            {
+                return NotFound(new { Messsage = "id not found" });
+            } 
+     bool check=  await  fieldprivilegeRepo.BulkDelte(id);
+            if (!check)
+            {
+                return BadRequest(new { Message = "Can't delete try again" }); 
+
+            }  
+
+            await fieldRepo.DeleteAsync(id);
+            await fieldRepo.SaveAsync();
+            return Ok(new { Message = "Deleted successfully" });
+        
+        }
     }
 }

@@ -17,6 +17,20 @@ namespace Data_Access_Layer.Repositry
         {
             this.context = context;
         }
+
+        public async Task<bool> BulkDelte(int fieldID)
+        {
+            try
+            {
+
+                await context.fieldPrivileges.Where(s => s.FieldJobID == fieldID).ExecuteDeleteAsync();
+                return true; 
+            }
+            catch { 
+            return false;
+            }
+        }
+
         public async Task BulkInsert(IEnumerable<FieldPrivilege> p)
         {
        await context.fieldPrivileges.AddRangeAsync(p);
@@ -36,7 +50,8 @@ namespace Data_Access_Layer.Repositry
 
         public IQueryable<FieldPrivilege> GetAll()
         {
-           return  context.fieldPrivileges.Include(s=>s.FieldJob).Include(s=>s.Privilege); 
+            
+           return  context.fieldPrivileges.Include(s=>s.FieldJob).Include(s=>s.Privilege);  
 
         }
     }
