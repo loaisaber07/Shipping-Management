@@ -10,7 +10,7 @@ namespace Data_Access_Layer.DTO.GovernAndCity
     public class AddGovernWithCities
     {
         [Required]
-        public string Name { get; set;}
-      public   List<AddCity>? cities { get; set; }
+        public string Name { get; set; }
+        public   List<AddCity>? cities { get; set; }
     }
 }

@@ -22,14 +22,51 @@ namespace Shippping_Managment.Controllers
         }
         [HttpGet]
         public async Task<ActionResult> GetAllgovern() {
-    IEnumerable<GovernDTO>DTO= await govern.GetGovernWithCities();
+            IEnumerable<Govern> lsit= await govern.GetGovernWithCities();
+            IEnumerable<GovernDTO> DTO = lsit.Select(g => new GovernDTO
+            {
+                ID = g.ID,
+                Name = g.Name,
+                cities = g.Cities.Select(city => new CityDTO
+                {
+                    ID = city.ID,
+                    Name = city.Name,
+                }).ToList()
+
+            });
             return Ok(DTO);
         
         }
-        [HttpPost("AddGovernWithCity")]
-        public async Task <ActionResult> AddGovernWithCity(AddGovernWithCities gov) {
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetGovernWithItsCities(int id)
+        {
+            Govern? gov = await govern.GetByID(id);
+            if (gov == null)
+            {
+                return BadRequest(new { Message = "Not Found!" });
+            }
+
+            GovernDTO dto = new()
+            {
+                ID = gov.ID,
+                Name = gov.Name,
+                cities = gov.Cities.Select(city => new CityDTO
+                {
+                    ID = city.ID,
+                    Name = city.Name,
+                }).ToList()
+
+            };
+
+            return Ok(dto);
+
+        }
+        [HttpPost("add")]
+        public async Task <ActionResult> AddGovernWithCity(AddGovernWithCities gov) 
+        {
             if (!ModelState.IsValid) {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             bool result = govern.IsExist(gov.Name);
             if (result) {
@@ -41,12 +78,12 @@ namespace Shippping_Managment.Controllers
             };
             await govern.CreateAsync(g);
             await govern.SaveAsync();  
-        g= govern.GetByName(g.Name);
+            g= await govern.GetByName(g.Name);
             if (g is null) {
                 return BadRequest(new { Message = "Not Add Correctly!" }); 
             }
             List<City> cities = new List<City>();
-foreach(var city in gov.cities)
+            foreach(var city in gov.cities)
             {
                 cities.Add(new City { 
                 Name=city.Name,
@@ -57,25 +94,26 @@ foreach(var city in gov.cities)
                 });
 
             }
-       await cityRepo.BulkInsert(cities);
+            await cityRepo.BulkInsert(cities);
             return Ok(await govern.GetGovernWithCities());
         
         }
 
+
         [HttpDelete]
         public async Task<ActionResult> DeleteGovernWithItsCities(int governID) { 
-   Govern? gov = govern.GetWithID(governID);
+             Govern? gov = await govern.GetByID(governID);
             if (gov is null) {
                 return BadRequest(new { Message = "No Govern Founded" }); 
             }
-   IEnumerable<City> cities=await cityRepo.BulkSelect(governID);
-        bool result=    cityRepo.BulkRemove(cities);
+            IEnumerable<City> cities=await cityRepo.BulkSelect(governID);
+            bool result=    cityRepo.BulkRemove(cities);
             if (!result) {
                 return BadRequest(new { Message = "Can't delete Cities" });
             }
-           await cityRepo.SaveAsync();
-       await   govern.DeleteAsync(governID); 
-         await govern.SaveAsync();
+            await cityRepo.SaveAsync();
+            await govern.DeleteAsync(governID); 
+            await govern.SaveAsync();
             return Ok(new { Message = "Successfully Deleted" });  
         }
     }

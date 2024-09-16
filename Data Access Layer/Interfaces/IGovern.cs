@@ -10,10 +10,10 @@ namespace Data_Access_Layer.Interfaces
 {
     public interface IGovern:IRepositry<Govern>
     {
-        Task<IEnumerable<GovernDTO>> GetGovernWithCities();
+        Task<IEnumerable<Govern>> GetGovernWithCities();
         bool IsExist(string govern);
-        Govern GetByName(string name);
-        Govern? GetWithID(int id); 
+        Task<Govern?> GetByName(string name);
+        Task<Govern?> GetByID(int id);
 
 
     }

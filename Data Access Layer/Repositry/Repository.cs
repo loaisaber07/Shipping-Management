@@ -36,8 +36,7 @@ namespace Data_Access_Layer.Repositry
         public bool  Update(T entity)
         {
             try { 
-            
-            dbSet.Update(entity);
+                dbSet.Update(entity);
                 return true;
             }  
             catch { 

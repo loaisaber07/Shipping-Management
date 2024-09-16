@@ -5,7 +5,7 @@ using Data_Access_Layer.DTO;
 
 namespace Data_Access_Layer.Repositry
 {
-    public class GovernRepository:Repository<Govern>,IGovern
+    public class GovernRepository : Repository<Govern>, IGovern
     {
         private readonly ShippingDataBase dataBase;
 
@@ -14,34 +14,18 @@ namespace Data_Access_Layer.Repositry
             this.dataBase = dataBase;
         }
 
-        public Govern GetByName(string name)
+        public async Task<Govern?> GetByName(string name)
         {
-       Govern? g=     dataBase.governs.FirstOrDefault(s => s.Name == name);
-            return g;
-
-        
+            return await dataBase.governs.FirstOrDefaultAsync(s => s.Name == name);
+            
         }
 
-        public async Task<IEnumerable<GovernDTO>> GetGovernWithCities()
+        public async Task<IEnumerable<Govern>> GetGovernWithCities()
         {
-        List<Govern> g=  await dataBase.governs.Include(c => c.Cities).ToListAsync();
-        return    g.Select(c => new GovernDTO
-            {
-                ID = c.ID,
-                Name = c.Name,
-                cities = c.Cities.Select(city => new CityDTO {
-                ID= city.ID,
-                Name= city.Name,
-                }).ToList()
-
-            });
+            return  await dataBase.governs.Include(c => c.Cities).ToListAsync();
         }
 
-        public Govern? GetWithID(int id)
-        {
-        return dataBase.governs.AsNoTracking().FirstOrDefault(s => s.ID == id);
-        }
-
+        public async Task<Govern?> GetByID(int id) => await dataBase.governs.Include(c => c.Cities).AsNoTracking().FirstOrDefaultAsync(s => s.ID == id);
         public bool IsExist(string govern)
         {
             Govern? result = dataBase.governs.FirstOrDefault(s => s.Name == govern);
@@ -51,5 +35,7 @@ namespace Data_Access_Layer.Repositry
             return false;
         
         }
+
+
     }
 }

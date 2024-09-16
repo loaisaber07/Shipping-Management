@@ -11,6 +11,6 @@ namespace Data_Access_Layer.DTO
     {
         public int ID { get; set; }
         public string Name { get; set; } 
-    public    List<CityDTO>? cities { get; set; }
+        public List<CityDTO>? cities { get; set; }
     }
 }
