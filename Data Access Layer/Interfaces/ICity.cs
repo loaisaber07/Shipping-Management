@@ -12,5 +12,8 @@ namespace Data_Access_Layer.Interfaces
         Task BulkInsert(IEnumerable<City> cities);
         bool BulkRemove(IEnumerable<City> cities);
         Task<IEnumerable<City>> BulkSelect(int governID);
+        Task<string>GetNameById(int Id);
+        Task<bool> IsExistById(int id);
+        Task<bool> IsExistByName(string Name);
     }
 }
