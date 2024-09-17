@@ -46,9 +46,9 @@ namespace Shippping_Managment.Controllers
             if(f is not null)
             {
 
-     IEnumerable<FieldPrivilege> fb= PrivilegeService.MappingFieldJob(privilege, f);
-           await fpRepo.BulkInsert(fb);
-           await fpRepo.SaveAsync();
+                 IEnumerable<FieldPrivilege> fb= PrivilegeService.MappingFieldJob(privilege, f);
+                 await fpRepo.BulkInsert(fb);
+                 await fpRepo.SaveAsync();
 
             }
             EditPrivilegeDTO editPrivilegeDTO =Privilege_Service.GetPrivilege(privilege);

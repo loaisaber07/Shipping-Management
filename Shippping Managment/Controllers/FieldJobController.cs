@@ -5,6 +5,7 @@ using Data_Access_Layer.Interfaces;
 using Data_Access_Layer.Repositry;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.WebRequestMethods;
 
 namespace Shippping_Managment.Controllers
 {
@@ -59,11 +60,11 @@ namespace Shippping_Managment.Controllers
         [HttpPut]
         public async Task<ActionResult> EditPermissionForField(EditFieldPrivilege obj) {
 
-  FieldJob? fieldResult = await  fieldRepo.GetAsyncById(obj.ID);
+            FieldJob? fieldResult = await  fieldRepo.GetAsyncById(obj.ID);
             if (fieldResult is null) {
                 return NotFound(new { Message = "Can't find this fieldJob!" }); 
             } 
-fieldResult.Name = obj.Name;
+            fieldResult.Name = obj.Name;
             if (!fieldRepo.Update(fieldResult)) {
                 return BadRequest(new { Message = "Can't update! Try again" }); 
             }

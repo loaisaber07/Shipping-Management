@@ -1,4 +1,5 @@
-﻿using Data_Access_Layer.DTO;
+﻿using Business_Layer.Services;
+using Data_Access_Layer.DTO;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,15 @@ namespace Shippping_Managment.Controllers
         {
             this.paymentRepo = paymentRepo;
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetPaymentTypes()
+        {
+          IEnumerable<TypeOfPayment> payment = await paymentRepo.GetAllAsync();
+            IEnumerable<GetTypeOfPaymentDTO> DTO =TypeOfPaymentService.GetPaymentList(payment);
+            return Ok(DTO);
+        }
+
         [HttpPost]
         public async Task<ActionResult> AddTypeOfPayment(AddTypeOfPaymentDTO addType)
         {
@@ -36,6 +46,32 @@ namespace Shippping_Managment.Controllers
                 Name = type.Name
             };
             return Ok(get);
+
+        }
+        [HttpPut]
+        public async Task<ActionResult> EditePaymentTypes(EditPaymentDTO edit)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            TypeOfPayment? type = await paymentRepo.GetAsyncById(edit.Id);
+            if (type == null)
+            {
+                return NotFound();
+            }
+            TypeOfPayment typeOf = new TypeOfPayment
+            {
+                Name = edit.Name,
+            };
+            if(!paymentRepo.Update(type))
+            {
+                return BadRequest(new { Message = "Can Not Save" });
+            }
+            await paymentRepo.SaveAsync();
+            return Ok();
+
+
 
         }
     }
