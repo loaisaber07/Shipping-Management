@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data_Access_Layer.Custom_Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,7 @@ namespace Data_Access_Layer.Entity
         public int ID { get; set; }
         [Required]
         [AllowedValues("Prepaid","Exchange","CashOnDelivery")]
+        [UniqueTypeOfPayment]
         public string Name { get; set; }
 
         #region mapping the relation between product and typeofPayment

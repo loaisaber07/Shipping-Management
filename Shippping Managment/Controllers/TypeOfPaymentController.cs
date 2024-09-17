@@ -19,10 +19,9 @@ namespace Shippping_Managment.Controllers
         [HttpPost]
         public async Task<ActionResult> AddTypeOfPayment(AddTypeOfPaymentDTO addType)
         {
-            bool chick = await paymentRepo.IsExistByName(addType.Name);
-            if(chick)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new { Message = "Type Is Allready Exist" });
+                return BadRequest(new { Message = "Invalid Data" });
             }
             TypeOfPayment payment = new TypeOfPayment
             {

@@ -11,6 +11,7 @@ namespace Data_Access_Layer.DTO
     public class AddTypeOfChargeDTO
     {
         [Required]
+        [UniqueTypeOfCharge]
         public string Name { get; set; }
         [Required]
         public int Cost { get; set; }
