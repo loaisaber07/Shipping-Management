@@ -33,7 +33,7 @@ namespace Data_Access_Layer.Repositry
 
         public async Task BulkInsert(IEnumerable<FieldPrivilege> p)
         {
-       await context.fieldPrivileges.AddRangeAsync(p);
+          await context.fieldPrivileges.AddRangeAsync(p);
         }
 
         public bool BulkIUpdate(IEnumerable<FieldPrivilege> p)
@@ -53,6 +53,11 @@ namespace Data_Access_Layer.Repositry
             
            return  context.fieldPrivileges.Include(s=>s.FieldJob).Include(s=>s.Privilege);  
 
+        }
+
+        public async Task<IEnumerable<FieldPrivilege>> GetByFJId(int fieldID)
+        {
+           return await context.fieldPrivileges.Where(f => f.FieldJobID == fieldID).Include(s => s.FieldJob).Include(s => s.Privilege).ToListAsync();
         }
     }
 }

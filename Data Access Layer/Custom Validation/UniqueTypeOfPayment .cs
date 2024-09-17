@@ -8,20 +8,18 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Custom_Validation
 {
-    internal class UniquePrivilegeName :ValidationAttribute
+    public class UniqueTypeOfPayment:ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value != null)
             {
                 var context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
-                var entity = context.privileges.FirstOrDefault(s => s.Name == value.ToString());
+                var entity = context.typeOfPayments.FirstOrDefault(s => s.Name == value.ToString());
                 if (entity != null)
                 {
-                    return new ValidationResult("Privilege Name must be unique ");
+                    return new ValidationResult("Type of payment must be unique ");
                 }
-
-
             }
 
             return ValidationResult.Success;

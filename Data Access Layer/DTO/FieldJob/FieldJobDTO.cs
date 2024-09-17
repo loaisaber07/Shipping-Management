@@ -10,6 +10,7 @@ namespace Data_Access_Layer.DTO.FieldJob
     {
         public int ID { get; set; }
         public string  Name { get; set; }
+        public DateTime DateAdding { get; set; }
         public ICollection<FieldPrivilegeDTO> FieldPrivilegeDTO { get; set; }
 
     }

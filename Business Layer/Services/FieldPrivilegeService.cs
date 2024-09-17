@@ -17,12 +17,12 @@ namespace Business_Layer.Services
             foreach (var f in fieldPrivilege) {
                 list.Add(new FieldPrivilege
                 {
-FieldJobID=fieldID , 
-PrivilegeID=f.PrivilegeID,
-Add=f.Add,
-Display=f.Display,
-Delete=f.Delete,
-Edit=f.Edit
+                    FieldJobID=fieldID , 
+                    PrivilegeID=f.PrivilegeID,
+                    Add=f.Add,
+                    Display=f.Display,
+                    Delete=f.Delete,
+                    Edit=f.Edit
                 });
             }
             return list;
@@ -66,6 +66,10 @@ Edit=f.Edit
             }
             return result;
         }
+
+
+
+
 
     }
 }

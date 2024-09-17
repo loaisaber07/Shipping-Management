@@ -8,24 +8,22 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Custom_Validation
 {
-    internal class UniquePrivilegeName :ValidationAttribute
+    internal class UniqueOrderStatus:ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value != null)
             {
-                var context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
-                var entity = context.privileges.FirstOrDefault(s => s.Name == value.ToString());
+                var context=(ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
+                var entity = context.Cities.FirstOrDefault(s=>s.Name==value.ToString());
                 if (entity != null)
                 {
-                    return new ValidationResult("Privilege Name must be unique ");
+                    return new ValidationResult("There iS an order status with the same name ");
                 }
 
 
             }
-
             return ValidationResult.Success;
-
         }
     }
 }

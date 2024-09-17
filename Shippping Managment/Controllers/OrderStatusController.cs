@@ -19,10 +19,9 @@ namespace Shippping_Managment.Controllers
         [HttpPost]
         public async Task<ActionResult> AddOrderStatus(AddOrderStatusDTO statusDTO)
         {
-            bool chick  = await statusRepo.IsExistByName(statusDTO.Name);
-            if (chick)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new {Message="Statu Is Allready Exist !!"});
+                return BadRequest(new { Message = "Invalid Data" });
             }
             OrderStatus status = new OrderStatus
             {

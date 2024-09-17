@@ -28,22 +28,22 @@ namespace Shippping_Managment.Controllers
         [HttpPut]
         public async Task<ActionResult> EditCity(EditCityDTO dto)
         {
-            City city = CityService.EditCity(dto);
             bool check = await cityRepo.IsExistById(dto.Id);
             if (!check)
             {
                 return NotFound(new { Message = "City Not Found !!" });
             }
-
+            City city = CityService.EditCity(dto);
             string oldName = await cityRepo.GetNameById(dto.Id);
             if (oldName != null && oldName != dto.Name) //   True => name changed #AKR
             {
                 bool checkName = await cityRepo.IsExistByName(dto.Name); // True => the new name that entered is already owned by another city #AKR 
                 if (checkName)
                 {
-                    return BadRequest(new { Message = "There Is A city With The Same Name " }); 
+                    return BadRequest(new { Message = "There Is A city With The Same Name " });
                 }
             }
+
             if (!cityRepo.Update(city))
             {
                 return BadRequest("Failed to update city !!");
@@ -54,10 +54,9 @@ namespace Shippping_Managment.Controllers
         [HttpPost]
         public async Task<ActionResult> AddCity(AddCityDTO addCity)
         {
-            bool nameCheck = await cityRepo.IsExistByName(addCity.Name);
-            if (nameCheck)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new { Message = "There Is A City With The Same Name That You Entered " });
+                return BadRequest(new { Message = "Invalid Data" });
             }
             City city = CityService.AddCity(addCity);
             await cityRepo.CreateAsync(city);
