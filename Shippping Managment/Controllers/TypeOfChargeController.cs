@@ -23,11 +23,6 @@ namespace Shippping_Managment.Controllers
             {
                 return BadRequest(new { Message = "Invalid Data" });
             }
-            bool chick = await chargeRepo.IsExistByName(ChargeDTO.Name);
-            if(chick)
-            {
-                return BadRequest(new {Message="Type Already Exist"});
-            }
             TypeOfCharge type = new TypeOfCharge
             {
                 Name = ChargeDTO.Name,

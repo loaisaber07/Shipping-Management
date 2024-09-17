@@ -37,11 +37,6 @@ namespace Shippping_Managment.Controllers
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
-          bool check = await privilegeRepo.IsExsitsByName(addPrivilege.Name);
-            if (check)
-            {
-                return BadRequest(new { Message = "There Is A privilege Whth The Same Name" });
-            }
             Privilege privilege = Privilege_Service.AddPrivilege(addPrivilege);
             await privilegeRepo.CreateAsync(privilege);
             await privilegeRepo.SaveAsync();
@@ -51,9 +46,9 @@ namespace Shippping_Managment.Controllers
             if(f is not null)
             {
 
-     IEnumerable<FieldPrivilege> fb= PrivilegeService.MappingFieldJob(privilege, f);
-           await fpRepo.BulkInsert(fb);
-           await fpRepo.SaveAsync();
+                 IEnumerable<FieldPrivilege> fb= PrivilegeService.MappingFieldJob(privilege, f);
+                 await fpRepo.BulkInsert(fb);
+                 await fpRepo.SaveAsync();
 
             }
             EditPrivilegeDTO editPrivilegeDTO =Privilege_Service.GetPrivilege(privilege);
@@ -72,7 +67,7 @@ namespace Shippping_Managment.Controllers
             string oldName = await privilegeRepo.GetNameById(editPrivilege.ID);
             if (oldName != editPrivilege.Name && oldName is not null)
             {
-                chick= await privilegeRepo.IsExsitsByName(editPrivilege.Name);
+                chick = await privilegeRepo.IsExsitsByName(editPrivilege.Name);
                 if (chick)
                 {
                     return BadRequest(new { Message = "The Name You Entered Is Allready Exist" });

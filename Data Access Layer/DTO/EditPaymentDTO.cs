@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.DTO
 {
-    public class AddTypeOfPaymentDTO
+    public class EditPaymentDTO
     {
+        public int Id { get; set; }
         [AllowedValues("Prepaid", "Exchange", "CashOnDelivery")]
         [UniqueTypeOfPayment]
         public string Name { get; set; }
