@@ -63,7 +63,7 @@ namespace Shippping_Managment.Controllers
             if (fieldResult is null) {
                 return NotFound(new { Message = "Can't find this fieldJob!" }); 
             } 
-fieldResult.Name = obj.Name;
+            fieldResult.Name = obj.Name;
             if (!fieldRepo.Update(fieldResult)) {
                 return BadRequest(new { Message = "Can't update! Try again" }); 
             }
@@ -84,7 +84,7 @@ fieldResult.Name = obj.Name;
             {
                 return NotFound(new { Messsage = "id not found" });
             } 
-     bool check=  await  fieldprivilegeRepo.BulkDelte(id);
+            bool check=  await  fieldprivilegeRepo.BulkDelte(id);
             if (!check)
             {
                 return BadRequest(new { Message = "Can't delete try again" }); 

@@ -19,9 +19,6 @@ namespace Data_Access_Layer.Entity
         public string Name { get; set; }
         [Required]
         public int PickUpCharge { get; set; }
-
-        public int? SpecialChargeForSeller { get; set; }
-
         #region  mapping the relation between city and govern 
         [ForeignKey("Govern")]
         public int GovernID { get; set; }
@@ -31,6 +28,10 @@ namespace Data_Access_Layer.Entity
         #region mapping between order and city 
         [InverseProperty("City")]
         public virtual ICollection<Order>? Orders { get; set; }
+        #endregion
+        #region mapping the relation between seller and city 
+        [InverseProperty("City")]
+        public virtual ICollection<SpecialCharge>? SpecialCharges { get; set; }
         #endregion
     }
 }

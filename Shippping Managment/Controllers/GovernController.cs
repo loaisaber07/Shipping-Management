@@ -53,7 +53,6 @@ foreach(var city in gov.cities)
                 GovernID=g.ID , 
                 NormalCharge=city.NormalCharge ,
                 PickUpCharge=city.PickUpCharge,
-                SpecialChargeForSeller=city.SpecialChargeForSeller
                 });
 
             }
