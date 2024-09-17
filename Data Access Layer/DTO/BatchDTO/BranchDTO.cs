@@ -12,6 +12,7 @@ namespace Data_Access_Layer.DTO.BatchDTO
         [Required]
         public int ID { get; set; }
         public string Name { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } 
+        public bool Status { get; set; }
     }
 }

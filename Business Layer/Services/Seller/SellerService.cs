@@ -11,17 +11,20 @@ namespace Business_Layer.Services.Seller
 {
     public class SellerService
     {
-        public static ApplicationUser GetSeller(AddSellerDTO dto)
+        public static Data_Access_Layer.Entity.Seller GetSeller(AddSellerDTO dto)
         {
-            ApplicationUser user = new ApplicationUser
+            Data_Access_Layer.Entity.Seller user = new Data_Access_Layer.Entity.Seller
             {
                 UserName=dto.Name,
                 Email=dto.Email,
                 PhoneNumber=dto.Phone,
                 BranchID=dto.BranchID,
-                FiledJobID=dto.FiledJobID,//?????????
+                FiledJobID=dto.FiledJobID,
                 Govern =dto.Govern,
                 City=dto.City,
+                StoreName=dto.StoreName,
+                PickUp=dto.PickUp,
+                ValueOfRejectedOrder=dto.ValueOfRejectedOrder
             };
             return user;
         }

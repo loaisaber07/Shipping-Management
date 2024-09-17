@@ -17,6 +17,7 @@ namespace Data_Access_Layer.Entity
         public string Name { get; set; }
 
         public DateTime DataAdding { get; set; } = DateTime.Now;
+        public bool Status { get; set; } = true;
 
         #region  
         [InverseProperty("Branch")]

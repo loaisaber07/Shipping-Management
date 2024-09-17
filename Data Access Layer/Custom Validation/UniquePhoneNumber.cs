@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Custom_Validation
 {
-    internal class UniqueUserName : ValidationAttribute
+    public class UniquePhoneNumber : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value != null)
             {
                 var context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
-                var entity = context.Users.FirstOrDefault(s => s.UserName == value.ToString());
+                var entity = context.Users.FirstOrDefault(s => s.PhoneNumber == value.ToString());
                 if (entity != null)
                 {
-                    return new ValidationResult("User Name must be unique ");
+                    return new ValidationResult("Phone Number must be unique ");
                 }
 
 

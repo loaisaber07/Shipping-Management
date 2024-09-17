@@ -37,8 +37,10 @@ namespace Shippping_Managment.Controllers
             var document = new PdfDocument();
             string HtmlContent = "<div class='body' style='font-family: Arial, sans-serif; margin: 20px'>"
         + "<div class='container' style='max-width: 600px; margin: auto; border: 1px solid #ccc; padding: 20px;'>"
-        + "<div class='header' style='text-align: center; margin-bottom: 20px'>"
-        + "<img src='https://pioneers-solutions.com/uploads/logo.logo.png' width='214px' height='65px' alt='logo' />"
+        + "<div class='header' style='text-align: center; margin-bottom: 20px'>" 
+       + $"<div>"
+        + "<img src='https://pioneers-solutions.com/uploads/logo.logo.png' width='214px' height='200px' alt='logo' />"
+       +$"</div>"
         + $"<p>Order No:{order.ID} </p>"
         + "<p>Date: 15th September 2024</p>"
         + "</div>"

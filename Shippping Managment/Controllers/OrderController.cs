@@ -36,9 +36,6 @@ namespace Shippping_Managment.Controllers
                 return NotFound();  
             }
             GetOrderDTO orderDTO = OrderService.GetOrder(order);
-            //List<Product> list =   await productRepo.getProductsByOrderId(order.ID);
-          
-
             return Ok(orderDTO);
         }
 

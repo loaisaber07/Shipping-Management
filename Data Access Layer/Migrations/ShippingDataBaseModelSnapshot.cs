@@ -129,6 +129,7 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -182,7 +183,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 12, 18, 46, 2, 572, DateTimeKind.Local).AddTicks(7872));
+                        .HasDefaultValue(new DateTime(2024, 9, 16, 16, 58, 51, 731, DateTimeKind.Local).AddTicks(7828));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -240,7 +241,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 12, 18, 46, 2, 573, DateTimeKind.Local).AddTicks(5757));
+                        .HasDefaultValue(new DateTime(2024, 9, 16, 16, 58, 51, 733, DateTimeKind.Local).AddTicks(1670));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -311,18 +312,27 @@ namespace Data_Access_Layer.Migrations
                     b.Property<int>("BranchID")
                         .HasColumnType("int");
 
+                    b.Property<int>("CityID")
+                        .HasColumnType("int");
+
                     b.Property<string>("ClientName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ClientNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClientNumber2")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientNumber2")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Cost")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DateAdding")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 9, 16, 16, 58, 51, 734, DateTimeKind.Local).AddTicks(161));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -359,6 +369,8 @@ namespace Data_Access_Layer.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("BranchID");
+
+                    b.HasIndex("CityID");
 
                     b.HasIndex("GovernID");
 
@@ -745,6 +757,12 @@ namespace Data_Access_Layer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Data_Access_Layer.Entity.City", "City")
+                        .WithMany("Orders")
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Data_Access_Layer.Entity.Govern", "Govern")
                         .WithMany("Orders")
                         .HasForeignKey("GovernID")
@@ -776,6 +794,8 @@ namespace Data_Access_Layer.Migrations
                         .IsRequired();
 
                     b.Navigation("Branch");
+
+                    b.Navigation("City");
 
                     b.Navigation("Govern");
 
@@ -856,6 +876,11 @@ namespace Data_Access_Layer.Migrations
 
                     b.Navigation("ApplicationUsers");
 
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.City", b =>
+                {
                     b.Navigation("Orders");
                 });
 

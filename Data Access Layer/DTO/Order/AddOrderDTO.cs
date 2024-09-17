@@ -13,9 +13,12 @@ namespace Data_Access_Layer.DTO.Order
         public string ClientName { get; set; }
         [DataType(DataType.PhoneNumber)]
         [Required]
-        public int ClientNumber { get; set; }
+        [RegularExpression(@"^01(0|1|2|5)\d{8}$", ErrorMessage = "Invalid phone number")]
+        public string ClientNumber { get; set; }
         [DataType(DataType.PhoneNumber)]
-        public int? ClientNumber2 { get; set; }
+        [RegularExpression(@"^01(0|1|2|5)\d{8}$", ErrorMessage = "Invalid phone number")]
+
+        public string? ClientNumber2 { get; set; }
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]

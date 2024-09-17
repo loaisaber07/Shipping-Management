@@ -18,6 +18,12 @@ namespace Data_Access_Layer.Repositry
             this.dataBase = dataBase;
         }
 
+        public async Task<Privilege>? GetByName(string Name)
+        {
+   Privilege? p = await dataBase.privileges.FirstOrDefaultAsync(s => s.Name == Name);
+            return p; 
+        }
+
         public async Task<string> GetNameById(int Id)
         {
             Privilege? privilege = await dataBase.privileges.AsNoTracking().FirstOrDefaultAsync(p => p.ID == Id);

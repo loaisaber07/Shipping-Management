@@ -29,6 +29,7 @@ namespace Business_Layer.Services.Order
                 TypeOfChargeID = add.TypeOfChargeID,
                 SellerID = add.SellerID,
                 OrderStatusID = add.OrderStatusID,
+                Note = add.Note
             };
             return order;
         }
@@ -51,6 +52,7 @@ namespace Business_Layer.Services.Order
                 TypeOfChargeID= order.TypeOfChargeID,
                 VillageOrStreet= order.VillageOrStreet,
                 TypeOfPaymentID= order.TypeOfPaymentID,
+                Note= order.Note
             };
            
             return getOrderDTO;
@@ -77,7 +79,7 @@ namespace Business_Layer.Services.Order
                     TypeOfChargeID = item.TypeOfChargeID,
                     TypeOfPaymentID = item.TypeOfPaymentID,
                     VillageOrStreet = item.VillageOrStreet,
-                    Note = item.Note
+                    Note = item.Note 
                 };
                 dtoList.Add(getOrder);
             }
