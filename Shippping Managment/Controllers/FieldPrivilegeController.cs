@@ -27,18 +27,5 @@ namespace Shippping_Managment.Controllers
             }
             return NotFound();
         }
-        [HttpGet]
-        [Route("GetByFJID")]
-        public async Task<ActionResult>GetByFieldJobId(int fjId)
-        {
-             FieldJob? F = await fieldRepo.GetAsyncById(fjId);
-            if (F is null)
-            {
-                return NotFound();
-            }
-           IEnumerable<FieldPrivilege>FJP = await fieldprivilegeRepo.GetByFJId(fjId);
-            IEnumerable<GetFieldPrivilegeDTO> DTO = FieldPrivilegeService.AllFieldPrivileg(FJP);
-            return Ok(DTO);
-        }
     }
 }

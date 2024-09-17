@@ -28,6 +28,7 @@ namespace Data_Access_Layer.Repositry
             {
                 ID = s.ID,
                 Name = s.Name,
+                DateAdding=s.DateAdding,
                 FieldPrivilegeDTO = s.FieldPrivilege.Select(s => new FieldPrivilegeDTO
                 {
                     Name = s.Privilege.Name,

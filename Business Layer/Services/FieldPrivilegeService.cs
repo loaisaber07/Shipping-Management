@@ -69,25 +69,6 @@ namespace Business_Layer.Services
 
 
 
-        public static IEnumerable<GetFieldPrivilegeDTO> AllFieldPrivileg(IEnumerable<FieldPrivilege> FB)
-        {
-            List<GetFieldPrivilegeDTO> result = new List<GetFieldPrivilegeDTO>();
-            foreach (var f in FB)
-            {
-                result.Add(new GetFieldPrivilegeDTO
-                {
-                    FieldJobID = f.FieldJobID,
-                    PrivilegeID = f.PrivilegeID,
-                    Add = f.Add,
-                    Display = f.Display,
-                    Delete = f.Delete,
-                    Edit = f.Edit,
-                    FieldName = f.FieldJob.Name,
-                    PrivilegeName = f.Privilege.Name                   
-                });
-            }
-            return result;
-        }
 
 
     }
