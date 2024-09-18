@@ -13,12 +13,10 @@ namespace Data_Access_Layer.Entity
 {
     public  class ApplicationUser : IdentityUser
     {
-        [UniqueUserName]
         [Required]
         public override string UserName { get; set; }
         [RegularExpression(@"^01(0|1|2|5)\d{8}$", ErrorMessage = "Invalid phone number")]
         [Required]
-        [UniquePhoneNumber]
         public override string? PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }
         [StringLength(maximumLength:100)]
         public string? Address { get; set; }
@@ -27,10 +25,8 @@ namespace Data_Access_Layer.Entity
         public bool Status { get; set; } = true; 
 
         #region mappiing relation between this and field Job 
-        [ForeignKey("FieldJob")]
-        public int FiledJobID { get; set; }
-        [ForeignKey("FiledJobID")]
-        public virtual FieldJob FieldJob { get; set; }
+        public int? FiledJobID { get; set; }
+        public virtual FieldJob? FieldJob { get; set; }
 
         #endregion
 

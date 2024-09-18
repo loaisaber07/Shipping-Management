@@ -25,8 +25,20 @@ namespace Data_Access_Layer.Repositry
         }
 
         public async Task<ApplicationUser?> GetUserAsyncById(string id)
-        {
-            ApplicationUser? entity = await userManager.FindByIdAsync(id);
+        { 
+
+            ApplicationUser? entity = await userManager.Users
+                .Include(s => s.FieldJob)
+                .Include(s=>s.Branch)
+                .FirstOrDefaultAsync(u => u.Id == id);
+            if(entity is null) 
+            {
+                return null; 
+            }
+           bool checkRole=  await userManager.IsInRoleAsync(entity, "Employee");
+            if (!checkRole) {
+                return null;
+            }
             return entity;
         }
         public async Task<bool> DeleteUserAsync(string id)
@@ -77,6 +89,44 @@ namespace Data_Access_Layer.Repositry
             } 
             return false;
 
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetAllEmployee()
+        {
+            var users = await userManager.Users.
+                Include(s => s.FieldJob)
+                .Include(s => s.Branch)
+                .ToListAsync();
+            var RoleInList = new List<ApplicationUser>();
+            foreach (var user in users) {
+                if (await userManager.IsInRoleAsync(user, "Employee")) { 
+                RoleInList.Add(user);
+                }
+            }
+            return RoleInList;
+            
+        }
+
+        public async Task<bool> UpdateUser(ApplicationUser user)
+        {
+    var result= await userManager.UpdateAsync(user);
+            if (result.Succeeded) {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> CreateSeller(Seller seller, string password)
+        {
+   IdentityResult result = await userManager.CreateAsync(seller, password);
+            if (result.Succeeded) { 
+          IdentityResult r= await userManager.AddToRoleAsync(seller, "Seller");
+                if (r.Succeeded) {
+                    return true;
+                }
+            
+            }
+            return false;
         }
     }
 }

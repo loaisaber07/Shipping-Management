@@ -4,6 +4,7 @@ using Data_Access_Layer.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    partial class ShippingDataBaseModelSnapshot : ModelSnapshot
+    [Migration("20240918090623_add TypeOfReceipt TableV2")]
+    partial class addTypeOfReceiptTableV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,7 +186,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 248, DateTimeKind.Local).AddTicks(5158));
+                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 6, 22, 975, DateTimeKind.Local).AddTicks(8929));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -236,7 +239,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 249, DateTimeKind.Local).AddTicks(1375));
+                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 6, 22, 976, DateTimeKind.Local).AddTicks(1951));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -325,7 +328,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 249, DateTimeKind.Local).AddTicks(7836));
+                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 6, 22, 976, DateTimeKind.Local).AddTicks(4296));
 
                     b.Property<string>("Email")
                         .IsRequired()

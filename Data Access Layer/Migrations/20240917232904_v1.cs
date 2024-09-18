@@ -32,8 +32,8 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 16, 16, 58, 51, 731, DateTimeKind.Local).AddTicks(7828)),
-                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 18, 2, 29, 3, 391, DateTimeKind.Local).AddTicks(2912)),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,7 +47,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 16, 16, 58, 51, 733, DateTimeKind.Local).AddTicks(1670))
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 18, 2, 29, 3, 392, DateTimeKind.Local).AddTicks(28))
                 },
                 constraints: table =>
                 {
@@ -61,7 +61,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,9 +180,9 @@ namespace Data_Access_Layer.Migrations
                     Govern = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    FiledJobID = table.Column<int>(type: "int", nullable: false),
+                    FiledJobID = table.Column<int>(type: "int", nullable: true),
                     BranchID = table.Column<int>(type: "int", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
+                    UserType = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     StoreName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PickUp = table.Column<int>(type: "int", nullable: true),
                     ValueOfRejectedOrder = table.Column<int>(type: "int", nullable: true),
@@ -212,8 +212,7 @@ namespace Data_Access_Layer.Migrations
                         name: "FK_AspNetUsers_fieldJobs_FiledJobID",
                         column: x => x.FiledJobID,
                         principalTable: "fieldJobs",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -225,7 +224,6 @@ namespace Data_Access_Layer.Migrations
                     NormalCharge = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PickUpCharge = table.Column<int>(type: "int", nullable: false),
-                    SpecialChargeForSeller = table.Column<int>(type: "int", nullable: true),
                     GovernID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -404,7 +402,7 @@ namespace Data_Access_Layer.Migrations
                     IsForVillage = table.Column<bool>(type: "bit", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Weight = table.Column<int>(type: "int", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 16, 16, 58, 51, 734, DateTimeKind.Local).AddTicks(161)),
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 18, 2, 29, 3, 392, DateTimeKind.Local).AddTicks(6062)),
                     VillageOrStreet = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BranchID = table.Column<int>(type: "int", nullable: false),
                     GovernID = table.Column<int>(type: "int", nullable: false),
@@ -457,6 +455,30 @@ namespace Data_Access_Layer.Migrations
                         name: "FK_Order_typeOfPayments_TypeOfPaymentID",
                         column: x => x.TypeOfPaymentID,
                         principalTable: "typeOfPayments",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "specialCharges",
+                columns: table => new
+                {
+                    SellerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CityID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_specialCharges", x => new { x.CityID, x.SellerID });
+                    table.ForeignKey(
+                        name: "FK_specialCharges_AspNetUsers_SellerID",
+                        column: x => x.SellerID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_specialCharges_Cities_CityID",
+                        column: x => x.CityID,
+                        principalTable: "Cities",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -602,6 +624,11 @@ namespace Data_Access_Layer.Migrations
                 table: "productStatuses",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_specialCharges_SellerID",
+                table: "specialCharges",
+                column: "SellerID");
         }
 
         /// <inheritdoc />
@@ -630,6 +657,9 @@ namespace Data_Access_Layer.Migrations
 
             migrationBuilder.DropTable(
                 name: "products");
+
+            migrationBuilder.DropTable(
+                name: "specialCharges");
 
             migrationBuilder.DropTable(
                 name: "weights");

@@ -17,7 +17,7 @@ namespace Data_Access_Layer.Entity
         public int PickUp { get; set; } = 0;
         public int ValueOfRejectedOrder { get; set; } = 0;
 
-  
+
 
         #region mapping the relation between seller and product 
         [InverseProperty("Seller")]
@@ -27,5 +27,6 @@ namespace Data_Access_Layer.Entity
         [InverseProperty("Seller")]
         public virtual ICollection<SpecialCharge> SpecialCharges { get; set; }
         #endregion
+    
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,7 @@ namespace Data_Access_Layer.Entity
         public virtual  Seller Seller   { get; set; }
         [ForeignKey("CityID")]
         public virtual  City City { get; set; }
+        [Required]
+        public int SpecialChargeForSeller { get; set; }
     }
 }

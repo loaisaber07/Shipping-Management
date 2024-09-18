@@ -4,6 +4,7 @@ using Data_Access_Layer.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    partial class ShippingDataBaseModelSnapshot : ModelSnapshot
+    [Migration("20240917232904_v1")]
+    partial class v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,7 +186,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 248, DateTimeKind.Local).AddTicks(5158));
+                        .HasDefaultValue(new DateTime(2024, 9, 18, 2, 29, 3, 391, DateTimeKind.Local).AddTicks(2912));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -236,7 +239,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 249, DateTimeKind.Local).AddTicks(1375));
+                        .HasDefaultValue(new DateTime(2024, 9, 18, 2, 29, 3, 392, DateTimeKind.Local).AddTicks(28));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -325,7 +328,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 249, DateTimeKind.Local).AddTicks(7836));
+                        .HasDefaultValue(new DateTime(2024, 9, 18, 2, 29, 3, 392, DateTimeKind.Local).AddTicks(6062));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -353,9 +356,6 @@ namespace Data_Access_Layer.Migrations
                     b.Property<int>("TypeOfPaymentID")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeOfReceiptID")
-                        .HasColumnType("int");
-
                     b.Property<string>("VillageOrStreet")
                         .HasColumnType("nvarchar(max)");
 
@@ -377,8 +377,6 @@ namespace Data_Access_Layer.Migrations
                     b.HasIndex("TypeOfChargeID");
 
                     b.HasIndex("TypeOfPaymentID");
-
-                    b.HasIndex("TypeOfReceiptID");
 
                     b.ToTable("Order", (string)null);
                 });
@@ -456,9 +454,6 @@ namespace Data_Access_Layer.Migrations
                     b.Property<string>("SellerID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("SpecialChargeForSeller")
-                        .HasColumnType("int");
-
                     b.HasKey("CityID", "SellerID");
 
                     b.HasIndex("SellerID");
@@ -518,23 +513,6 @@ namespace Data_Access_Layer.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("typeOfPayments");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfReceipt", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("typeOfReceipts");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Weight", b =>
@@ -824,12 +802,6 @@ namespace Data_Access_Layer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data_Access_Layer.Entity.TypeOfReceipt", "TypeOfReceipt")
-                        .WithMany("Orders")
-                        .HasForeignKey("TypeOfReceiptID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Branch");
 
                     b.Navigation("City");
@@ -843,8 +815,6 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("TypeOfCharge");
 
                     b.Navigation("TypeOfPayment");
-
-                    b.Navigation("TypeOfReceipt");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Product", b =>
@@ -986,11 +956,6 @@ namespace Data_Access_Layer.Migrations
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfPayment", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfReceipt", b =>
                 {
                     b.Navigation("Orders");
                 });

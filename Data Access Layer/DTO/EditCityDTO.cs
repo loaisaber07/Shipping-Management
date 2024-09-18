@@ -18,7 +18,6 @@ namespace Data_Access_Layer.DTO
         [Required]
         public int PickUpCharge { get; set; }
 
-        public int? SpecialChargeForSeller { get; set; }
         public int GovernID { get; set; }
     }
 }

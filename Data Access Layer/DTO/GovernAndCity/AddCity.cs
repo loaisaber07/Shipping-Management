@@ -17,6 +17,5 @@ namespace Data_Access_Layer.DTO.GovernAndCity
         [Required]
         public int PickUpCharge { get; set; }
 
-        public int? SpecialChargeForSeller { get; set; }
     }
 }
