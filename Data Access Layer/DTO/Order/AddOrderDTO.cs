@@ -35,6 +35,8 @@ namespace Data_Access_Layer.DTO.Order
         public int BranchID { get; set; }
 
         public int GovernID { get; set; }
+        public int CityID { get; set; }
+
         public string SellerID { get; set; }
         public int TypeOfPaymentID { get; set; }
         public int TypeOfChargeID { get; set; }
