@@ -24,7 +24,7 @@ namespace Data_Access_Layer.Entity
         public DbSet<FieldJob> fieldJobs { get; set; }
         public DbSet<Govern> governs { get; set; }
         public DbSet<Privilege> privileges { get; set; }
-
+        public DbSet<SpecialCharge> specialCharges { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderStatus> productStatuses { get; set; }
         public DbSet<Seller> sellers { get; set; }
@@ -38,14 +38,13 @@ namespace Data_Access_Layer.Entity
         {
             builder.Entity<ApplicationUser>().Property<bool>("Status").IsRequired()
                 .HasDefaultValue(true);  
-            builder.Entity<Govern>().Property<bool>("Status").IsRequired().HasDefaultValue(true);
-            builder.Entity<Branch>().Property<bool>("Status").IsRequired().HasDefaultValue(true);
             builder.Entity<Order>().ToTable("Order");
             builder.Entity<OrderStatus>().HasIndex(s => s.Name).IsUnique();
             builder.Entity<Branch>().Property(s => s.DataAdding).HasDefaultValue(DateTime.Now);
             builder.Entity<FieldPrivilege>().HasKey(s => new { s.PrivilegeID, s.FieldJobID });
-            builder.Entity<FieldJob>().Property(s => s.DateAdding).HasDefaultValue(DateTime.Now);
-
+            builder.Entity<FieldJob>().Property(s => s.DateAdding).HasDefaultValue(DateTime.Now); 
+            builder.Entity<Order>().Property(s=>s.DateAdding).IsRequired().HasDefaultValue(DateTime.Now);
+            builder.Entity<SpecialCharge>().HasKey(s => new { s.CityID, s.SellerID });
      
             base.OnModelCreating(builder);
         }

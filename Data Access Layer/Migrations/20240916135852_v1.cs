@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data_Access_Layer.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class v1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 16, 16, 58, 51, 731, DateTimeKind.Local).AddTicks(7828)),
                     Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
@@ -45,7 +46,8 @@ namespace Data_Access_Layer.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 16, 16, 58, 51, 733, DateTimeKind.Local).AddTicks(1670))
                 },
                 constraints: table =>
                 {
@@ -64,6 +66,19 @@ namespace Data_Access_Layer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_governs", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "privileges",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_privileges", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,44 +170,22 @@ namespace Data_Access_Layer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "privileges",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Add = table.Column<bool>(type: "bit", nullable: false),
-                    Edit = table.Column<bool>(type: "bit", nullable: false),
-                    Display = table.Column<bool>(type: "bit", nullable: false),
-                    Delete = table.Column<bool>(type: "bit", nullable: false),
-                    FieldJobID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_privileges", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_privileges_fieldJobs_FieldJobID",
-                        column: x => x.FieldJobID,
-                        principalTable: "fieldJobs",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Govern = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     FiledJobID = table.Column<int>(type: "int", nullable: false),
                     BranchID = table.Column<int>(type: "int", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     StoreName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PickUp = table.Column<int>(type: "int", nullable: true),
                     ValueOfRejectedOrder = table.Column<int>(type: "int", nullable: true),
-                    GovernID = table.Column<int>(type: "int", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -200,7 +193,6 @@ namespace Data_Access_Layer.Migrations
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -220,12 +212,6 @@ namespace Data_Access_Layer.Migrations
                         name: "FK_AspNetUsers_fieldJobs_FiledJobID",
                         column: x => x.FiledJobID,
                         principalTable: "fieldJobs",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_governs_GovernID",
-                        column: x => x.GovernID,
-                        principalTable: "governs",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -249,6 +235,34 @@ namespace Data_Access_Layer.Migrations
                         name: "FK_Cities_governs_GovernID",
                         column: x => x.GovernID,
                         principalTable: "governs",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "fieldPrivileges",
+                columns: table => new
+                {
+                    FieldJobID = table.Column<int>(type: "int", nullable: false),
+                    PrivilegeID = table.Column<int>(type: "int", nullable: false),
+                    Add = table.Column<bool>(type: "bit", nullable: false),
+                    Delete = table.Column<bool>(type: "bit", nullable: false),
+                    Edit = table.Column<bool>(type: "bit", nullable: false),
+                    Display = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_fieldPrivileges", x => new { x.PrivilegeID, x.FieldJobID });
+                    table.ForeignKey(
+                        name: "FK_fieldPrivileges_fieldJobs_FieldJobID",
+                        column: x => x.FieldJobID,
+                        principalTable: "fieldJobs",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_fieldPrivileges_privileges_PrivilegeID",
+                        column: x => x.PrivilegeID,
+                        principalTable: "privileges",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -383,16 +397,18 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClientNumber = table.Column<int>(type: "int", nullable: false),
-                    ClientNumber2 = table.Column<int>(type: "int", nullable: true),
+                    ClientNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClientNumber2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cost = table.Column<int>(type: "int", nullable: false),
                     IsForVillage = table.Column<bool>(type: "bit", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Weight = table.Column<int>(type: "int", nullable: false),
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 16, 16, 58, 51, 734, DateTimeKind.Local).AddTicks(161)),
                     VillageOrStreet = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BranchID = table.Column<int>(type: "int", nullable: false),
                     GovernID = table.Column<int>(type: "int", nullable: false),
+                    CityID = table.Column<int>(type: "int", nullable: false),
                     SellerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TypeOfPaymentID = table.Column<int>(type: "int", nullable: false),
                     TypeOfChargeID = table.Column<int>(type: "int", nullable: false),
@@ -406,6 +422,12 @@ namespace Data_Access_Layer.Migrations
                         column: x => x.SellerID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Order_Cities_CityID",
+                        column: x => x.CityID,
+                        principalTable: "Cities",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Order_branches_BranchID",
@@ -519,11 +541,6 @@ namespace Data_Access_Layer.Migrations
                 column: "FiledJobID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_GovernID",
-                table: "AspNetUsers",
-                column: "GovernID");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -536,9 +553,19 @@ namespace Data_Access_Layer.Migrations
                 column: "GovernID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_fieldPrivileges_FieldJobID",
+                table: "fieldPrivileges",
+                column: "FieldJobID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Order_BranchID",
                 table: "Order",
                 column: "BranchID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_CityID",
+                table: "Order",
+                column: "CityID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_GovernID",
@@ -564,11 +591,6 @@ namespace Data_Access_Layer.Migrations
                 name: "IX_Order_TypeOfPaymentID",
                 table: "Order",
                 column: "TypeOfPaymentID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_privileges_FieldJobID",
-                table: "privileges",
-                column: "FieldJobID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_products_OrderID",
@@ -604,10 +626,7 @@ namespace Data_Access_Layer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Cities");
-
-            migrationBuilder.DropTable(
-                name: "privileges");
+                name: "fieldPrivileges");
 
             migrationBuilder.DropTable(
                 name: "products");
@@ -622,10 +641,16 @@ namespace Data_Access_Layer.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "privileges");
+
+            migrationBuilder.DropTable(
                 name: "Order");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Cities");
 
             migrationBuilder.DropTable(
                 name: "productStatuses");

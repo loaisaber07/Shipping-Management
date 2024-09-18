@@ -19,13 +19,20 @@ namespace Data_Access_Layer.Repositry
             this.dataBase = dataBase;
         }
 
+        public void AddBranch(string branch)
+        {
+            Branch b = new Branch() { Name = branch  };
+            dataBase.branches.Add(b);
+        }
+
         public IEnumerable<BranchDTO> GetAll()
         {
         return    dataBase.branches.Select(s => new BranchDTO
             {
 Name = s.Name, 
 ID = s.ID,
-Date= s.DataAdding
+Date= s.DataAdding , 
+Status=s.Status
             });
         }
 
@@ -33,11 +40,14 @@ Date= s.DataAdding
         {
             Branch? b = dataBase.branches.FirstOrDefault(s => s.Name == name);
         if(b is not null) {
+
+                dataBase.branches.Attach(b); 
                 BranchDTO Dto = new BranchDTO
                 {
                 Name =b.Name , 
                 ID= b.ID ,
-                Date =b.DataAdding
+                Date =b.DataAdding , 
+                Status= b.Status
                 };
                 return Dto; 
             }

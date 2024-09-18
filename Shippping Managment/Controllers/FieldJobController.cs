@@ -5,6 +5,7 @@ using Data_Access_Layer.Interfaces;
 using Data_Access_Layer.Repositry;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.WebRequestMethods;
 
 namespace Shippping_Managment.Controllers
 {
@@ -14,11 +15,15 @@ namespace Shippping_Managment.Controllers
     {
         private readonly IFieldJob fieldRepo;
         private readonly IFieldPrivilege fieldprivilegeRepo;
+        private readonly IPrivilege privilegeRepo;
 
-        public FieldJobController(IFieldJob fieldRepo , IFieldPrivilege fieldprivilegeRepo)
+        public FieldJobController(IFieldJob fieldRepo , IFieldPrivilege fieldprivilegeRepo , 
+            IPrivilege privilegeRepo
+            )
         {
             this.fieldRepo = fieldRepo;
             this.fieldprivilegeRepo = fieldprivilegeRepo;
+            this.privilegeRepo = privilegeRepo;
         }
         [HttpGet]
         public ActionResult Get() {
@@ -31,25 +36,23 @@ namespace Shippping_Managment.Controllers
             if (!ModelState.IsValid) {
                 return BadRequest(new { Message ="Inavlid sent Object something is missed! " }); 
             }
-
+            
             bool result =  fieldRepo.IsExist(addFieldJob.Name);
             if (result)
             {
                 return BadRequest(new {Message="Field is allready exsit"});  
             }
             FieldJob? b = new FieldJob {
-                Name = addFieldJob.Name,
-                DateAdding = DateTime.Now
-            };
-            await  fieldRepo.CreateAsync(b);
-            await fieldRepo.SaveAsync();
-            b= fieldRepo.GetByName(addFieldJob.Name);
+                Name = addFieldJob.Name };
+         await  fieldRepo.CreateAsync(b);
+         await fieldRepo.SaveAsync();
+        b= fieldRepo.GetByName(addFieldJob.Name);
             if (b is null) {
                 return NotFound(new { Message="Field to save Fieldjob!"});
             }
-            IEnumerable<FieldPrivilege>FB= FieldPrivilegeService.CreateListOfFieldPrivilege(b.ID, addFieldJob.FieldPrivilegeDTo);
-            await  fieldprivilegeRepo.BulkInsert(FB);
-            await  fieldprivilegeRepo.SaveAsync();
+ IEnumerable<FieldPrivilege>FB= FieldPrivilegeService.CreateListOfFieldPrivilege(b.ID, addFieldJob.FieldPrivilegeDTo);
+          await  fieldprivilegeRepo.BulkInsert(FB);
+          await  fieldprivilegeRepo.SaveAsync();
             return RedirectToAction("Get");
 
 
@@ -75,30 +78,24 @@ namespace Shippping_Managment.Controllers
             return Ok(new { Message="Update Successfully!"}); 
         
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetById(int id)
-        {
-            FieldJobDTO? fieldJobDTO = await fieldRepo.GetByIdAsync(id);
-
-            if (fieldJobDTO == null)
+        [HttpDelete]
+        public async  Task<ActionResult> Delete(int id) {
+            
+           if(! await fieldRepo.IsExistByIdAsync(id))
             {
-                return NotFound(new { Message = "FieldJob not found" });
-            }
-
-            return Ok(fieldJobDTO);
-        }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFieldJob(int id)
-        {
-            var isDeleted = await fieldRepo.DeleteFieldJobAsync(id);
-
-            if (!isDeleted)
+                return NotFound(new { Messsage = "id not found" });
+            } 
+            bool check=  await  fieldprivilegeRepo.BulkDelte(id);
+            if (!check)
             {
-                return NotFound(new { Message = "FieldJob not found" });
-            }
+                return BadRequest(new { Message = "Can't delete try again" }); 
 
-            return Ok(new { Message = "FieldJob deleted successfully" });
+            }  
+
+            await fieldRepo.DeleteAsync(id);
+            await fieldRepo.SaveAsync();
+            return Ok(new { Message = "Deleted successfully" });
+        
         }
-
     }
 }

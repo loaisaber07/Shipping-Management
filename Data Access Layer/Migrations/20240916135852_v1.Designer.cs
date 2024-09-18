@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    [Migration("20240911142614_v7")]
-    partial class v7
+    [Migration("20240916135852_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,10 @@ namespace Data_Access_Layer.Migrations
                     b.Property<int>("BranchID")
                         .HasColumnType("int");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -106,6 +110,10 @@ namespace Data_Access_Layer.Migrations
                     b.Property<int>("FiledJobID")
                         .HasColumnType("int");
 
+                    b.Property<string>("Govern")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -124,6 +132,7 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -177,7 +186,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 17, 26, 13, 447, DateTimeKind.Local).AddTicks(6502));
+                        .HasDefaultValue(new DateTime(2024, 9, 16, 16, 58, 51, 731, DateTimeKind.Local).AddTicks(7828));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -232,6 +241,11 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<DateTime>("DateAdding")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 9, 16, 16, 58, 51, 733, DateTimeKind.Local).AddTicks(1670));
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -239,6 +253,33 @@ namespace Data_Access_Layer.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("fieldJobs");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.FieldPrivilege", b =>
+                {
+                    b.Property<int>("PrivilegeID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FieldJobID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Add")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Delete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Display")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Edit")
+                        .HasColumnType("bit");
+
+                    b.HasKey("PrivilegeID", "FieldJobID");
+
+                    b.HasIndex("FieldJobID");
+
+                    b.ToTable("fieldPrivileges");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Govern", b =>
@@ -274,18 +315,27 @@ namespace Data_Access_Layer.Migrations
                     b.Property<int>("BranchID")
                         .HasColumnType("int");
 
+                    b.Property<int>("CityID")
+                        .HasColumnType("int");
+
                     b.Property<string>("ClientName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ClientNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClientNumber2")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientNumber2")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Cost")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DateAdding")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 9, 16, 16, 58, 51, 734, DateTimeKind.Local).AddTicks(161));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -322,6 +372,8 @@ namespace Data_Access_Layer.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("BranchID");
+
+                    b.HasIndex("CityID");
 
                     b.HasIndex("GovernID");
 
@@ -364,28 +416,11 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<bool>("Add")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Delete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Display")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Edit")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("FieldJobID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("FieldJobID");
 
                     b.ToTable("privileges");
                 });
@@ -628,20 +663,15 @@ namespace Data_Access_Layer.Migrations
                 {
                     b.HasBaseType("Data_Access_Layer.Entity.ApplicationUser");
 
-                    b.Property<int>("GovernID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PickUp")
+                    b.Property<int>("PickUp")
                         .HasColumnType("int");
 
                     b.Property<string>("StoreName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ValueOfRejectedOrder")
+                    b.Property<int>("ValueOfRejectedOrder")
                         .HasColumnType("int");
-
-                    b.HasIndex("GovernID");
 
                     b.HasDiscriminator().HasValue("Seller");
                 });
@@ -703,11 +733,36 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("Govern");
                 });
 
+            modelBuilder.Entity("Data_Access_Layer.Entity.FieldPrivilege", b =>
+                {
+                    b.HasOne("Data_Access_Layer.Entity.FieldJob", "FieldJob")
+                        .WithMany("FieldPrivilege")
+                        .HasForeignKey("FieldJobID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data_Access_Layer.Entity.Privilege", "Privilege")
+                        .WithMany("FieldPrivilege")
+                        .HasForeignKey("PrivilegeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FieldJob");
+
+                    b.Navigation("Privilege");
+                });
+
             modelBuilder.Entity("Data_Access_Layer.Entity.Order", b =>
                 {
                     b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
                         .WithMany("Orders")
                         .HasForeignKey("BranchID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data_Access_Layer.Entity.City", "City")
+                        .WithMany("Orders")
+                        .HasForeignKey("CityID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -743,6 +798,8 @@ namespace Data_Access_Layer.Migrations
 
                     b.Navigation("Branch");
 
+                    b.Navigation("City");
+
                     b.Navigation("Govern");
 
                     b.Navigation("OrderStatus");
@@ -752,17 +809,6 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("TypeOfCharge");
 
                     b.Navigation("TypeOfPayment");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.Privilege", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.FieldJob", "FieldJob")
-                        .WithMany("Privileges")
-                        .HasForeignKey("FieldJobID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FieldJob");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Product", b =>
@@ -827,17 +873,6 @@ namespace Data_Access_Layer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Data_Access_Layer.Entity.Seller", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.Govern", "Govern")
-                        .WithMany("Sellers")
-                        .HasForeignKey("GovernID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Govern");
-                });
-
             modelBuilder.Entity("Data_Access_Layer.Entity.Branch", b =>
                 {
                     b.Navigation("Agents");
@@ -847,9 +882,14 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("Orders");
                 });
 
+            modelBuilder.Entity("Data_Access_Layer.Entity.City", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Data_Access_Layer.Entity.FieldJob", b =>
                 {
-                    b.Navigation("Privileges");
+                    b.Navigation("FieldPrivilege");
 
                     b.Navigation("Users");
                 });
@@ -861,8 +901,6 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("Cities");
 
                     b.Navigation("Orders");
-
-                    b.Navigation("Sellers");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Order", b =>
@@ -873,6 +911,11 @@ namespace Data_Access_Layer.Migrations
             modelBuilder.Entity("Data_Access_Layer.Entity.OrderStatus", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.Privilege", b =>
+                {
+                    b.Navigation("FieldPrivilege");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfCharge", b =>

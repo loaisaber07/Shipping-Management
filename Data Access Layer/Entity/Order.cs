@@ -19,12 +19,16 @@ namespace Data_Access_Layer.Entity
         public string ClientName { get; set; }
         [DataType(DataType.PhoneNumber)]
         [Required]
-        public int ClientNumber { get; set; }
+        [RegularExpression(@"^01(0|1|2|5)\d{8}$", ErrorMessage = "Invalid phone number")]
+
+        public string ClientNumber { get; set; }
         [DataType(DataType.PhoneNumber)]
-        public int? ClientNumber2 { get; set; }
+        [RegularExpression(@"^01(0|1|2|5)\d{8}$", ErrorMessage = "Invalid phone number")]
+        public string? ClientNumber2 { get; set; }
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required]
+        [Range(10 , 100000)]
         public int Cost { get; set; }
         [Required]
         public bool IsForVillage { get; set; } = false;
@@ -32,7 +36,7 @@ namespace Data_Access_Layer.Entity
         public string? Note { get; set; }
         [Required]
         public int Weight { get; set; }
-
+        public DateTime DateAdding { get;}
         public string? VillageOrStreet { get; set; }
 
         #region mapping the relation between product and branch 
@@ -47,6 +51,13 @@ namespace Data_Access_Layer.Entity
         public int GovernID { get; set; }
         [ForeignKey("GovernID")]
         public virtual  Govern Govern  { get; set; }
+        #endregion
+        #region mapping the realtion between Order and city 
+        [ForeignKey("City")]
+
+        public int CityID { get; set; }
+        [ForeignKey("CityID")]
+        public virtual City City { get; set; }  
         #endregion
 
         #region mapping the relation between product and seller 
@@ -71,7 +82,7 @@ namespace Data_Access_Layer.Entity
         public virtual TypeOfCharge TypeOfCharge { get; set; }
         #endregion
 
-        #region 
+        #region mapping the realtion between this and OrderStatus
         [ForeignKey("OrderStatus")]
         public int OrderStatusID { get; set; }
         [ForeignKey("OrderStatusID")]

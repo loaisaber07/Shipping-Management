@@ -10,7 +10,8 @@ namespace Data_Access_Layer.DTO
     public class GovernDTO
     {
         public int ID { get; set; }
-        public string Name { get; set; } 
+        public string Name { get; set; }  
+        public bool Status { get; set; }
     public    List<CityDTO>? cities { get; set; }
     }
 }

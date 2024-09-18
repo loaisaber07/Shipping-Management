@@ -11,6 +11,9 @@ namespace Data_Access_Layer.Interfaces
     {
         Task BulkInsert(IEnumerable<FieldPrivilege> p); 
         bool BulkIUpdate(IEnumerable<FieldPrivilege> p);
+        Task<bool> BulkDelte(int fieldID); 
+        IQueryable<FieldPrivilege> GetAll();  
+        Task<IEnumerable<FieldPrivilege>>GetByFJId(int fieldID);
 
     }
 }

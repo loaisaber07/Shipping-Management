@@ -9,5 +9,6 @@ namespace Data_Access_Layer.Interfaces
 {
     public interface IOrder:IRepositry<Order>
     {
+        Task<Order?> GetById(int id);
     }
 }
