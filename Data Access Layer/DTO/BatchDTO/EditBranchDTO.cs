@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.DTO.BatchDTO
 {
-    public class BranchDTO
+    public class EditBranchDTO
     {
         [Required]
         public int ID { get; set; }
-        
+        [UniqueBranchNameEdit]
         public string Name { get; set; }
-        public DateTime Date { get; set; } 
         public bool Status { get; set; }
     }
 }
