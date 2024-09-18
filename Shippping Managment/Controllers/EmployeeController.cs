@@ -39,8 +39,14 @@ namespace Shippping_Managment.Controllers
             return BadRequest(new { Message="Can't update Employee!"});
             }
             await userRepo.SaveAsync();
-            return Ok(); 
+            return Ok();
 
         }
+        [HttpDelete]
+        public ActionResult DeleteEmployee(int id) {
+
+            return NoContent();
+        }
+        
     }
 }
