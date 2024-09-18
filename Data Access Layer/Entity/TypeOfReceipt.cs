@@ -1,4 +1,5 @@
-﻿using Data_Access_Layer.Custom_Validation;
+
+using Data_Access_Layer.Custom_Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Entity
 {
+
     public class TypeOfReceipt
     {
         [Key]

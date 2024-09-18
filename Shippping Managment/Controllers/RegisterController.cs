@@ -1,4 +1,4 @@
-﻿using Business_Layer.DTO.Employee;
+using Business_Layer.DTO.Employee;
 using Business_Layer.Services.Employee;
 using Business_Layer.Services.Seller;
 using Business_Layer.Services.SpecialCharge;
@@ -104,6 +104,7 @@ namespace Shippping_Managment.Controllers
             }
             
        IEnumerable<SpecialCharge>? list=   SpecialChargeService.GetSpecialCharges(user.Id,sellerDTO.citySellers);
+
             if (list is not null)
             { 
             await specialChargeRepo.BulkInsert(list);
