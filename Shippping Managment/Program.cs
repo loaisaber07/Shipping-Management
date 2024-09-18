@@ -42,6 +42,7 @@ namespace Shippping_Managment
             builder.Services.AddScoped<IOrderStatus, OrderStatusRepository>();
             builder.Services.AddScoped<IOrder,OrderRepository>();
             builder.Services.AddScoped<ISpecialCharge, SpecialChargeRepo>();
+            builder.Services.AddScoped<ISeller, SellerRepository>();
             builder.Services.AddScoped<IWeight,WeightRepository>();
             builder.Services.AddScoped<InvoiceService>();
             builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "mySchema")

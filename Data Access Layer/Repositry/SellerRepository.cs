@@ -1,6 +1,8 @@
-﻿using Data_Access_Layer.Entity;
+﻿using Data_Access_Layer.DTO.Seller;
+using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +14,23 @@ namespace Data_Access_Layer.Repositry
     public class SellerRepository:Repository<Seller>,ISeller
     {
         private readonly ShippingDataBase dataBase;
-        private readonly UserManager<Seller> userManager;
 
-        public SellerRepository(ShippingDataBase dataBase ,UserManager<Seller>userManager) : base(dataBase)
+        public SellerRepository(ShippingDataBase dataBase ) : base(dataBase)
         {
             this.dataBase = dataBase;
-            this.userManager = userManager;
+            
         }
 
-        public Task<bool> CreateSeller(Seller seller, string Password)
+        public async Task<Seller?> DisplayScreenForSeller(string id)
         {
-            throw new NotImplementedException();
+            return await dataBase.sellers
+                    .AsNoTracking()
+                    .Include(s => s.Orders)
+                    .ThenInclude(s => s.OrderStatus)
+                    .AsSplitQuery()
+                    .Where(s => s.Id == id)
+                    .FirstOrDefaultAsync();  
+                
         }
     }
 }

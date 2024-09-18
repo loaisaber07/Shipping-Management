@@ -1,4 +1,5 @@
-﻿using Data_Access_Layer.Entity;
+﻿using Data_Access_Layer.DTO.Seller;
+using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,6 +23,8 @@ namespace Data_Access_Layer.Repositry
             OrderStatus? type = await dataBase.productStatuses.AsNoTracking().FirstOrDefaultAsync(p => p.Name == name);
             return type;
         }
+
+        
 
         public async Task<bool> IsExistByName(string name)
         {

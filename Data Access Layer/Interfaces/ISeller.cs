@@ -1,4 +1,5 @@
-﻿using Data_Access_Layer.Entity;
+﻿using Data_Access_Layer.DTO.Seller;
+using Data_Access_Layer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Interfaces
 {
-    public interface ISeller:IRepositry<Seller>
+    public interface ISeller : IRepositry<Seller>
     {
-        Task<bool> CreateSeller(Seller seller, string Password);
-
+        Task<Seller?> DisplayScreenForSeller(string id);
     }
 }

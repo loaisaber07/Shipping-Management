@@ -12,10 +12,12 @@ namespace Shippping_Managment.Controllers
     public class SellerController : ControllerBase
     {
         private readonly IUser userRepo;
+        private readonly ISeller sellerRepo;
 
-        public SellerController( IUser userRepo)
+        public SellerController( IUser userRepo , ISeller sellerRepo)
         {
             this.userRepo = userRepo;
+            this.sellerRepo = sellerRepo;
         }
         [HttpDelete]
         public async Task<ActionResult> Delete(string sellerId)
@@ -48,6 +50,20 @@ namespace Shippping_Managment.Controllers
            IEnumerable<Seller> sellerList= await userRepo.GetAllSellers();
             IEnumerable<GetSellerDTO> get = SellerService.GetAllSellers(sellerList);
             return Ok(get);
+        }
+        [HttpGet]
+        [Route("ScreenForSeller")]
+        public async Task<ActionResult> ScreenForSeller(string id) {
+          Seller? seller=await sellerRepo.DisplayScreenForSeller(id);
+            if (seller is null) {
+                return BadRequest();
+            }
+    IEnumerable<DisplayScreenForSeller?>dto  = SellerService.GetDisplayScreenForSellers(seller);
+            if (dto is null) {
+                return BadRequest();
+            } 
+            return Ok(dto);
+        
         }
     }
 }

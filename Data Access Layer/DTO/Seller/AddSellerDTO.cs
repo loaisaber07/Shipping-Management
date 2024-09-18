@@ -25,10 +25,9 @@ namespace Data_Access_Layer.DTO.Seller
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        public string Govern { get; set; }
-        public string City { get; set; }
         [Required]
         public string StoreName { get; set; }
+        public int StoreCityId { get; set; }
         public int PickUp { get; set; } = 0;
         public int ValueOfRejectedOrder { get; set; } = 0;
         public ICollection<CitySeller>? citySellers { get; set; }
