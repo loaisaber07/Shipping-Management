@@ -78,5 +78,21 @@ namespace Data_Access_Layer.Repositry
             return false;
 
         }
+
+        public async Task<IEnumerable<ApplicationUser>> GetAllEmployee()
+        {
+            var users = await userManager.Users.
+                Include(s => s.FieldJob)
+                .Include(s => s.Branch)
+                .ToListAsync();
+            var RoleInList = new List<ApplicationUser>();
+            foreach (var user in users) {
+                if (await userManager.IsInRoleAsync(user, "Employee")) { 
+                RoleInList.Add(user);
+                }
+            }
+            return RoleInList;
+            
+        }
     }
 }

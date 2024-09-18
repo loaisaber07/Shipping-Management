@@ -27,10 +27,8 @@ namespace Data_Access_Layer.Entity
         public bool Status { get; set; } = true; 
 
         #region mappiing relation between this and field Job 
-        [ForeignKey("FieldJob")]
-        public int FiledJobID { get; set; }
-        [ForeignKey("FiledJobID")]
-        public virtual FieldJob FieldJob { get; set; }
+        public int? FiledJobID { get; set; }
+        public virtual FieldJob? FieldJob { get; set; }
 
         #endregion
 

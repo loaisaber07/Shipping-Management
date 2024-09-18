@@ -14,7 +14,8 @@ namespace Data_Access_Layer.Interfaces
         Task<bool> DeleteUserAsync(string id);
         Task<ApplicationUser?> GetByEmail(string email); 
         Task<bool> CreateUser(ApplicationUser user,string password);
-        Task<bool> AddRole(string Email, string roleName); 
+        Task<bool> AddRole(string Email, string roleName);
+        Task<IEnumerable<ApplicationUser>> GetAllEmployee();
 
     }
 }

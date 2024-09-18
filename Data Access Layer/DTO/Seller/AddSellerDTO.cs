@@ -28,6 +28,7 @@ namespace Data_Access_Layer.DTO.Seller
         public string StoreName { get; set; }
         public int PickUp { get; set; } = 0;
         public int ValueOfRejectedOrder { get; set; } = 0;
-        public int FiledJobID { get; set; }//????????????
+        public ICollection<CitySeller> citySellers { get; set; }
+
     }
 }

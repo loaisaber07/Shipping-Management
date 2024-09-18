@@ -45,7 +45,18 @@ namespace Data_Access_Layer.Entity
             builder.Entity<FieldJob>().Property(s => s.DateAdding).HasDefaultValue(DateTime.Now); 
             builder.Entity<Order>().Property(s=>s.DateAdding).IsRequired().HasDefaultValue(DateTime.Now);
             builder.Entity<SpecialCharge>().HasKey(s => new { s.CityID, s.SellerID });
-     
+            builder.Entity<ApplicationUser>()
+                 .HasDiscriminator<string>("UserType")
+                 .HasValue<ApplicationUser>("ApplicationUser")
+                 .HasValue<Seller>("Seller");
+            builder.Entity<ApplicationUser>()
+                .HasOne(s=>s.FieldJob)
+                .WithMany(s=>s.Users)
+                .HasForeignKey(s=> s.FiledJobID)
+                .IsRequired(false);
+
+            
+            
             base.OnModelCreating(builder);
         }
     }

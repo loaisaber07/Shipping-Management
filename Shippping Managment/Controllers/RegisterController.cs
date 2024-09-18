@@ -1,10 +1,12 @@
 ﻿using Business_Layer.DTO.Employee;
 using Business_Layer.Services.Employee;
 using Business_Layer.Services.Seller;
+using Business_Layer.Services.SpecialCharge;
 using Data_Access_Layer.DTO.Seller;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Shippping_Managment.Controllers
@@ -16,12 +18,18 @@ namespace Shippping_Managment.Controllers
         private readonly IBranch branchRepo;
         private readonly IFieldJob fieldRepo;
         private readonly IUser userReo;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ISpecialCharge specialChargeRepo;
 
-        public RegisterController(IBranch branchRepo ,IFieldJob fieldRepo ,IUser userReo)
+        public RegisterController(IBranch branchRepo ,IFieldJob fieldRepo ,IUser userReo, 
+            RoleManager<IdentityRole> roleManager , 
+            ISpecialCharge specialChargeRepo)
         {
             this.branchRepo = branchRepo;
             this.fieldRepo = fieldRepo;
             this.userReo = userReo;
+            this._roleManager = roleManager;
+            this.specialChargeRepo = specialChargeRepo;
         }
         [HttpPost]
         [Route("/AddEmployee")]
@@ -30,6 +38,19 @@ namespace Shippping_Managment.Controllers
             if (!ModelState.IsValid) {
                 return BadRequest(new { Message = "Incorrect Data!" }); 
             }
+            var roleExists = await _roleManager.RoleExistsAsync("Employee");
+            if (!roleExists)
+            {
+                var role = new IdentityRole("Employee");
+                var result1 = await _roleManager.CreateAsync(role);
+
+                if (!result1.Succeeded)
+                {
+                    return BadRequest(new { Message="Can't create the Role of Employee successfully!"});
+                }
+               
+            }
+
             bool check =await branchRepo.IsExistByID(employee.BranchID);
             if (!check) { 
             return BadRequest(new { Message="Branch Not Exist"});
@@ -58,6 +79,18 @@ namespace Shippping_Managment.Controllers
             {
                 return BadRequest(new { Message = "Incorrect Data!" });
             }
+            var roleExists = await _roleManager.RoleExistsAsync("Seller");
+            if (!roleExists)
+            {
+                var role = new IdentityRole("Seller");
+                var result1 = await _roleManager.CreateAsync(role);
+
+                if (!result1.Succeeded)
+                {
+                    return BadRequest(new { Message = "Can't create the Role of Seller successfully!" });
+                }
+
+            }
             bool check = await branchRepo.IsExistByID(sellerDTO.BranchID);
             if (!check)
             {
@@ -74,7 +107,9 @@ namespace Shippping_Managment.Controllers
             {
                 return BadRequest();
             }
-
+       IEnumerable<SpecialCharge> list=   SpecialChargeService.GetSpecialCharges(user.Id,sellerDTO.citySellers);
+          await specialChargeRepo.BulkInsert(list);
+          await specialChargeRepo.SaveAsync();
             return Ok(new { Message = "Adding Successfully" });
         }
     }

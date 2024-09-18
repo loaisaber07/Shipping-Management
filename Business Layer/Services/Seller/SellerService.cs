@@ -19,7 +19,6 @@ namespace Business_Layer.Services.Seller
                 Email=dto.Email,
                 PhoneNumber=dto.Phone,
                 BranchID=dto.BranchID,
-                FiledJobID=dto.FiledJobID,
                 Govern =dto.Govern,
                 City=dto.City,
                 StoreName=dto.StoreName,
