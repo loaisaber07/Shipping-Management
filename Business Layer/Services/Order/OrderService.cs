@@ -29,7 +29,8 @@ namespace Business_Layer.Services.Order
                 TypeOfChargeID = add.TypeOfChargeID,
                 SellerID = add.SellerID,
                 OrderStatusID = add.OrderStatusID,
-                Note = add.Note
+                Note = add.Note,
+                CityID=add.CityID
             };
             return order;
         }
@@ -52,7 +53,9 @@ namespace Business_Layer.Services.Order
                 TypeOfChargeID= order.TypeOfChargeID,
                 VillageOrStreet= order.VillageOrStreet,
                 TypeOfPaymentID= order.TypeOfPaymentID,
-                Note= order.Note
+                Note= order.Note,
+                CityID = order.CityID
+
             };
            
             return getOrderDTO;

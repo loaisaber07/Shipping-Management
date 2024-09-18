@@ -18,7 +18,7 @@ namespace Data_Access_Layer.Custom_Validation
                 var entity = context.privileges.FirstOrDefault(s => s.Name == value.ToString());
                 if (entity != null)
                 {
-                    return new ValidationResult("Phone Number must be unique ");
+                    return new ValidationResult("Privilege Name must be unique ");
                 }
 
 

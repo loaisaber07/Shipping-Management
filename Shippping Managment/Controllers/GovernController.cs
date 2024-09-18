@@ -68,10 +68,6 @@ namespace Shippping_Managment.Controllers
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
-            bool result = govern.IsExist(gov.Name);
-            if (result) {
-                return BadRequest(new { Message = "Already Existed!" }); 
-            }
             Govern g = new Govern
             {
                 Name = gov.Name
@@ -90,7 +86,6 @@ namespace Shippping_Managment.Controllers
                 GovernID=g.ID , 
                 NormalCharge=city.NormalCharge ,
                 PickUpCharge=city.PickUpCharge,
-                SpecialChargeForSeller=city.SpecialChargeForSeller
                 });
 
             }

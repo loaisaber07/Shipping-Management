@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data_Access_Layer.Custom_Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,7 +18,6 @@ namespace Data_Access_Layer.DTO
         [Required]
         public int PickUpCharge { get; set; }
 
-        public int? SpecialChargeForSeller { get; set; }
         public int GovernID { get; set; }
     }
 }

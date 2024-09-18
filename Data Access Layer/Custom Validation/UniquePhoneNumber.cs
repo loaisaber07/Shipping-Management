@@ -15,7 +15,8 @@ namespace Data_Access_Layer.Custom_Validation
             if (value != null)
             {
                 var context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
-                var entity = context.Users.FirstOrDefault(s => s.PhoneNumber == value.ToString());
+               
+                var entity = context?.Users.FirstOrDefault(s => s.PhoneNumber == value.ToString());
                 if (entity != null)
                 {
                     return new ValidationResult("Phone Number must be unique ");

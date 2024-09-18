@@ -19,7 +19,6 @@ namespace Business_Layer.Services
                 Name = dto.Name,
                 NormalCharge = dto.NormalCharge,
                 PickUpCharge = dto.PickUpCharge,
-                SpecialChargeForSeller = dto.SpecialChargeForSeller,
                 GovernID=dto.GovernID
             };
             return city;
@@ -36,7 +35,6 @@ namespace Business_Layer.Services
                     ID = city.ID,
                     NormalCharge = city.NormalCharge,
                     PickUpCharge=city.PickUpCharge,
-                     SpecialChargeForSeller=city.SpecialChargeForSeller,
                      GovernID=city.GovernID
                 };
                 list.Add(dto);
@@ -52,7 +50,6 @@ namespace Business_Layer.Services
                 GovernID=addCity.GovernID,
                 NormalCharge=addCity.NormalCharge,
                 PickUpCharge = addCity.PickUpCharge,
-                SpecialChargeForSeller=addCity.SpecialChargeForSeller
             };
             return city;
         }
@@ -65,7 +62,6 @@ namespace Business_Layer.Services
                 NormalCharge = city.NormalCharge,
                 PickUpCharge = city.PickUpCharge,
                 Id = city.ID,
-                SpecialChargeForSeller = city.SpecialChargeForSeller
             };
             return cityDTO;
         }

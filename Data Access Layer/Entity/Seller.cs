@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,12 +17,16 @@ namespace Data_Access_Layer.Entity
         public int PickUp { get; set; } = 0;
         public int ValueOfRejectedOrder { get; set; } = 0;
 
-  
+
 
         #region mapping the relation between seller and product 
         [InverseProperty("Seller")]
         public virtual ICollection<Order> Orders { get; set; }
         #endregion
-     
+        #region mapping the relation between City and Seller (SpecialCharge) 
+        [InverseProperty("Seller")]
+        public virtual ICollection<SpecialCharge> SpecialCharges { get; set; }
+        #endregion
+    
     }
 }

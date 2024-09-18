@@ -14,7 +14,7 @@ namespace Shippping_Managment.Controllers
         {
             _roleManager = roleManager;
         }
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> CreateRoleAsync(string roleName)
         {
             // Step 1: Check if the role already exists

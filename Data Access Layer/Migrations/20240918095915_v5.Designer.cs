@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    [Migration("20240916135852_v1")]
-    partial class v1
+    [Migration("20240918095915_v5")]
+    partial class v5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,11 +95,6 @@ namespace Data_Access_Layer.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -107,7 +102,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("FiledJobID")
+                    b.Property<int?>("FiledJobID")
                         .HasColumnType("int");
 
                     b.Property<string>("Govern")
@@ -154,6 +149,11 @@ namespace Data_Access_Layer.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("UserType")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BranchID");
@@ -170,7 +170,7 @@ namespace Data_Access_Layer.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasDiscriminator().HasValue("ApplicationUser");
+                    b.HasDiscriminator<string>("UserType").HasValue("ApplicationUser");
 
                     b.UseTphMappingStrategy();
                 });
@@ -186,16 +186,14 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 16, 16, 58, 51, 731, DateTimeKind.Local).AddTicks(7828));
+                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 248, DateTimeKind.Local).AddTicks(5158));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
+                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -223,9 +221,6 @@ namespace Data_Access_Layer.Migrations
                     b.Property<int>("PickUpCharge")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SpecialChargeForSeller")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
                     b.HasIndex("GovernID");
@@ -244,7 +239,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 16, 16, 58, 51, 733, DateTimeKind.Local).AddTicks(1670));
+                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 249, DateTimeKind.Local).AddTicks(1375));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -295,9 +290,7 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
+                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -335,7 +328,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 16, 16, 58, 51, 734, DateTimeKind.Local).AddTicks(161));
+                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 249, DateTimeKind.Local).AddTicks(7836));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -363,6 +356,9 @@ namespace Data_Access_Layer.Migrations
                     b.Property<int>("TypeOfPaymentID")
                         .HasColumnType("int");
 
+                    b.Property<int>("TypeOfReceiptID")
+                        .HasColumnType("int");
+
                     b.Property<string>("VillageOrStreet")
                         .HasColumnType("nvarchar(max)");
 
@@ -384,6 +380,8 @@ namespace Data_Access_Layer.Migrations
                     b.HasIndex("TypeOfChargeID");
 
                     b.HasIndex("TypeOfPaymentID");
+
+                    b.HasIndex("TypeOfReceiptID");
 
                     b.ToTable("Order", (string)null);
                 });
@@ -453,6 +451,24 @@ namespace Data_Access_Layer.Migrations
                     b.ToTable("products");
                 });
 
+            modelBuilder.Entity("Data_Access_Layer.Entity.SpecialCharge", b =>
+                {
+                    b.Property<int>("CityID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SellerID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("SpecialChargeForSeller")
+                        .HasColumnType("int");
+
+                    b.HasKey("CityID", "SellerID");
+
+                    b.HasIndex("SellerID");
+
+                    b.ToTable("specialCharges");
+                });
+
             modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfCharge", b =>
                 {
                     b.Property<int>("ID")
@@ -505,6 +521,23 @@ namespace Data_Access_Layer.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("typeOfPayments");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfReceipt", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("typeOfReceipts");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Weight", b =>
@@ -713,9 +746,7 @@ namespace Data_Access_Layer.Migrations
 
                     b.HasOne("Data_Access_Layer.Entity.FieldJob", "FieldJob")
                         .WithMany("Users")
-                        .HasForeignKey("FiledJobID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FiledJobID");
 
                     b.Navigation("Branch");
 
@@ -796,6 +827,12 @@ namespace Data_Access_Layer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Data_Access_Layer.Entity.TypeOfReceipt", "TypeOfReceipt")
+                        .WithMany("Orders")
+                        .HasForeignKey("TypeOfReceiptID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Branch");
 
                     b.Navigation("City");
@@ -809,6 +846,8 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("TypeOfCharge");
 
                     b.Navigation("TypeOfPayment");
+
+                    b.Navigation("TypeOfReceipt");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Product", b =>
@@ -820,6 +859,25 @@ namespace Data_Access_Layer.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.SpecialCharge", b =>
+                {
+                    b.HasOne("Data_Access_Layer.Entity.City", "City")
+                        .WithMany("SpecialCharges")
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data_Access_Layer.Entity.Seller", "Seller")
+                        .WithMany("SpecialCharges")
+                        .HasForeignKey("SellerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -885,6 +943,8 @@ namespace Data_Access_Layer.Migrations
             modelBuilder.Entity("Data_Access_Layer.Entity.City", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("SpecialCharges");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.FieldJob", b =>
@@ -933,9 +993,16 @@ namespace Data_Access_Layer.Migrations
                     b.Navigation("Orders");
                 });
 
+            modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfReceipt", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Data_Access_Layer.Entity.Seller", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("SpecialCharges");
                 });
 #pragma warning restore 612, 618
         }

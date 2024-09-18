@@ -14,7 +14,6 @@ namespace Data_Access_Layer.DTO
         public string Name { get; set; }
         public int NormalCharge { get; set; }
         public int PickUpCharge { get; set; }
-        public int? SpecialChargeForSeller { get; set; }
         public int GovernID { get; set; }
 
     }

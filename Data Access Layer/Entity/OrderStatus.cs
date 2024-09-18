@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data_Access_Layer.Custom_Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,7 +15,7 @@ namespace Data_Access_Layer.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
-        
+        [UniqueOrderStatus]
         public string Name { get; set; } = "new"; 
 
         #region mapping the relation between this and product

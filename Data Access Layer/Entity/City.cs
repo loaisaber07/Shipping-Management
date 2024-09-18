@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data_Access_Layer.Custom_Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,12 +17,10 @@ namespace Data_Access_Layer.Entity
         [Required]
         public int NormalCharge { get; set; }
         [Required]
+        [UniqueCityName]
         public string Name { get; set; }
         [Required]
         public int PickUpCharge { get; set; }
-
-        public int? SpecialChargeForSeller { get; set; }
-
         #region  mapping the relation between city and govern 
         [ForeignKey("Govern")]
         public int GovernID { get; set; }
@@ -31,6 +30,10 @@ namespace Data_Access_Layer.Entity
         #region mapping between order and city 
         [InverseProperty("City")]
         public virtual ICollection<Order>? Orders { get; set; }
+        #endregion
+        #region mapping the relation between seller and city 
+        [InverseProperty("City")]
+        public virtual ICollection<SpecialCharge>? SpecialCharges { get; set; }
         #endregion
     }
 }
