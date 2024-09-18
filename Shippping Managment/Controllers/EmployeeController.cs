@@ -23,5 +23,24 @@ namespace Shippping_Managment.Controllers
         IEnumerable<DisplayEmployeeDTO>dto =   EmployeeServices.GetEmployees(users);
         return Ok(dto);
         }
+        [HttpPut]
+        public async Task<ActionResult>  EditEmployee(EditEmployeeDTO dto)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest(new { Message = "invalid data" });      
+            }
+        ApplicationUser? user =  await userRepo.GetUserAsyncById(dto.ID);
+            if (user is null) {
+                return NotFound(new { Message="Can't find Employee hava the same id!"});
+            }
+      user= EmployeeServices.MapEmployeeForEditing(user, dto); ;
+     bool check= await userRepo.UpdateUser(user);
+            if (!check) { 
+            return BadRequest(new { Message="Can't update Employee!"});
+            }
+            await userRepo.SaveAsync();
+            return Ok(); 
+
+        }
     }
 }

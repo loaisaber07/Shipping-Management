@@ -34,7 +34,7 @@ namespace Data_Access_Layer.Entity
         public DbSet<Weight> weights { get; set; }       
         public DbSet<Product> products { get; set; }
         public DbSet<FieldPrivilege> fieldPrivileges { get; set; }
-        public DbSet<TypeOfReceipt> typeOfReceipts { get; set; }
+        public DbSet<TypeOfReceipt> typeOfReceipts { get; set; } 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ApplicationUser>().Property<bool>("Status").IsRequired()

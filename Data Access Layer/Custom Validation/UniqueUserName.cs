@@ -15,7 +15,8 @@ namespace Data_Access_Layer.Custom_Validation
             if (value != null)
             {
                 var context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
-                var entity = context.Users.FirstOrDefault(s => s.UserName == value.ToString());
+             
+                var entity = context.Users.FirstOrDefault(s => s.UserName == value.ToString());    
                 if (entity != null)
                 {
                     return new ValidationResult("User Name must be unique ");
