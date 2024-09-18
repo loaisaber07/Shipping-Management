@@ -53,6 +53,16 @@ namespace Shippping_Managment.Controllers
             await userRepo.SaveAsync();
             return Ok(new { Message = "Employee Deleted" });
         }
-
+        [HttpGet("{employeeId}")]
+        public async Task<ActionResult> GetEmployeeById(string employeeId) { 
+    ApplicationUser? user = await userRepo.GetUserAsyncById(employeeId);
+            if (user is null)
+            {
+                return NotFound(new { Message="Cant find Employee!"});
+            }
+      DisplayEmployeeDTO dto =  EmployeeServices.MapEmployeeforDisplay(user);
+        return Ok(dto);
+        }
     }
+
 }
