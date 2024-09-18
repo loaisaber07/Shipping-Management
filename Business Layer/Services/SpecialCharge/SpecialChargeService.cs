@@ -9,7 +9,7 @@ namespace Business_Layer.Services.SpecialCharge
 {
     public  class SpecialChargeService
     {
-        public static IEnumerable<Data_Access_Layer.Entity.SpecialCharge> GetSpecialCharges(string sellerId , IEnumerable<CitySeller> dtos) { 
+        public static IEnumerable<Data_Access_Layer.Entity.SpecialCharge>? GetSpecialCharges(string sellerId , IEnumerable<CitySeller> dtos) { 
         List<Data_Access_Layer.Entity.SpecialCharge> result =new List<Data_Access_Layer.Entity.SpecialCharge>();
             foreach (var item in dtos) {
                 result.Add(new Data_Access_Layer.Entity.SpecialCharge
@@ -19,7 +19,7 @@ namespace Business_Layer.Services.SpecialCharge
                   SellerID=sellerId
                 });  
             }
-            return result;
+            return result ?? null;
         
         }
     }
