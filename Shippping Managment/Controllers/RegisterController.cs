@@ -97,16 +97,12 @@ namespace Shippping_Managment.Controllers
                 return BadRequest(new { Message = "Branch Not Exist" });
             }
             Seller user = SellerService.GetSeller(sellerDTO);
-            bool result = await userReo.CreateUser(user, sellerDTO.Password);
+            bool result = await userReo.CreateSeller(user, sellerDTO.Password);
             if (!result)
             {
                 return BadRequest(new { Message = "Failed to create new seller!" });
             }
-            result = await userReo.AddRole(sellerDTO.Email, "Seller");
-            if (!result)
-            {
-                return BadRequest();
-            }
+            
        IEnumerable<SpecialCharge>? list=   SpecialChargeService.GetSpecialCharges(user.Id,sellerDTO.citySellers);
             if (list is not null)
             { 

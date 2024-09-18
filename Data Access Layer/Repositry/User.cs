@@ -115,5 +115,18 @@ namespace Data_Access_Layer.Repositry
             }
             return false;
         }
+
+        public async Task<bool> CreateSeller(Seller seller, string password)
+        {
+   IdentityResult result = await userManager.CreateAsync(seller, password);
+            if (result.Succeeded) { 
+          IdentityResult r= await userManager.AddToRoleAsync(seller, "Seller");
+                if (r.Succeeded) {
+                    return true;
+                }
+            
+            }
+            return false;
+        }
     }
 }
