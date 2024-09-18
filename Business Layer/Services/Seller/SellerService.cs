@@ -27,5 +27,45 @@ namespace Business_Layer.Services.Seller
             };
             return user;
         }
+        public static GetSellerDTO GetSellerDTO(Data_Access_Layer.Entity.Seller seller)
+        {
+            GetSellerDTO dto = new GetSellerDTO
+            {
+                BranchID=seller.BranchID,
+                City=seller.City,
+                StoreName=seller.StoreName,
+                Email=seller.Email,
+                Id=seller.Id,
+                Govern=seller.Govern,
+                Name=seller.UserName,
+                Phone=seller.PhoneNumber,
+                ValueOfRejectedOrder = seller.ValueOfRejectedOrder,
+                PickUp = seller.PickUp
+
+            };
+            return dto;
+        }
+        public static IEnumerable<GetSellerDTO> GetAllSellers(IEnumerable<Data_Access_Layer.Entity.Seller>sellerList)
+        {
+            List<GetSellerDTO> getSellerDTOs = new List<GetSellerDTO>();
+            foreach (var dto in sellerList)
+            {
+                GetSellerDTO getSeller = new GetSellerDTO
+                {
+                    BranchID = dto.BranchID,
+                    City = dto.City,
+                    StoreName = dto.StoreName,
+                    Email = dto.Email,
+                    Id = dto.Id,
+                    Govern = dto.Govern,
+                    Name = dto.UserName,
+                    Phone = dto.PhoneNumber,
+                    PickUp = dto.PickUp
+                };
+                getSellerDTOs.Add(getSeller);
+            }
+            return getSellerDTOs;
+        }
+
     }
 }
