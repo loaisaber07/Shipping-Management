@@ -23,5 +23,16 @@ namespace Shippping_Managment.Controllers
         IEnumerable<DisplayEmployeeDTO>dto =   EmployeeServices.GetEmployees(users);
         return Ok(dto);
         }
+        [HttpDelete]
+        public async Task<ActionResult> Delete(string employeeId)
+        {
+           bool chick = await userRepo.DeleteUserAsync(employeeId);
+            if (!chick)
+            {
+                return BadRequest(new { Message = "Can not delete try agin" });
+            }
+           await userRepo.SaveAsync();
+            return Ok(new {Message="Employee Deleted"});
+        }
     }
 }

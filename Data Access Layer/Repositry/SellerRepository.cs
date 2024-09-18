@@ -20,9 +20,5 @@ namespace Data_Access_Layer.Repositry
             this.userManager = userManager;
         }
 
-        public Task<bool> CreateSeller(Seller seller, string Password)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

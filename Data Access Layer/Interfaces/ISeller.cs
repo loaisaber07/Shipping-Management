@@ -9,7 +9,7 @@ namespace Data_Access_Layer.Interfaces
 {
     public interface ISeller:IRepositry<Seller>
     {
-        Task<bool> CreateSeller(Seller seller, string Password);
+        
 
     }
 }

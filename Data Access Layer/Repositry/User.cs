@@ -36,8 +36,11 @@ namespace Data_Access_Layer.Repositry
             {
                 try
                 {
-
-                    db.Remove(entity);
+                    bool checkRole = await userManager.IsInRoleAsync(entity, "Employee");
+                    if (!checkRole) {
+                        return false; 
+                    }
+                    await  userManager.DeleteAsync(entity);
                     return true; 
                 }
                 catch (Exception ex) {
@@ -92,6 +95,65 @@ namespace Data_Access_Layer.Repositry
                 }
             }
             return RoleInList;
+            
+        }
+
+        public async Task<bool> DeleteSellerAsync(string id)
+        {
+            ApplicationUser? entity = await userManager.FindByIdAsync(id);
+            if (entity is not null)
+            {
+                try
+                {
+                    bool checkRole = await userManager.IsInRoleAsync(entity, "Seller");
+                    if (!checkRole)
+                    {
+                        return false;
+                    }
+                    await userManager.DeleteAsync(entity);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public async Task<Seller?> GetSellerAsyncById(string id)
+        {
+            Seller? user = await db.sellers
+                 .Include(s => s.Orders)
+                 .Include(s => s.SpecialCharges)
+                 .FirstOrDefaultAsync(s => s.Id == id); 
+                
+                
+            if (user is not null)
+            {
+                bool chickRole = await userManager.IsInRoleAsync(user, "Seller");
+                if (chickRole)
+                { 
+                    return user;
+                }
+            }
+            return null;
+        }
+
+        public async Task<IEnumerable<Seller>> GetAllSellers()
+        {
+            List<ApplicationUser> users = await userManager.Users.ToListAsync();
+            List<Seller> sellers = new List<Seller>();
+            foreach (ApplicationUser user in users)
+            {
+                if (await userManager.IsInRoleAsync(user, "Seller"))
+                {
+
+                    Seller seller = (Seller)user;
+                    sellers.Add(seller);
+                }
+            }
+            return sellers;
             
         }
     }
