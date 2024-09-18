@@ -25,8 +25,20 @@ namespace Data_Access_Layer.Repositry
         }
 
         public async Task<ApplicationUser?> GetUserAsyncById(string id)
-        {
-            ApplicationUser? entity = await userManager.FindByIdAsync(id);
+        { 
+
+            ApplicationUser? entity = await userManager.Users
+                .Include(s => s.FieldJob)
+                .Include(s=>s.Branch)
+                .FirstOrDefaultAsync(u => u.Id == id);
+            if(entity is null) 
+            {
+                return null; 
+            }
+           bool checkRole=  await userManager.IsInRoleAsync(entity, "Employee");
+            if (!checkRole) {
+                return null;
+            }
             return entity;
         }
         public async Task<bool> DeleteUserAsync(string id)
@@ -93,6 +105,15 @@ namespace Data_Access_Layer.Repositry
             }
             return RoleInList;
             
+        }
+
+        public async Task<bool> UpdateUser(ApplicationUser user)
+        {
+    var result= await userManager.UpdateAsync(user);
+            if (result.Succeeded) {
+                return true;
+            }
+            return false;
         }
     }
 }

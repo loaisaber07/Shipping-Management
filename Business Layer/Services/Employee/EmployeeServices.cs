@@ -28,7 +28,7 @@ namespace Business_Layer.Services.Employee
 
         public static IEnumerable<DisplayEmployeeDTO> GetEmployees(IEnumerable<ApplicationUser> users) {
         return  users.Select(s => new DisplayEmployeeDTO
-            {
+            {Id = s.Id,
                 UserName=s.UserName , 
                 Email=s.Email,
                 PhoneNumber=s.PhoneNumber,
@@ -38,5 +38,18 @@ namespace Business_Layer.Services.Employee
         
         
         }
+
+        public static ApplicationUser MapEmployeeForEditing(ApplicationUser user, EditEmployeeDTO dto) {
+            user.FieldJob.ID = dto.FieldJobId;   
+            user.Branch.ID = dto.BranchId;
+            user.Govern = dto.GovernName;
+            user.PhoneNumber = dto.phoneNumber;
+            user.City = dto.CityName;
+            user.Status = dto.Status;
+            user.UserName = dto.UserName;
+            return user; 
+        }
+
+        
     }
 }
