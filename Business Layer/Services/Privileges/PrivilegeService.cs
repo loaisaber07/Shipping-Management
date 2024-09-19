@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace Business_Layer.Services.Privileges
 {
+    using Data_Access_Layer.Entity;
+
     public class PrivilegeService
     {
-
       
         public static IEnumerable<FieldPrivilege> MappingFieldJob(Privilege p, IEnumerable<FieldJob> fields) {
             List<FieldPrivilege> FBS = new List<FieldPrivilege>();  

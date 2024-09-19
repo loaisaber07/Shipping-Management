@@ -1,4 +1,5 @@
 ﻿using Business_Layer.Services;
+using Business_Layer.Services.FieldJob;
 using Data_Access_Layer.DTO.FieldJob;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
@@ -30,6 +31,18 @@ namespace Shippping_Managment.Controllers
             IEnumerable<FieldJobDTO> dto = fieldRepo.GetAllFieldWithPrivilege();
             return Ok(dto); 
         
+        }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult>GetFieldJobWithPrivileges(int id)
+        {
+            FieldJob? fieldJob =await fieldRepo.GetFieldJobById(id);
+            if (fieldJob is null)
+            {
+                return NotFound(new {Message="Field Not Found !!"});
+            }
+            FieldJobDTO fieldJobDTO = FieldJobService.MappingFieldJob(fieldJob);
+           return Ok(fieldJobDTO);
+
         }
         [HttpPost]
         public async Task<ActionResult> AddField(AddFieldJob addFieldJob) {
