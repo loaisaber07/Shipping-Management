@@ -19,7 +19,7 @@ namespace Shippping_Managment.Controllers
         {
             this.userRepo = userRepo;
         }
-        [Authorize(policy: "Employee")]
+        [Authorize(Policy="Employee")]
         [HttpGet("getEmployee")]
 
         public async Task<ActionResult> GetEmployee() {
