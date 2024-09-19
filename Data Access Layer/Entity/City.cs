@@ -35,5 +35,9 @@ namespace Data_Access_Layer.Entity
         [InverseProperty("City")]
         public virtual ICollection<SpecialCharge>? SpecialCharges { get; set; }
         #endregion
+        #region mapping the relation between seller and city
+        [InverseProperty("StoreCity")]
+        public virtual ICollection<Seller>? Sellers { get; set; }
+        #endregion
     }
 }

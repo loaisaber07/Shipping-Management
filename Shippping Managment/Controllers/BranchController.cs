@@ -1,4 +1,5 @@
-﻿using Data_Access_Layer.DTO.BatchDTO;
+﻿using Business_Layer.Services;
+using Data_Access_Layer.DTO.BatchDTO;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,41 @@ namespace Shippping_Managment.Controllers
                 return Ok(dto);
             }
             return BadRequest(new { Message = "Branch Allready Exsit" });
+        }
+        [HttpPut]
+        public async Task<ActionResult> Edit(EditBranchDTO dto)
+        {
+           Branch? branch= await branchRepo.GetAsyncById(dto.ID);
+            if (branch is null)
+            {
+                return NotFound(new {Message="Can not find Branch !"});
+            }
+            branch.Name = dto.Name;
+            branch.Status = dto.Status;
+            if (!branchRepo.Update(branch))
+            {
+                return BadRequest(new {Message="Can not update try again"});
+            }
+            await branchRepo.SaveAsync();
+            BranchDTO branchDTO = BranchService.GetBranchDTO(branch);
+
+
+            return Ok(dto);
+        }
+
+
+
+        [HttpDelete("{branchId:int}")]
+        public async Task<ActionResult> Delete(int branchId)
+        {
+           Branch? branch = await branchRepo.GetAsyncById(branchId);
+            if (branch is null)
+            {
+                return NotFound(new { Message = "Can not find branch" });
+            }
+            await branchRepo.DeleteAsync(branchId);
+            await branchRepo.SaveAsync();
+            return Ok(new { Message = "Branch Deleted"});
         }
 
     }

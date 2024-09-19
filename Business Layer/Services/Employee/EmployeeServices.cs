@@ -50,6 +50,18 @@ namespace Business_Layer.Services.Employee
             return user; 
         }
 
-        
+        public static DisplayEmployeeDTO MapEmployeeforDisplay(ApplicationUser user) {
+
+            DisplayEmployeeDTO dto = new DisplayEmployeeDTO
+            {
+                BranchName = user.Branch.Name,
+                FieldJobName = user.FieldJob.Name,
+                Email=user.Email,
+                Id=user.Id , 
+                PhoneNumber=user.PhoneNumber , 
+                UserName=user.UserName
+            };
+            return dto; 
+        }
     }
 }

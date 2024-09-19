@@ -19,7 +19,7 @@ namespace Data_Access_Layer.Entity
 
 
 
-        #region mapping the relation between seller and product 
+        #region mapping the relation between seller and Order 
         [InverseProperty("Seller")]
         public virtual ICollection<Order> Orders { get; set; }
         #endregion
@@ -27,6 +27,11 @@ namespace Data_Access_Layer.Entity
         [InverseProperty("Seller")]
         public virtual ICollection<SpecialCharge> SpecialCharges { get; set; }
         #endregion
-    
+        #region mapping the relation between seller and City
+        [ForeignKey("StoreCity")]
+        public int StoreCityId { get; set; }
+        [ForeignKey("StoreCityId")]
+        public virtual City StoreCity { get; set; }
+        #endregion
     }
 }

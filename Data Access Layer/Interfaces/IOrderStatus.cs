@@ -1,4 +1,5 @@
-﻿using Data_Access_Layer.Entity;
+﻿using Data_Access_Layer.DTO.Seller;
+using Data_Access_Layer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

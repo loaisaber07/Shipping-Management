@@ -47,7 +47,7 @@ namespace Shippping_Managment.Controllers
                 return BadRequest(new {Message="Invalid Data !!"});
             }
             Order order = OrderService.MappingOrder(orderDTO);
-           await orderRepo.CreateAsync(order);
+            await orderRepo.CreateAsync(order);
             await orderRepo.SaveAsync();
             List<Product> products = new List<Product>();
             foreach(AddProductDTO product in orderDTO.ProductList)

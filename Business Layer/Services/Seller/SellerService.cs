@@ -1,6 +1,7 @@
 ﻿using Business_Layer.DTO.Employee;
 using Data_Access_Layer.DTO.Seller;
 using Data_Access_Layer.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +20,61 @@ namespace Business_Layer.Services.Seller
                 Email=dto.Email,
                 PhoneNumber=dto.Phone,
                 BranchID=dto.BranchID,
-                Govern =dto.Govern,
-                City=dto.City,
+                StoreCityId=dto.StoreCityId,
                 StoreName=dto.StoreName,
                 PickUp=dto.PickUp,
                 ValueOfRejectedOrder=dto.ValueOfRejectedOrder
             };
             return user;
+        }
+        public static GetSellerDTO GetSellerDTO(Data_Access_Layer.Entity.Seller seller)
+        {
+            GetSellerDTO dto = new GetSellerDTO
+            {
+                BranchID=seller.BranchID,
+                StoreName=seller.StoreName,
+                Email=seller.Email,
+                Id=seller.Id,
+                Govern=seller.Govern,
+                Name=seller.UserName,
+                Phone=seller.PhoneNumber,
+                ValueOfRejectedOrder = seller.ValueOfRejectedOrder,
+                PickUp = seller.PickUp
+
+            };
+            return dto;
+        }
+        public static IEnumerable<GetSellerDTO> GetAllSellers(IEnumerable<Data_Access_Layer.Entity.Seller>sellerList)
+        {
+            List<GetSellerDTO> getSellerDTOs = new List<GetSellerDTO>();
+            foreach (var dto in sellerList)
+            {
+                GetSellerDTO getSeller = new GetSellerDTO
+                {
+                    BranchID = dto.BranchID,
+                   
+                    StoreName = dto.StoreName,
+                    Email = dto.Email,
+                    Id = dto.Id,
+                    Govern = dto.Govern,
+                    Name = dto.UserName,
+                    Phone = dto.PhoneNumber,
+                    PickUp = dto.PickUp
+                };
+                getSellerDTOs.Add(getSeller);
+            }
+            return getSellerDTOs;
+        }
+        public static  IEnumerable<DisplayScreenForSeller?>  GetDisplayScreenForSellers(Data_Access_Layer.Entity.Seller seller) {
+            List<DisplayScreenForSeller> list= new List<DisplayScreenForSeller>();
+            foreach (var orders in seller.Orders) {
+                list.Add(new DisplayScreenForSeller
+                {
+StatusName = orders.OrderStatus.Name,
+StatusId=orders.OrderStatus.ID
+                }); 
+            }
+            return list; 
         }
     }
 }
