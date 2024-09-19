@@ -70,71 +70,31 @@ namespace Shippping_Managment.Controllers
         }
 
 
-        private async Task<string> GetTokenAsync(ApplicationUser user) {
-            var userClaims = new List<Claim>
-            {
-new Claim(JwtRegisteredClaimNames.Sub,user.UserName) , 
-new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-new Claim(ClaimTypes.Name ,user.UserName)
-            };
-            var roles = await userManager.GetRolesAsync(user);
-            foreach (var role in roles) {
-                userClaims.Add(new Claim(ClaimTypes.Role, role));  
+            private async Task<string> GetTokenAsync(ApplicationUser user) {
+                var userClaims = new List<Claim>
+                {
+    new Claim(JwtRegisteredClaimNames.Sub,user.UserName) , 
+    new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+    new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+    new Claim(ClaimTypes.Name ,user.UserName)
+                };
+                var roles = await userManager.GetRolesAsync(user);
+                foreach (var role in roles) {
+                    userClaims.Add(new Claim(ClaimTypes.Role, role));  
+                }
+                var JwtSetting= configuration.GetSection("JwtSetting");
+                string? key = JwtSetting["SecretKey"];
+                var secretKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+                var signingCredination = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                var expiration = DateTime.UtcNow.AddHours(1);
+                var token = new JwtSecurityToken(
+                    claims:userClaims, 
+                    signingCredentials:signingCredination ,
+                       expires:expiration );
+                var tokenObj = new JwtSecurityTokenHandler().WriteToken(token);
+                return tokenObj;
             }
-            var JwtSetting= configuration.GetSection("JwtSetting");
-            string? key = JwtSetting["SecretKey"];
-            var secretKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var signingCredination = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-            var expiration = DateTime.UtcNow.AddHours(1);
-            var token = new JwtSecurityToken(
-                claims:userClaims, 
-                signingCredentials:signingCredination ,
-                   expires:expiration );
-            var tokenObj = new JwtSecurityTokenHandler().WriteToken(token);
-            return tokenObj;
-        }
-
-        // add admin data ( For testing purposes only)
-        //[HttpGet]
-        //public async Task<ActionResult> AddAdmin()
-        //{
-        //    var user = new ApplicationUser
-        //    {
-        //        UserName = "admin",
-        //        Email = "admin",
-        //        EmailConfirmed = true
-        //    };
-
-        //    var result = await userManager.CreateAsync(user, "Admin_123456");
-        //    if (result.Succeeded)
-        //    {
-        //        return Ok();
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
-        //[HttpPost]
-        //public async Task<ActionResult> AddRole(string Name)
-        //{
-        //    if (string.IsNullOrEmpty(Name))
-        //    {
-        //        return BadRequest("Role name cannot be empty.");
-        //    }
-        //    else if (await roleManager.RoleExistsAsync(Name))
-        //    {
-        //        return BadRequest("Role already exists.");
-        //    }
-        //    else if (!(await roleManager.RoleExistsAsync(Name)))
-        //    {
-
-        //       var result = await roleManager.CreateAsync(new IdentityRole(Name));
-        //        return Ok("Role created successfully.");
-        //    }
-        //    return BadRequest("An error occurred while creating the role.");
-        //}
+        
 
     }
 }
