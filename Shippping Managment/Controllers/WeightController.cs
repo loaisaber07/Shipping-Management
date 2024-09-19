@@ -39,7 +39,7 @@ namespace Shippping_Managment.Controllers
             WeightDTO dTO = WeightService.GetWeightDTO(weight);
             return Ok(dTO);
         }
-        [HttpDelete]
+        [HttpDelete("{settingId:int}")]
         public async Task<ActionResult> Delete(int settingId)
         {
             Weight? weight= await weightRepo.GetAsyncById(settingId);

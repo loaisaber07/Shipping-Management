@@ -64,7 +64,7 @@ namespace Shippping_Managment.Controllers
             EditCityDTO cityDTO = CityService.Mapping(city);
             return Ok(cityDTO);
         }
-        [HttpDelete]
+        [HttpDelete("{cityId:int}")]
         public async Task<ActionResult> DeleteCity(int cityId)
         {
             bool check =await cityRepo.IsExistById(cityId);

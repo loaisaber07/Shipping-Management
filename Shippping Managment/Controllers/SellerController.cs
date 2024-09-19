@@ -19,7 +19,7 @@ namespace Shippping_Managment.Controllers
             this.userRepo = userRepo;
             this.sellerRepo = sellerRepo;
         }
-        [HttpDelete]
+        [HttpDelete("{sellerId:alpha}")]
         public async Task<ActionResult> Delete(string sellerId)
         {
            bool chick = await userRepo.DeleteSellerAsync(sellerId);

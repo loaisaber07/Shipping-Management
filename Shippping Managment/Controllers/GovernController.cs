@@ -57,7 +57,7 @@ namespace Shippping_Managment.Controllers
         
         }
 
-        [HttpDelete]
+        [HttpDelete("{governID:int}")]
         public async Task<ActionResult> DeleteGovernWithItsCities(int governID) { 
    Govern? gov = govern.GetWithID(governID);
             if (gov is null) {
