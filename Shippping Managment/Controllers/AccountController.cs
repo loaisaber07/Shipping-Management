@@ -86,9 +86,11 @@ new Claim(ClaimTypes.Name ,user.UserName)
             string? key = JwtSetting["SecretKey"];
             var secretKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var signingCredination = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var expiration = DateTime.UtcNow.AddHours(1);
             var token = new JwtSecurityToken(
-                claims:userClaims,
-                signingCredentials:signingCredination  ); 
+                claims:userClaims, 
+                signingCredentials:signingCredination ,
+                   expires:expiration );
             var tokenObj = new JwtSecurityTokenHandler().WriteToken(token);
             return tokenObj;
         }

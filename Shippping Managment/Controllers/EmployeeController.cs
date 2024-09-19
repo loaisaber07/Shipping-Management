@@ -10,7 +10,6 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(policy: "Employee")]
     
     public class EmployeeController : ControllerBase
     {
@@ -20,7 +19,9 @@ namespace Shippping_Managment.Controllers
         {
             this.userRepo = userRepo;
         }
-        [HttpGet]
+        [Authorize(policy: "Employee")]
+        [HttpGet("getEmployee")]
+
         public async Task<ActionResult> GetEmployee() {
             IEnumerable<ApplicationUser> users = await userRepo.GetAllEmployee();
             IEnumerable<DisplayEmployeeDTO> dto = EmployeeServices.GetEmployees(users);
