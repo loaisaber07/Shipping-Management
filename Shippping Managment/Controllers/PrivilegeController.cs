@@ -81,7 +81,7 @@ namespace Shippping_Managment.Controllers
             return Ok(new {Message ="Privilege Updated Successfully"});
         }
 
-        [HttpDelete]
+        [HttpDelete("{privilegeId:int}")]
         public async Task<ActionResult> DeletePrivilege(int privilegeId)
         {
             bool chick = await privilegeRepo.IsExsitsById(privilegeId);

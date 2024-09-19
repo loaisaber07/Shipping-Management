@@ -67,7 +67,7 @@ namespace Shippping_Managment.Controllers
 
 
 
-        [HttpDelete]
+        [HttpDelete("{branchId:int}")]
         public async Task<ActionResult> Delete(int branchId)
         {
            Branch? branch = await branchRepo.GetAsyncById(branchId);

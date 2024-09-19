@@ -78,7 +78,7 @@ namespace Shippping_Managment.Controllers
             return Ok(new { Message="Update Successfully!"}); 
         
         }
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public async  Task<ActionResult> Delete(int id) {
             
            if(! await fieldRepo.IsExistByIdAsync(id))
