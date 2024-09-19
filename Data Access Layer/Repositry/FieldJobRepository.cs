@@ -47,6 +47,16 @@ namespace Data_Access_Layer.Repositry
          return  context.fieldJobs.FirstOrDefault(s => s.Name == name); 
         }
 
+        public async Task<FieldJob?> GetFieldJobById(int id)
+        {
+        return   await context.fieldJobs
+                .AsNoTracking()
+                .Include(s => s.FieldPrivilege)
+                .ThenInclude(s => s.Privilege)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(s => s.ID == id); 
+        }
+
         public bool IsExist(string name)
         {
       FieldJob? f= context.fieldJobs.
