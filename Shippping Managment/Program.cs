@@ -3,10 +3,12 @@ using Data_Access_Layer;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Data_Access_Layer.Repositry;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 namespace Shippping_Managment
@@ -46,18 +48,31 @@ namespace Shippping_Managment
             builder.Services.AddScoped<IWeight,WeightRepository>();
             builder.Services.AddScoped<ITypeOfReceipt, TypeOfReceiptRepository>();
             builder.Services.AddScoped<InvoiceService>();
-            builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "mySchema")
-            .AddJwtBearer("mySchema", op =>
+            builder.Services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            })
+            .AddJwtBearer(op =>
             {
                 var JwtSetting = builder.Configuration.GetSection("JwtSetting");
                 string? key = JwtSetting["SecretKey"];
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-                op.TokenValidationParameters = new TokenValidationParameters() { 
-                IssuerSigningKey=secretKey , 
-                ValidateIssuer=false , 
-                ValidateAudience=false
-                
-                }; 
+                op.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = secretKey,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    RoleClaimType = ClaimTypes.Role ,
+                    ClockSkew = TimeSpan.Zero 
+                };
+            });
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Employee", policy => policy.RequireClaim(ClaimTypes.Role, "Employee"));
             });
 
             builder.Services.AddCors(option => {
