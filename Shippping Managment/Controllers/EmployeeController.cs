@@ -10,7 +10,7 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="Employee")] 
+    [Authorize(policy: "Employee")]
     
     public class EmployeeController : ControllerBase
     {

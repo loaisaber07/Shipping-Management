@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 namespace Shippping_Managment
@@ -55,9 +56,14 @@ namespace Shippping_Managment
                 op.TokenValidationParameters = new TokenValidationParameters() { 
                 IssuerSigningKey=secretKey , 
                 ValidateIssuer=false , 
-                ValidateAudience=false
+                ValidateAudience=false ,
+                RoleClaimType=ClaimTypes.Role
                 
                 }; 
+            });
+            builder.Services.AddAuthorization(option =>
+            {
+                option.AddPolicy("Employee", policy => { policy.RequireClaim(ClaimTypes.Role, "Employee"); });
             });
 
             builder.Services.AddCors(option => {
