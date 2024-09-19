@@ -2,6 +2,7 @@
 using Data_Access_Layer.DTO.Employee;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,8 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Employee")] 
+    
     public class EmployeeController : ControllerBase
     {
         private readonly IUser userRepo;

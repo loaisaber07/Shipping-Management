@@ -14,6 +14,7 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
