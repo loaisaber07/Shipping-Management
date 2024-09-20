@@ -45,6 +45,29 @@ namespace Shippping_Managment.Controllers
             }
             return BadRequest(new {Message="Can not add try again !!"});
         }
+
+        [HttpPut]
+        public async Task<ActionResult> Edit(EditTypeOfReceiptDTO editType)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            TypeOfReceipt? type =  await typeOfReceiptRepo.GetAsyncById(editType.ID);
+            if (type is null)
+            {
+                return NotFound(new {Message="Can not find Type"});
+            }
+            type.Name = editType.Name;
+            if (!typeOfReceiptRepo.Update(type))
+            {
+                return BadRequest(new { Message = "Can not update try again" });
+            }
+             await typeOfReceiptRepo.SaveAsync();
+            GetTypeOfReceiptDTO get = TypeOfReceiptService.GetType(type);
+            return Ok(get);
+        }
+
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {

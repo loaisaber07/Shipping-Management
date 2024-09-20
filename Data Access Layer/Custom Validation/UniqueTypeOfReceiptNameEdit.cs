@@ -14,23 +14,28 @@ namespace Data_Access_Layer.Custom_Validation
         {
             if (value != null)
             {
+                // Get the database context from the validation context
                 var context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
-                int? id = context?.typeOfReceipts.FirstOrDefault(s => s.Name == value.ToString())?.ID;
-                if (id is null)
-                {
-                    return ValidationResult.Success;
-                }
-                var entity = context?.typeOfReceipts.FirstOrDefault(s => s.Name == value.ToString() && s.ID != id);
-                if (entity is not null)
-                {
-                    return new ValidationResult("Name must be unique ");
-                }
 
+                // Check if an entity with the same name already exists
+                var existingEntity = context?.typeOfReceipts.FirstOrDefault(s => s.Name == value.ToString());
 
+                // If such an entity exists, ensure it has a different ID (for updates)
+                if (existingEntity != null)
+                {
+                    // Check if the ID of the current entity is different from the found one
+                    var currentEntityId = validationContext.ObjectInstance?.GetType().GetProperty("ID")?.GetValue(validationContext.ObjectInstance, null);
+                    if (existingEntity.ID != (int?)currentEntityId)
+                    {
+                        // Validation failed, return error message
+                        return new ValidationResult("Name must be unique");
+                    }
+                }
             }
 
+            // Validation successful
             return ValidationResult.Success;
-
         }
+
     }
 }
