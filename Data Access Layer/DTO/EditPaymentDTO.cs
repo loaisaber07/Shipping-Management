@@ -10,9 +10,9 @@ namespace Data_Access_Layer.DTO
 {
     public class EditPaymentDTO
     {
-        public int Id { get; set; }
-        [AllowedValues("Prepaid", "Exchange", "CashOnDelivery")]
-        [UniqueTypeOfPayment]
+        public int ID { get; set; }
+        //[AllowedValues("Prepaid", "Exchange", "CashOnDelivery")]
+        [UniqueTypeOfPaymentNameEdit]
         public string Name { get; set; }
     }
 }
