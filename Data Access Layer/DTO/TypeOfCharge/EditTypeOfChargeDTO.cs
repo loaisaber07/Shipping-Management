@@ -6,12 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data_Access_Layer.DTO
+namespace Data_Access_Layer.DTO.TypeOfCharge
 {
-    public class AddTypeOfPaymentDTO
+    public class EditTypeOfChargeDTO
     {
-        //[AllowedValues("Prepaid", "Exchange", "CashOnDelivery")]
-        [UniqueTypeOfPayment]
+        public int ID { get; set; }
+        [UniqueTyprOfChargeNameEdit]
         public string Name { get; set; }
+        
+        public int Cost { get; set; }
     }
 }

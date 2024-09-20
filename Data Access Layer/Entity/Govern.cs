@@ -15,7 +15,7 @@ namespace Data_Access_Layer.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
-        [UniqueGovernName]
+        //[UniqueGovernName]
         public string Name { get; set; }
         public bool Status { get; set; } = true; 
 

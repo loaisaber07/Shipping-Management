@@ -17,7 +17,7 @@ namespace Data_Access_Layer.Entity
         [Required]
         public int NormalCharge { get; set; }
         [Required]
-        [UniqueCityName]
+        //[UniqueCityName]
         public string Name { get; set; }
         [Required]
         public int PickUpCharge { get; set; }
