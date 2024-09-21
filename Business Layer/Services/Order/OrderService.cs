@@ -3,6 +3,7 @@ using Data_Access_Layer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -104,6 +105,33 @@ namespace Business_Layer.Services.Order
 
             });
         }
-
+        public static Data_Access_Layer.Entity.Order MappingOrderForUpdate(Data_Access_Layer.Entity.Order order ,UpdateOrderDTO update) { 
+        order.ClientName = update.ClientName;
+        order.ClientNumber = update.ClientNumber;
+        order.ClientNumber2 = update.ClientNumber2;
+        order.Cost = update.Cost;
+        order.Email = update.Email;
+        order.GovernID = update.GovernID;
+        order.Weight = update.Weight;
+        order.VillageOrStreet = update.VillageOrStreet;
+        order.IsForVillage = update.IsForVillage;
+        order.TypeOfPaymentID = update.TypeOfPaymentID;
+        order.TypeOfChargeID = update.TypeOfChargeID;
+        order.OrderStatusID = update.OrderStatusID;
+        order.TypeOfReceiptID = update.TypeOfReceiptID;
+        order.Note = update.Note;
+        order.CityID = update.CityID;
+        order.BranchID = update.BranchID;
+        order.Products = update.ProductList.Select(p => new Product {
+        ID=  p.Id,
+        Name= p.Name,
+        OrderID= p.OrderId,
+        Weight= p.ProductWeight,
+Quantity= p.Quantity
+            }).ToList();
+        return order;
+        }
+        
+      
     }
 }

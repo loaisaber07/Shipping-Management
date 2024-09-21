@@ -11,5 +11,6 @@ namespace Data_Access_Layer.Interfaces
     {
         Task<Order?> GetById(int id); 
         IQueryable<Order> GetAll(); 
+        bool ISEXIST(int id);
     }
 }
