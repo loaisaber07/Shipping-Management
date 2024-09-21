@@ -15,7 +15,7 @@ namespace Data_Access_Layer.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
-        [UniqueTypeOfCharge]
+        //[UniqueTypeOfCharge]
         public string Name { get; set; }
         [Required]
         public int Cost { get; set; }

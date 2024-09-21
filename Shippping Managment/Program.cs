@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
 
@@ -48,34 +49,73 @@ namespace Shippping_Managment
             builder.Services.AddScoped<IWeight,WeightRepository>();
             builder.Services.AddScoped<ITypeOfReceipt, TypeOfReceiptRepository>();
             builder.Services.AddScoped<InvoiceService>();
-            builder.Services.AddAuthentication(option =>
-            {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            var jwtSetting = builder.Configuration.GetSection("JwtSetting");
+            var keyBase64 = jwtSetting["SecretKey"];
+            var key = Convert.FromBase64String(keyBase64);
+            var secretKey = new SymmetricSecurityKey(key);
 
-            })
-            .AddJwtBearer(op =>
+            builder.Services.AddAuthentication(options =>
             {
-                var JwtSetting = builder.Configuration.GetSection("JwtSetting");
-                string? key = JwtSetting["SecretKey"];
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-                op.TokenValidationParameters = new TokenValidationParameters
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     IssuerSigningKey = secretKey,
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    RoleClaimType = ClaimTypes.Role ,
-                    ClockSkew = TimeSpan.Zero 
+                    RoleClaimType = ClaimTypes.Role, 
+                    ClockSkew = TimeSpan.FromMinutes(5),
+                    ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 }
                 };
             });
+
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Employee", policy => policy.RequireClaim(ClaimTypes.Role, "Employee"));
+                options.AddPolicy("Seller", policy => policy.RequireClaim(ClaimTypes.Role, "Seller"));
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+                options.AddPolicy("Agent", policy => policy.RequireClaim(ClaimTypes.Role, "Agent"));
             });
 
-            builder.Services.AddCors(option => {
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Shipping Managment", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter your JWT token"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+            });
+
+
+
+            builder.Services.AddCors(option =>
+            {
                 option.AddPolicy("Allow", builder =>
                 {
                     builder.AllowAnyOrigin();
@@ -83,8 +123,9 @@ namespace Shippping_Managment
                     builder.AllowAnyHeader();
 
                 });
-            
+
             });
+            builder.Logging.AddConsole();
                  var app = builder.Build();
 
             // Configure the HTTP request pipeline.

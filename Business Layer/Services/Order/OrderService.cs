@@ -11,7 +11,7 @@ namespace Business_Layer.Services.Order
 {
     public class OrderService
     {
-        public static Data_Access_Layer.Entity.Order MappingOrder(AddOrderDTO add)
+        public static Data_Access_Layer.Entity.Order MappingOrder(string sellerId ,AddOrderDTO add)
         {
             Data_Access_Layer.Entity.Order order = new Data_Access_Layer.Entity.Order
             { 
@@ -27,9 +27,9 @@ namespace Business_Layer.Services.Order
                 IsForVillage = add.IsForVillage,
                 TypeOfPaymentID = add.TypeOfPaymentID,
                 TypeOfChargeID = add.TypeOfChargeID,
-                SellerID = add.SellerID,
+                SellerID = sellerId,
                 OrderStatusID = add.OrderStatusID,
-                TypeOfReceiptID = add.TypeOfPaymentID,
+                TypeOfReceiptID = add.TypeOfReceiptID,
                 Note = add.Note,
                 CityID=add.CityID
             };
@@ -54,40 +54,55 @@ namespace Business_Layer.Services.Order
                 TypeOfChargeID= order.TypeOfChargeID,
                 VillageOrStreet= order.VillageOrStreet,
                 TypeOfPaymentID= order.TypeOfPaymentID,
+                TypeOfReceiptID=order.TypeOfReceiptID,
                 Note= order.Note,
-                CityID = order.CityID
+                CityID = order.CityID,
+                ProductList = order.Products.Select(p => new GetProductDTO {
+                    Id = p.ID,
+                    Name = p.Name,
+                    OrderId = p.OrderID,
+                    ProductWeight = p.Weight,
+                    Quantity = p.Quantity
+
+                }).ToList()
 
             };
            
             return getOrderDTO;
         }
-        public static IEnumerable<GetOrderDTO> GetAllOrder(IEnumerable< Data_Access_Layer.Entity.Order> order)
+        public static IEnumerable<GetOrderDTO> GetAllOrder(IQueryable< Data_Access_Layer.Entity.Order> orders)
         {
-           List<GetOrderDTO> dtoList = new List<GetOrderDTO>();
-            foreach (var item in order)
+           return  orders.Select(s => new GetOrderDTO
             {
-                GetOrderDTO getOrder = new GetOrderDTO
-                {
-                    BranchID = item.BranchID,
-                    ClientName = item.ClientName,
-                    ClientNumber = item.ClientNumber,
-                    ClientNumber2 = item.ClientNumber2,
-                    Cost = item.Cost,
-                    Email = item.Email,
-                    GovernID = item.GovernID,
-                    Weight = item.Weight,
-                    Id = item.ID,
-                    IsForVillage = item.IsForVillage,
-                    OrderStatusID = item.OrderStatusID,
-                    SellerID = item.SellerID,
-                    TypeOfChargeID = item.TypeOfChargeID,
-                    TypeOfPaymentID = item.TypeOfPaymentID,
-                    VillageOrStreet = item.VillageOrStreet,
-                    Note = item.Note 
-                };
-                dtoList.Add(getOrder);
-            }
-            return dtoList;
+
+                ClientName = s.ClientName,
+                ClientNumber = s.ClientNumber,
+                ClientNumber2 = s.ClientNumber2,
+                Email = s.Email,
+                Cost = s.Cost,
+                BranchID = s.BranchID,
+                CityID = s.CityID,
+                GovernID = s.GovernID,
+                Id = s.ID,
+                IsForVillage = s.IsForVillage,
+                Note = s.Note,
+                OrderStatusID = s.OrderStatusID,
+                SellerID = s.SellerID,
+                TypeOfChargeID = s.TypeOfChargeID,
+                TypeOfPaymentID = s.TypeOfPaymentID,
+                VillageOrStreet = s.VillageOrStreet,
+                TypeOfReceiptID =s.TypeOfReceiptID,
+                Weight = s.Weight,
+                ProductList = s.Products.Select(p => new GetProductDTO {
+                Id= p.ID,
+                Name= p.Name,
+                OrderId= p.OrderID,
+                ProductWeight= p.Weight,
+                Quantity= p.Quantity
+                }).ToList()
+
+
+            });
         }
 
     }

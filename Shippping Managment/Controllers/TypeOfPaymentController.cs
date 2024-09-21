@@ -55,15 +55,12 @@ namespace Shippping_Managment.Controllers
             {
                 return BadRequest();
             }
-            TypeOfPayment? type = await paymentRepo.GetAsyncById(edit.Id);
+            TypeOfPayment? type = await paymentRepo.GetAsyncById(edit.ID);
             if (type == null)
             {
                 return NotFound();
             }
-            TypeOfPayment typeOf = new TypeOfPayment
-            {
-                Name = edit.Name,
-            };
+           type.Name = edit.Name;   
             if(!paymentRepo.Update(type))
             {
                 return BadRequest(new { Message = "Can Not Save" });
@@ -73,6 +70,18 @@ namespace Shippping_Managment.Controllers
 
 
 
+        }
+        [HttpDelete("{typeId:int}")]
+        public async Task<ActionResult> DeleteType(int typeId)
+        {
+          TypeOfPayment? type =  await paymentRepo.GetAsyncById(typeId);
+            if (type is null)
+            {
+                return NotFound(new {Message="Type Not Found !!"});  
+            }
+            await paymentRepo.DeleteAsync(typeId);
+            await paymentRepo.SaveAsync();  
+            return Ok(new {Message="Type Deleted"});
         }
     }
 }

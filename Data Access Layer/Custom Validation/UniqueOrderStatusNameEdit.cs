@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Custom_Validation
 {
-    public class UniqueTypeOfReceiptNameEdit : ValidationAttribute
+    public class UniqueOrderStatusNameEdit : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
@@ -18,7 +18,7 @@ namespace Data_Access_Layer.Custom_Validation
                 var context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
 
                 // Check if an entity with the same name already exists
-                var existingEntity = context?.typeOfReceipts.FirstOrDefault(s => s.Name == value.ToString());
+                var existingEntity = context?.productStatuses.FirstOrDefault(s => s.Name == value.ToString());
 
                 // If such an entity exists, ensure it has a different ID (for updates)
                 if (existingEntity != null)
@@ -39,3 +39,4 @@ namespace Data_Access_Layer.Custom_Validation
 
     }
 }
+
