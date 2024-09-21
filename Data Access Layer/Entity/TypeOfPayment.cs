@@ -15,8 +15,8 @@ namespace Data_Access_Layer.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
-        [AllowedValues("Prepaid","Exchange","CashOnDelivery")]
-        [UniqueTypeOfPayment]
+       // [AllowedValues("Prepaid","Exchange","CashOnDelivery")]
+       // [UniqueTypeOfPayment]
         public string Name { get; set; }
 
         #region mapping the relation between product and typeofPayment
