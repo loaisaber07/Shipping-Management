@@ -5,19 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data_Access_Layer.DTO.Employee
+namespace Data_Access_Layer.DTO.Agent
 {
-    public  class EditEmployeeDTO
+    public class EditAgentDTO
     {
         public string ID { get; set; }
-        [UniqueUserNameEdit]
+        [UniqueAgentNameEdit]
         public string UserName { get; set; }
-        public int FieldJobId { get; set; }
-        public int BranchId { get; set; }
         [UniquePhoneNumberEditing]
         public string phoneNumber { get; set; }
-        public string GovernName { get; set; }
-        public string CityName { get; set; }
         public bool Status { get; set; }
+        public int BranchID { get; set; }
+        public int ThePrecentageOfCompanyFromOffer { get; set; }
+        public int GovernID { get; set; }
+        public int TypeOfOfferID { get; set; }
     }
 }
