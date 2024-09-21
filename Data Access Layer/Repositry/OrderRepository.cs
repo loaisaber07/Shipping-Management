@@ -30,7 +30,6 @@ namespace Data_Access_Layer.Repositry
         {
            Order? order = await dataBase.Orders
                 .Include(o=>o.Products)
-                .Include(s=>s.Seller)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(o=>o.ID==id);
             return order;

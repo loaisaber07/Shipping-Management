@@ -29,7 +29,7 @@ namespace Business_Layer.Services.Order
                 TypeOfChargeID = add.TypeOfChargeID,
                 SellerID = sellerId,
                 OrderStatusID = add.OrderStatusID,
-                TypeOfReceiptID = add.TypeOfPaymentID,
+                TypeOfReceiptID = add.TypeOfReceiptID,
                 Note = add.Note,
                 CityID=add.CityID
             };
@@ -54,6 +54,7 @@ namespace Business_Layer.Services.Order
                 TypeOfChargeID= order.TypeOfChargeID,
                 VillageOrStreet= order.VillageOrStreet,
                 TypeOfPaymentID= order.TypeOfPaymentID,
+                TypeOfReceiptID=order.TypeOfReceiptID,
                 Note= order.Note,
                 CityID = order.CityID
 
@@ -82,6 +83,7 @@ namespace Business_Layer.Services.Order
                 TypeOfChargeID = s.TypeOfChargeID,
                 TypeOfPaymentID = s.TypeOfPaymentID,
                 VillageOrStreet = s.VillageOrStreet,
+                TypeOfReceiptID =s.TypeOfReceiptID,
                 Weight = s.Weight,
                 ProductList = s.Products.Select(p => new GetProductDTO {
                 Id= p.ID,
