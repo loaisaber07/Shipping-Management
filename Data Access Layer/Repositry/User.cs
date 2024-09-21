@@ -167,13 +167,7 @@ namespace Data_Access_Layer.Repositry
                 }
             }
             return sellers;
-
         }
-
-
-
-
-
         public async Task<bool> UpdateUser(ApplicationUser user)
         {
     var result= await userManager.UpdateAsync(user);
@@ -208,6 +202,60 @@ namespace Data_Access_Layer.Repositry
                     }
             }
             return false;
+        }
+
+        public async Task<IEnumerable<Agent>> GetAllAgents()
+        {
+            List<ApplicationUser> users =await userManager.Users.ToListAsync();
+            List<Agent> Agents = new List<Agent>();
+            foreach (ApplicationUser user in users)
+            {
+                if (await userManager.IsInRoleAsync(user,"Agent"))
+                {
+                    Agent agent = (Agent)user;
+                    Agents.Add(agent);
+                }
+            }
+            return Agents;
+        }
+
+        public async Task<bool> DeleteAgentAsync(string id)
+        {
+            ApplicationUser? entity = await userManager.FindByIdAsync(id);
+            if (entity is not null)
+            {
+                try
+                {
+                    bool checkRole = await userManager.IsInRoleAsync(entity, "Agent");
+                    if (!checkRole)
+                    {
+                        return false;
+                    }
+                    await userManager.DeleteAsync(entity);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public async Task<Agent?> GetAgentAsyncById(string id)
+        {
+            Agent? agent = await db.agents
+                .Include(o=>o.Orders)
+                .FirstOrDefaultAsync(a=>a.Id==id);
+            if (agent is not null)
+            {
+                bool chickRole = await userManager.IsInRoleAsync(agent, "Agent");
+                if (chickRole)
+                {
+                    return agent;
+                }
+            }
+            return null;
         }
     }
 }

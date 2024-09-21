@@ -43,5 +43,17 @@ namespace Shippping_Managment.Controllers
             }
             return Ok(getProductDTOs);
         }
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            Product? product = await productRepo.GetAsyncById(id);
+            if (product is null)
+            {
+                return NotFound(new {Message="Can't Find product"});
+            }
+            await productRepo.DeleteAsync(id);
+            await productRepo.SaveAsync();
+            return Ok(new {Message="Product Deleted"});
+        }
     }
 }
