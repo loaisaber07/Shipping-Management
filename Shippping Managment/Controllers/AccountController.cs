@@ -1,5 +1,9 @@
     using Business_Layer.DTO;
+using Business_Layer.Services.FieldJob;
+using Data_Access_Layer.DTO.FieldJob;
 using Data_Access_Layer.Entity;
+using Data_Access_Layer.Interfaces;
+using Data_Access_Layer.Repositry;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -19,14 +23,18 @@ namespace Shippping_Managment.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IFieldJob fieldJobRepo;
+        private readonly ShippingDataBase context;
 
         public AccountController(UserManager<ApplicationUser> userManager ,
             IConfiguration configuration ,
-           RoleManager<IdentityRole> roleManager )
+           RoleManager<IdentityRole> roleManager ,IFieldJob fieldJobRepo )
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
+            this.fieldJobRepo = fieldJobRepo;
+            this.context = context;
         }
 
         [HttpPost]
@@ -60,9 +68,20 @@ namespace Shippping_Managment.Controllers
                 if (!result) {
                     return BadRequest(new { Message = "Incorrect Password try again!" });
                 }
+                FieldJobDTO f = new FieldJobDTO();
+                FieldJob? fieldJob = new FieldJob();
+
+                if (user.FiledJobID is not null)
+                { 
+                int fieldId = (int)user.FiledJobID;
+                     fieldJob = await fieldJobRepo.GetFieldJobById(fieldId);
+                }
+                if(fieldJob is not null)
+                f = FieldJobService.MappingFieldJob(fieldJob);
+
                 string token = await GetTokenAsync(user , user.Id);
                 var roles = await userManager.GetRolesAsync(user);
-                return Ok(new { token=token , Role=roles , ID=user.Id });
+                return Ok(new { token=token , Role=roles , ID=user.Id ,FieldJob=f });
 
             }
             return BadRequest();
