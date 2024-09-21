@@ -28,9 +28,10 @@ namespace Data_Access_Layer.Repositry
 
         public async Task<Order?> GetById(int id)
         {
-           Order? order = await dataBase.Orders
-                .Include(o=>o.Products)
+           Order? order = await dataBase
+                .Orders
                 .AsNoTracking()
+                .Include(o=>o.Products)
                 .FirstOrDefaultAsync(o=>o.ID==id);
             return order;
         }

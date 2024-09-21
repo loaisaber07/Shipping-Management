@@ -56,7 +56,15 @@ namespace Business_Layer.Services.Order
                 TypeOfPaymentID= order.TypeOfPaymentID,
                 TypeOfReceiptID=order.TypeOfReceiptID,
                 Note= order.Note,
-                CityID = order.CityID
+                CityID = order.CityID,
+                ProductList = order.Products.Select(p => new GetProductDTO {
+                    Id = p.ID,
+                    Name = p.Name,
+                    OrderId = p.OrderID,
+                    ProductWeight = p.Weight,
+                    Quantity = p.Quantity
+
+                }).ToList()
 
             };
            

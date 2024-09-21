@@ -32,11 +32,11 @@ namespace Shippping_Managment.Controllers
             IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
             return Ok(dto);
         }
-        [HttpGet("{id:int}")]
-        [Route("GetOrderById")]
-        public async Task<ActionResult> GetOrderById(int orderId)
+        [HttpGet]
+        [Route("GetOrderById{id:int}")]
+        public async Task<ActionResult> GetOrderById(int id)
         {
-           Order? order = await orderRepo.GetById(orderId);
+           Order? order = await orderRepo.GetById(id);
             if (order == null)
             {
                 return NotFound();  
@@ -66,6 +66,6 @@ IEnumerable<Product> products =  ProductService.MappingProduct(order.ID ,orderDT
             return RedirectToAction("GetAll");
 
         }
-
+    
     }
 }
