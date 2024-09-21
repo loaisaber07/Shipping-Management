@@ -10,7 +10,8 @@ namespace Data_Access_Layer.Interfaces
     public interface IProduct:IRepositry<Product>
     {
         public Task BulkInsert(IEnumerable<Product> products);
-        Task<List<Product>> getProductsByOrderId(int orderId); 
-        
+        Task<List<Product>> getProductsByOrderId(int orderId);
+        Task<bool> BulkDelete(int id); 
+        Task<bool> BulkUpdate(IEnumerable<Product> products); 
     }
 }

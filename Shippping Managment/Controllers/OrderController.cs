@@ -66,10 +66,37 @@ IEnumerable<Product> products =  ProductService.MappingProduct(order.ID ,orderDT
             return RedirectToAction("GetAll");
 
         }
-        [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id) {
+        [HttpDelete("{orderId:int}")]
+        public async Task<ActionResult> Delete(int orderId) {
 
-            return NoContent();
+        bool check= orderRepo.ISEXIST(orderId);
+            if (!check) {
+                return BadRequest(new { Message = "There No Order Hava this id" }); 
+            } 
+check = await productRepo.BulkDelete(orderId);
+            if (!check) { 
+            return StatusCode(500, new { Message = "Can't Delete Try Again" });
+            }
+        await productRepo.SaveAsync();
+await orderRepo.DeleteAsync(orderId);
+          await  orderRepo.SaveAsync();
+            return Ok(new { Message="Deleted Successfully "});
+        }
+        [HttpPut]
+        public async Task<ActionResult> UpdateOrder(UpdateOrderDTO orderDTO) {
+        Order? order = await orderRepo.GetById(orderDTO.ID);
+            if (order is null) {
+                return BadRequest(new { Message = "Not found !" }); 
+            } 
+            order = OrderService.MappingOrderForUpdate(order,orderDTO);
+     bool check=      await productRepo.BulkUpdate(order.Products);
+            if (!check) { 
+            return StatusCode(500, new { Message = "Can't Update Try Again" });
+            }
+            await productRepo.SaveAsync(); 
+            orderRepo.Update(order);
+            await orderRepo.SaveAsync();
+            return Ok(new { Message = "Update Successfully" });
         }
 
     }
