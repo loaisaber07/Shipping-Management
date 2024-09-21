@@ -195,5 +195,19 @@ namespace Data_Access_Layer.Repositry
             }
             return false;
         }
+
+        public async Task<bool> CreateAgent(Agent agent, string password)
+        {
+            IdentityResult result =await userManager.CreateAsync(agent, password);
+            if (result.Succeeded)
+            {
+                IdentityResult identityResult = await userManager.AddToRoleAsync(agent, "Agent");
+                    if(identityResult.Succeeded)
+                    {
+                        return true;
+                    }
+            }
+            return false;
+        }
     }
 }

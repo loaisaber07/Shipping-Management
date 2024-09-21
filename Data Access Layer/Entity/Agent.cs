@@ -8,37 +8,22 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Entity
 {
-    public  class Agent
+    public  class Agent:ApplicationUser
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
-        [DataType(DataType.EmailAddress)]
-        [Required]
-        public string Email { get; set; }
-        [Required]
-        public string  Name { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-        [Required]
-        public string Address { get; set; }
+        
         [Required]
         public int ThePrecentageOfCompanyFromOffer { get; set; }
 
-        #region  mapping the realtion between agent and branch 
-        [ForeignKey("Branch")]
-        public int BranchID { get; set; }
-        [ForeignKey("BranchID")]
-        public virtual Branch Branch { get; set; }
-
+        #region mapping the relation between Agent and Order
+        [InverseProperty("Agent")]
+        public virtual ICollection<Order> Orders { get; set; }
         #endregion
 
         #region mapping the relation between agent and govern 
-        [ForeignKey("Govern")]
+        [ForeignKey("Governs")]
         public int GovernID { get; set; }
         [ForeignKey("GovernID")]
-        public virtual  Govern Govern { get; set; }
+        public virtual  Govern Governs { get; set; }
         #endregion
 
         #region mapping the relation between agent and typeofoffer

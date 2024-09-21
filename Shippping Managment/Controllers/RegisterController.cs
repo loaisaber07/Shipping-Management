@@ -1,7 +1,9 @@
 using Business_Layer.DTO.Employee;
+using Business_Layer.Services.Agent;
 using Business_Layer.Services.Employee;
 using Business_Layer.Services.Seller;
 using Business_Layer.Services.SpecialCharge;
+using Data_Access_Layer.DTO.Agent;
 using Data_Access_Layer.DTO.Seller;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
@@ -113,5 +115,39 @@ namespace Shippping_Managment.Controllers
             }
             return Ok(new { Message = "Adding Successfully" });
         }
+
+        [HttpPost]
+        [Route("/AddAgent")]
+        public async Task<ActionResult> AddAgent(AddAgentDTO agentDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Message = "Incorrect Data!" });
+            }
+            bool roleExists = await _roleManager.RoleExistsAsync("Agent");
+            if (!roleExists )
+            {
+                var role = new IdentityRole("Agent");
+               var result= await _roleManager.CreateAsync(role);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(new { Message = "Can 't Create Role Agent" });
+                }
+
+            }
+            bool check = await branchRepo.IsExistByID(agentDTO.BranchID);
+            if (!check)
+            {
+                return BadRequest(new { Message = "Branch Not Exist" });
+            }
+            Agent user = AgentService.GetAgent(agentDTO);
+            bool chick = await userReo.CreateAgent(user,agentDTO.Password);
+            if (!chick)
+            {
+                return BadRequest(new { Message = "Failed to create new Agent!" });
+            }
+            return Ok(new {Message= "Agent Added Successfully" });
+        }
+
     }
 }

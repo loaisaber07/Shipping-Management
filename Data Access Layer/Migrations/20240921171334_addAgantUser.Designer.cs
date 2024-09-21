@@ -4,6 +4,7 @@ using Data_Access_Layer.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    partial class ShippingDataBaseModelSnapshot : ModelSnapshot
+    [Migration("20240921171334_addAgantUser")]
+    partial class addAgantUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,7 +137,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 21, 20, 38, 8, 110, DateTimeKind.Local).AddTicks(6229));
+                        .HasDefaultValue(new DateTime(2024, 9, 21, 20, 13, 17, 457, DateTimeKind.Local).AddTicks(214));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -187,7 +190,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 21, 20, 38, 8, 110, DateTimeKind.Local).AddTicks(9340));
+                        .HasDefaultValue(new DateTime(2024, 9, 21, 20, 13, 17, 457, DateTimeKind.Local).AddTicks(3198));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -254,6 +257,7 @@ namespace Data_Access_Layer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("AgentID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("BranchID")
@@ -279,7 +283,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 21, 20, 38, 8, 111, DateTimeKind.Local).AddTicks(2296));
+                        .HasDefaultValue(new DateTime(2024, 9, 21, 20, 13, 17, 457, DateTimeKind.Local).AddTicks(6110));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -738,7 +742,9 @@ namespace Data_Access_Layer.Migrations
                 {
                     b.HasOne("Data_Access_Layer.Entity.Agent", "Agent")
                         .WithMany("Orders")
-                        .HasForeignKey("AgentID");
+                        .HasForeignKey("AgentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
                         .WithMany("Orders")
