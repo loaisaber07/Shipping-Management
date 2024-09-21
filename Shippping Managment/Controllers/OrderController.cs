@@ -6,6 +6,7 @@ using Data_Access_Layer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SixLabors.ImageSharp.PixelFormats;
 using System.Security.Claims;
 
 namespace Shippping_Managment.Controllers
@@ -18,7 +19,7 @@ namespace Shippping_Managment.Controllers
         private readonly IOrder orderRepo;
         private readonly IProduct productRepo;
 
-        public OrderController(IOrder orderRepo ,IProduct productRepo)
+        public OrderController(IOrder orderRepo, IProduct productRepo)
         {
             this.orderRepo = orderRepo;
             this.productRepo = productRepo;
@@ -27,11 +28,12 @@ namespace Shippping_Managment.Controllers
         [Route("GetAll")]
         public async Task<ActionResult> GetAll()
         {
-            IQueryable<Order> orders = orderRepo.GetAll(); 
+            IQueryable<Order> orders = orderRepo.GetAll();
             IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
             return Ok(dto);
         }
-        [HttpGet]
+        [HttpGet("{id:int}")]
+        [Route("GetOrderById")]
         public async Task<ActionResult> GetOrderById(int orderId)
         {
            Order? order = await orderRepo.GetById(orderId);
