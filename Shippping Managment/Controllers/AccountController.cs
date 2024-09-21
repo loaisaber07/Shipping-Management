@@ -68,24 +68,34 @@ namespace Shippping_Managment.Controllers
                 if (!result) {
                     return BadRequest(new { Message = "Incorrect Password try again!" });
                 }
-                FieldJobDTO f = new FieldJobDTO();
-                FieldJob? fieldJob = new FieldJob();
-
-                if (user.FiledJobID is not null)
-                { 
-                int fieldId = (int)user.FiledJobID;
-                     fieldJob = await fieldJobRepo.GetFieldJobById(fieldId);
-                }
-                if(fieldJob is not null)
-                f = FieldJobService.MappingFieldJob(fieldJob);
-
-                string token = await GetTokenAsync(user , user.Id);
                 var roles = await userManager.GetRolesAsync(user);
-                return Ok(new { token=token , Role=roles , ID=user.Id ,FieldJob=f });
-
+                foreach (var role in roles)
+                {
+                    if (role == "Employee")
+                    {
+                        FieldJobDTO f = new FieldJobDTO();
+                        FieldJob? fieldJob = new FieldJob();
+                        if (user.FiledJobID is not null)
+                        {
+                            int fieldId = (int)user.FiledJobID;
+                            fieldJob = await fieldJobRepo.GetFieldJobById(fieldId);
+                            if (fieldJob is not null)
+                            {
+                                f = FieldJobService.MappingFieldJob(fieldJob);
+                            }
+                            else
+                            {
+                                return BadRequest(new { Message = "FieldJob NotFound" });
+                            }
+                            string Emptoken = await GetTokenAsync(user, user.Id);
+                            return Ok(new { token = Emptoken, Role = roles, ID = user.Id, FieldJob = f });
+                        }
+                    }
+                }
+                string token1 = await GetTokenAsync(user , user.Id);
+                return Ok(new { token=token1 , Role=roles , ID=user.Id });
             }
             return BadRequest();
-
         }
 
 

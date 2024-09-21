@@ -27,7 +27,7 @@ namespace Data_Access_Layer.Entity
         #endregion
 
         #region MAPPING between govern and agent
-        [InverseProperty("Govern")]
+        [InverseProperty("Governs")]
         public virtual ICollection<Agent> Agents { get; set; }
         #endregion
 
