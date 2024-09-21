@@ -70,31 +70,43 @@ namespace Shippping_Managment.Controllers
         }
 
 
-            private async Task<string> GetTokenAsync(ApplicationUser user) {
-                var userClaims = new List<Claim>
-                {
-    new Claim(JwtRegisteredClaimNames.Sub,user.UserName) , 
-    new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-    new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-    new Claim(ClaimTypes.Name ,user.UserName)
-                };
-                var roles = await userManager.GetRolesAsync(user);
-                foreach (var role in roles) {
-                    userClaims.Add(new Claim(ClaimTypes.Role, role));  
-                }
-                var JwtSetting= configuration.GetSection("JwtSetting");
-                string? key = JwtSetting["SecretKey"];
-                var secretKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-                var signingCredination = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                var expiration = DateTime.UtcNow.AddHours(1);
-                var token = new JwtSecurityToken(
-                    claims:userClaims, 
-                    signingCredentials:signingCredination ,
-                       expires:expiration );
-                var tokenObj = new JwtSecurityTokenHandler().WriteToken(token);
-                return tokenObj;
+        private async Task<string> GetTokenAsync(ApplicationUser user)
+        {
+            var userClaims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, user.UserName)
+    };
+
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                userClaims.Add(new Claim(ClaimTypes.Role, role));
             }
-        
+
+            var jwtSetting = configuration.GetSection("JwtSetting");
+            var keyBase64 = jwtSetting["SecretKey"];
+            var key = Convert.FromBase64String(keyBase64);
+            var secretKey = new SymmetricSecurityKey(key);
+
+            var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha512);
+            var expiration = DateTime.UtcNow.AddHours(1);
+
+            var token = new JwtSecurityToken(
+                claims: userClaims,
+                signingCredentials: signingCredentials,
+                expires: expiration
+            );
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return tokenString;
+        }
+
+
 
     }
 }
