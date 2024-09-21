@@ -66,6 +66,11 @@ IEnumerable<Product> products =  ProductService.MappingProduct(order.ID ,orderDT
             return RedirectToAction("GetAll");
 
         }
-    
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id) {
+
+            return NoContent();
+        }
+
     }
 }
