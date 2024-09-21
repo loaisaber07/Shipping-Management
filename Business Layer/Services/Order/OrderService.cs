@@ -11,7 +11,7 @@ namespace Business_Layer.Services.Order
 {
     public class OrderService
     {
-        public static Data_Access_Layer.Entity.Order MappingOrder(AddOrderDTO add)
+        public static Data_Access_Layer.Entity.Order MappingOrder(string sellerId ,AddOrderDTO add)
         {
             Data_Access_Layer.Entity.Order order = new Data_Access_Layer.Entity.Order
             { 
@@ -27,7 +27,7 @@ namespace Business_Layer.Services.Order
                 IsForVillage = add.IsForVillage,
                 TypeOfPaymentID = add.TypeOfPaymentID,
                 TypeOfChargeID = add.TypeOfChargeID,
-                SellerID = add.SellerID,
+                SellerID = sellerId,
                 OrderStatusID = add.OrderStatusID,
                 TypeOfReceiptID = add.TypeOfPaymentID,
                 Note = add.Note,

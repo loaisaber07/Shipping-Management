@@ -11,7 +11,7 @@ namespace Data_Access_Layer.DTO.Order
         public string Name { get; set; }
         public int Quantity { get; set; }
         public int ProductWeight { get; set; }
-        public int OrderId { get; set; }
+  
         
     }
 }

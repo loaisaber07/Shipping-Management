@@ -1,14 +1,18 @@
 ﻿using Business_Layer.Services.Order;
+using Business_Layer.Services.Products;
 using Data_Access_Layer.DTO.Order;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class OrderController : ControllerBase
     {
         private readonly IOrder orderRepo;
@@ -40,31 +44,24 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "Seller")]
         public async Task<ActionResult> AddOrder(AddOrderDTO orderDTO)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(new {Message="Invalid Data !!"});
             }
-            Order order = OrderService.MappingOrder(orderDTO);
+        string? sellerId=  HttpContext.User.FindFirst("userID")?.Value;
+            if (sellerId == null) { 
+            return Unauthorized();
+            }
+            Order order = OrderService.MappingOrder(sellerId,orderDTO);
             await orderRepo.CreateAsync(order);
             await orderRepo.SaveAsync();
-            List<Product> products = new List<Product>();
-            foreach(AddProductDTO product in orderDTO.ProductList)
-            {
-                Product addProduct = new Product
-                {
-                    Name = product.Name,
-                    Quantity = product.Quantity,
-                    Weight = product.ProductWeight,
-                    OrderID=order.ID,
-                };
-                products.Add(addProduct);
-
-            }
+IEnumerable<Product> products =  ProductService.MappingProduct(order.ID ,orderDTO.ProductList);
             await productRepo.BulkInsert(products);
             await productRepo.SaveAsync();
-            return Ok();
+            return RedirectToAction("GetAll");
 
         }
 

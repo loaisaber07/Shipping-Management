@@ -48,7 +48,7 @@ namespace Shippping_Managment.Controllers
                 if (!result) {
                     return BadRequest(new { Message = "Incorrect Password" }); 
                 }
-                string token = await GetTokenAsync(user);
+                string token = await GetTokenAsync(user , user.Id);
                 return Ok(token);
             }
             if (log.Email is not null) {
@@ -60,9 +60,9 @@ namespace Shippping_Managment.Controllers
                 if (!result) {
                     return BadRequest(new { Message = "Incorrect Password try again!" });
                 }
-                string token = await GetTokenAsync(user);
+                string token = await GetTokenAsync(user , user.Id);
                 var roles = await userManager.GetRolesAsync(user);
-                return Ok(new { token=token , Role=roles});
+                return Ok(new { token=token , Role=roles , ID=user.Id });
 
             }
             return BadRequest();
@@ -70,15 +70,15 @@ namespace Shippping_Managment.Controllers
         }
 
 
-        private async Task<string> GetTokenAsync(ApplicationUser user)
+        private async Task<string> GetTokenAsync(ApplicationUser user , string id)
         {
             var userClaims = new List<Claim>
     {
         new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        new Claim(ClaimTypes.Name, user.UserName)
+        new Claim("userID",id)
     };
+            Console.WriteLine(user.Id);
 
             var roles = await userManager.GetRolesAsync(user);
             foreach (var role in roles)

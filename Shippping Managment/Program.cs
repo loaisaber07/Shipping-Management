@@ -68,7 +68,7 @@ namespace Shippping_Managment
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    RoleClaimType = ClaimTypes.Role,
+                    RoleClaimType = ClaimTypes.Role, 
                     ClockSkew = TimeSpan.FromMinutes(5),
                     ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 }
                 };
@@ -77,11 +77,14 @@ namespace Shippping_Managment
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Employee", policy => policy.RequireClaim(ClaimTypes.Role, "Employee"));
+                options.AddPolicy("Seller", policy => policy.RequireClaim(ClaimTypes.Role, "Seller"));
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+                options.AddPolicy("Agent", policy => policy.RequireClaim(ClaimTypes.Role, "Agent"));
             });
 
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Title", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Shipping Managment", Version = "v1" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -90,7 +93,7 @@ namespace Shippping_Managment
                     Scheme = JwtBearerDefaults.AuthenticationScheme,
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' followed by a space and then your JWT token."
+                    Description = "Enter your JWT token"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement

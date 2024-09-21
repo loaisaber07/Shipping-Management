@@ -40,8 +40,6 @@ namespace Data_Access_Layer.DTO.Order
         [Required]
         public int CityID { get; set; }
         [Required]
-        public string SellerID { get; set; }
-        [Required]
         public int TypeOfPaymentID { get; set; }
         [Required]
 
