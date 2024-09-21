@@ -12,7 +12,7 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+    [Authorize(Policy = "Seller")]
     public class OrderController : ControllerBase
     {
         private readonly IOrder orderRepo;
@@ -27,9 +27,9 @@ namespace Shippping_Managment.Controllers
         [Route("GetAll")]
         public async Task<ActionResult> GetAll()
         {
-            IEnumerable<Order> list = await orderRepo.GetAllAsync();
-            IEnumerable<GetOrderDTO> get = OrderService.GetAllOrder(list);
-            return Ok(get);
+            IQueryable<Order> orders = orderRepo.GetAll(); 
+            IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
+            return Ok(dto);
         }
         [HttpGet]
         public async Task<ActionResult> GetOrderById(int orderId)
@@ -44,7 +44,7 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Seller")]
+       
         public async Task<ActionResult> AddOrder(AddOrderDTO orderDTO)
         {
             if(!ModelState.IsValid)

@@ -18,6 +18,14 @@ namespace Data_Access_Layer.Repositry
             this.dataBase = dataBase;
         }
 
+        public IQueryable<Order> GetAll()
+        {
+            return    dataBase
+                        .Orders
+                        .AsNoTracking()
+                        .Include(s => s.Products);
+        }
+
         public async Task<Order?> GetById(int id)
         {
            Order? order = await dataBase.Orders

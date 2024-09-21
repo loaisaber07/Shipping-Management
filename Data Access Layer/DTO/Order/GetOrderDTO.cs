@@ -37,6 +37,6 @@ namespace Data_Access_Layer.DTO.Order
         public int TypeOfPaymentID { get; set; }
         public int TypeOfChargeID { get; set; }
         public int OrderStatusID { get; set; }
-       // public List<GetProductDTO> ProductList { get; set; }
+        public ICollection<GetProductDTO>? ProductList { get; set; }
     }
 }
