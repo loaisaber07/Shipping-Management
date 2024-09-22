@@ -12,14 +12,18 @@ namespace Data_Access_Layer.Interfaces
     {
         Task<ApplicationUser?> GetUserAsyncById(string id);
         Task<Seller?> GetSellerAsyncById(string id);
+        Task<Agent?> GetAgentAsyncById(string id);
         Task<bool> DeleteUserAsync(string id);
         Task<bool> DeleteSellerAsync(string id);
+        Task<bool> DeleteAgentAsync(string id);
         Task<ApplicationUser?> GetByEmail(string email); 
         Task<bool> CreateUser(ApplicationUser user,string password); 
         Task<bool> CreateSeller(Seller seller , string password);
+        Task<bool>CreateAgent(Agent agent,string password);
         Task<bool> AddRole(string Email, string roleName);
         Task<IEnumerable<ApplicationUser>> GetAllEmployee();
         Task<IEnumerable<Seller>> GetAllSellers();
+        Task<IEnumerable<Agent>> GetAllAgents();
         Task<bool> UpdateUser(ApplicationUser user);
 
     }

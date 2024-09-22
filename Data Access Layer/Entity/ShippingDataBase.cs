@@ -51,6 +51,10 @@ namespace Data_Access_Layer.Entity
                  .HasValue<ApplicationUser>("ApplicationUser")
                  .HasValue<Seller>("Seller");
             builder.Entity<ApplicationUser>()
+                .HasDiscriminator<string>("UserType")
+                .HasValue<ApplicationUser>("ApplicationUser")
+                .HasValue<Agent>("Agent");
+            builder.Entity<ApplicationUser>()
                 .HasOne(s=>s.FieldJob)
                 .WithMany(s=>s.Users)
                 .HasForeignKey(s=> s.FiledJobID)

@@ -19,10 +19,7 @@ namespace Data_Access_Layer.Entity
         public DateTime DataAdding { get; set; } = DateTime.Now;
         public bool Status { get; set; } = true;
 
-        #region  branch with agent
-        [InverseProperty("Branch")]
-        public virtual ICollection<Agent> Agents { get; set; }  
-        #endregion
+       
 
         #region mapping the relation between Order and branch
         [InverseProperty("Branch")]
