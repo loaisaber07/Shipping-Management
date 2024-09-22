@@ -35,6 +35,30 @@ namespace Data_Access_Layer.Repositry
             return order;
         }
 
+        public async Task<Order?> GetOrderForShippinCost(int id)
+        {
+            Order? order = await dataBase.Orders
+                .Include(o=>o.Seller).ThenInclude(s=>s.SpecialCharges)
+                .Include(c=>c.City)
+                .Include(t=>t.TypeOfCharge)
+                .Include(t=>t.TypeOfReceipt)
+                .FirstOrDefaultAsync (o=>o.ID==id);
+            return order;
+        }
+
+        public async Task<SpecialCharge?> GetSpecialForSeller(int id,string sellerId)
+        {
+          SpecialCharge? special =await dataBase.specialCharges.FirstOrDefaultAsync(c=>c.CityID==id&&c.SellerID== sellerId);
+            return special;
+
+        }
+
+        public async Task<Weight?> GetWeight()
+        {
+           Weight? weight=  await dataBase.weights.FirstOrDefaultAsync();
+            return weight;
+        }
+
         public bool ISEXIST(int id)
         {
        int? orderId= dataBase

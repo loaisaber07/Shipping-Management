@@ -18,11 +18,13 @@ namespace Shippping_Managment.Controllers
     {
         private readonly IOrder orderRepo;
         private readonly IProduct productRepo;
+        private readonly IWeight weightRepo;
 
-        public OrderController(IOrder orderRepo, IProduct productRepo)
+        public OrderController(IOrder orderRepo, IProduct productRepo,IWeight weightRepo)
         {
             this.orderRepo = orderRepo;
             this.productRepo = productRepo;
+            this.weightRepo = weightRepo;
         }
         [HttpGet]
         [Route("GetAll")]
@@ -97,6 +99,43 @@ await orderRepo.DeleteAsync(orderId);
             orderRepo.Update(order);
             await orderRepo.SaveAsync();
             return Ok(new { Message = "Update Successfully" });
+        }
+
+        [HttpGet("id/{id:int}")]
+        public async Task<ActionResult> GetShippingCost(int id)
+        {
+            Order? order = await orderRepo.GetOrderForShippinCost(id);
+            if (order is null)
+            {
+                return NotFound(new { Message = "Not found Order !" });
+            }
+            Weight?weight =  await orderRepo.GetWeight();
+            if (weight is null)
+            {
+                return NotFound(new { Message = "Not found Weight Setting !" });
+            }
+            int shippingCost = 0;
+            int typeOfChargeCost= 0;
+            int vilagetCost = 0;
+            int cityCost = order.City.NormalCharge;
+            int weightcost = 0;
+            SpecialCharge? special = await orderRepo.GetSpecialForSeller(order.CityID,order.SellerID);
+            if (special is not null)
+            {
+                 cityCost = special.SpecialChargeForSeller;
+            }
+            if (order.IsForVillage)
+            {
+                vilagetCost = 20;
+            }
+            typeOfChargeCost = order.TypeOfCharge.Cost;
+            if (order.Weight > weight.DefaultWeight)
+            {
+                 weightcost = (order.Weight - weight.DefaultWeight) * weight.AdditionalWeight;
+            }
+            shippingCost = cityCost + weightcost + typeOfChargeCost + vilagetCost;
+            return Ok(shippingCost);
+
         }
 
     }
