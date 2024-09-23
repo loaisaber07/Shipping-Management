@@ -1,4 +1,5 @@
 ﻿using Data_Access_Layer.Entity;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Data_Access_Layer.Interfaces
         Task<Order?> GetOrderForShippinCost(int id);
         Task<SpecialCharge?> GetSpecialForSeller(int id, string sellerId);
         Task<Weight?> GetWeight();
-
+        Task<IEnumerable<Order?>> GetOrderByTimeAdding(DateTime begin, DateTime end, int statusId);
         bool ISEXIST(int id);
     }
 }

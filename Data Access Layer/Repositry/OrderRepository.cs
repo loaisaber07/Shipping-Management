@@ -1,6 +1,7 @@
 ﻿using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,10 +36,18 @@ namespace Data_Access_Layer.Repositry
             return order;
         }
 
+        public async Task<IEnumerable<Order?>> GetOrderByTimeAdding(DateTime begin, DateTime end, int statusId)
+        {
+        return    await dataBase.Orders
+                .Where(s => s.DateAdding >= begin && s.DateAdding <= end && s.OrderStatusID == statusId)
+                .ToListAsync();
+
+        }
+
         public async Task<Order?> GetOrderForShippinCost(int id)
         {
             Order? order = await dataBase.Orders
-                .Include(o=>o.Seller).ThenInclude(s=>s.SpecialCharges)
+                .Include(o=>o.Seller)
                 .Include(c=>c.City)
                 .Include(t=>t.TypeOfCharge)
                 .Include(t=>t.TypeOfReceipt)

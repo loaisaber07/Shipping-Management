@@ -10,6 +10,7 @@ namespace Data_Access_Layer.Interfaces
 {
     public interface ISpecialCharge :IRepositry<SpecialCharge>
     {
-        Task BulkInsert(IEnumerable<SpecialCharge> DTO);
+        Task BulkInsert(IEnumerable<SpecialCharge> DTO); 
+        SpecialCharge GetSpecialCharge(string sellerId,int city ,out bool IsExist);
     }
 }

@@ -19,12 +19,15 @@ namespace Shippping_Managment.Controllers
         private readonly IOrder orderRepo;
         private readonly IProduct productRepo;
         private readonly IWeight weightRepo;
+        private readonly ISpecialCharge specialRepo;
 
-        public OrderController(IOrder orderRepo, IProduct productRepo,IWeight weightRepo)
+        public OrderController(IOrder orderRepo, IProduct productRepo,IWeight weightRepo , 
+            ISpecialCharge specialRepo)
         {
             this.orderRepo = orderRepo;
             this.productRepo = productRepo;
             this.weightRepo = weightRepo;
+            this.specialRepo = specialRepo;
         }
         [HttpGet]
         [Route("GetAll")]
@@ -101,41 +104,47 @@ await orderRepo.DeleteAsync(orderId);
             return Ok(new { Message = "Update Successfully" });
         }
 
-        [HttpGet("id/{id:int}")]
-        public async Task<ActionResult> GetShippingCost(int id)
+        [HttpGet]
+        [Route("GetShippingCost{beignningDate:datetime}/{endingDate:datetime}/{orderStatusId:int}")]
+        public async Task<ActionResult> ReportOrders(DateTime beignningDate, DateTime endingDate, int orderStatusId)
+        { 
+        IEnumerable<Order?>orders =await orderRepo.GetOrderByTimeAdding(beignningDate,endingDate,orderStatusId);
+            return NoContent (); 
+        }
+        private async Task<decimal> GetShippingCost(int id)
         {
             Order? order = await orderRepo.GetOrderForShippinCost(id);
             if (order is null)
             {
-                return NotFound(new { Message = "Not found Order !" });
+                return 0;
             }
-            Weight?weight =  await orderRepo.GetWeight();
-            if (weight is null)
+            decimal cost=0m; 
+            bool IsExist; 
+SpecialCharge? special =  specialRepo.GetSpecialCharge(order.SellerID,order.CityID ,out IsExist);
+            if (IsExist)
             {
-                return NotFound(new { Message = "Not found Weight Setting !" });
+                cost += (decimal)special.SpecialChargeForSeller;
             }
-            int shippingCost = 0;
-            int typeOfChargeCost= 0;
-            int vilagetCost = 0;
-            int cityCost = order.City.NormalCharge;
-            int weightcost = 0;
-            SpecialCharge? special = await orderRepo.GetSpecialForSeller(order.CityID,order.SellerID);
-            if (special is not null)
+            if (order.IsForVillage) {
+                cost += 20; //Now i set the constatnt value for delivery to village 
+            } 
+            cost+= order.TypeOfCharge.Cost;
+            if (order.TypeOfReceipt.Name == "Branch")
             {
-                 cityCost = special.SpecialChargeForSeller;
+                cost += order.City.PickUpCharge; 
             }
-            if (order.IsForVillage)
+            Weight weight = weightRepo.GetDefaultWeight(out IsExist);
+            if (IsExist)
             {
-                vilagetCost = 20;
-            }
-            typeOfChargeCost = order.TypeOfCharge.Cost;
-            if (order.Weight > weight.DefaultWeight)
-            {
-                 weightcost = (order.Weight - weight.DefaultWeight) * weight.AdditionalWeight;
-            }
-            shippingCost = cityCost + weightcost + typeOfChargeCost + vilagetCost;
-            return Ok(shippingCost);
+                if (order.Weight > weight.DefaultWeight)
+                { 
+    cost += (order.Weight - weight.DefaultWeight) * weight.AdditionalWeight;
+                }
 
+            }
+            cost += order.Cost;  
+
+return cost;                                   
         }
 
     }
