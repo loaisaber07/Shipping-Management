@@ -73,6 +73,20 @@ namespace Shippping_Managment
                     RoleClaimType = ClaimTypes.Role, 
                     ClockSkew = TimeSpan.FromMinutes(5),
                     ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 }
+
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        // Read the JWT token from the HttpOnly cookie named "jwt"
+                        var token = context.Request.Cookies["jwt"];
+                        if (!string.IsNullOrEmpty(token))
+                        {
+                            context.Token = token;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
@@ -129,9 +143,10 @@ namespace Shippping_Managment
             {
                 option.AddPolicy("Allow", builder =>
                 {
-                    builder.AllowAnyOrigin();
-                    builder.AllowAnyMethod();
-                    builder.AllowAnyHeader();
+                    builder.SetIsOriginAllowed(origin => true)
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
 
                 });
 
