@@ -39,6 +39,13 @@ namespace Data_Access_Layer.Repositry
         public async Task<IEnumerable<Order?>> GetOrderByTimeAdding(DateTime begin, DateTime end, int statusId)
         {
         return    await dataBase.Orders
+                .Include(o => o.Seller)
+                .Include(s=>s.Agent)
+                .Include(o => o.OrderStatus)
+                .Include(c => c.City)
+                .Include(s => s.Govern)
+                .Include(t => t.TypeOfCharge)
+                .Include(t => t.TypeOfReceipt)
                 .Where(s => s.DateAdding >= begin && s.DateAdding <= end && s.OrderStatusID == statusId)
                 .ToListAsync();
 
@@ -48,7 +55,9 @@ namespace Data_Access_Layer.Repositry
         {
             Order? order = await dataBase.Orders
                 .Include(o=>o.Seller)
+                .Include(o=>o.OrderStatus)
                 .Include(c=>c.City)
+                .Include(s=>s.Govern)
                 .Include(t=>t.TypeOfCharge)
                 .Include(t=>t.TypeOfReceipt)
                 .FirstOrDefaultAsync (o=>o.ID==id);

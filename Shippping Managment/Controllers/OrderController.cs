@@ -109,11 +109,33 @@ await orderRepo.DeleteAsync(orderId);
         public async Task<ActionResult> ReportOrders(DateTime beignningDate, DateTime endingDate, int orderStatusId)
         { 
         IEnumerable<Order?>orders =await orderRepo.GetOrderByTimeAdding(beignningDate,endingDate,orderStatusId);
-            return NoContent (); 
+            if (orders is null) {
+                return NotFound(new { Message = "There is no orders founded in this Date!" });
+            
+            }
+            List<ReportOrderDTO> dtos = new List<ReportOrderDTO>();
+            foreach (var order in orders)
+            {
+                dtos.Add(new ReportOrderDTO {
+                OrderID = order.ID, 
+                OrderStatusName = order.OrderStatus.Name, 
+                SellerName = order.Seller.UserName,
+                ClientName = order.ClientName,
+                PhoneNumber = order.ClientNumber,
+                ClientGover = order.Govern.Name , 
+                ClientCity = order.City.Name ,
+                OrderCost = order.Cost,
+                ChargeCost =await GetShippingCost(order) ,
+                OrderDate = order.DateAdding ,
+                CompanyAmount = order.Agent.ThePrecentageOfCompanyFromOffer
+                }); 
+
+            }
+            return Ok(dtos);
         }
-        private async Task<decimal> GetShippingCost(int id)
+        private async Task<decimal> GetShippingCost(Order orders)
         {
-            Order? order = await orderRepo.GetOrderForShippinCost(id);
+            Order? order = orders;
             if (order is null)
             {
                 return 0;
