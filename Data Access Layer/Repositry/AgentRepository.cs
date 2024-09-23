@@ -22,7 +22,7 @@ namespace Data_Access_Layer.Repositry
 
         public async Task<IEnumerable<GetAgentsToAsigenOrderDTO>> GetAgent(Order order)
         {
-            return await dataBase.agents.Include(a => a.Govern).AsNoTracking()
+            return await dataBase.agents.Include(a => a.Governs).AsNoTracking()
                 .Where(a => a.BranchID == order.BranchID && a.GovernID == order.GovernID)
                 .Select(a=>new GetAgentsToAsigenOrderDTO { 
                     ID=a.Id,

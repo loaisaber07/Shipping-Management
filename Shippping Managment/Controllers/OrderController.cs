@@ -30,7 +30,7 @@ namespace Shippping_Managment.Controllers
             this.specialRepo = specialRepo;
             this.orderStatusRepo = orderStatusRepo;
         }
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "AdminOrEmployee")]
         [HttpGet]
         [Route("GetAll")]
 
