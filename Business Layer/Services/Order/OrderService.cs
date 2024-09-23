@@ -36,6 +36,34 @@ namespace Business_Layer.Services.Order
             };
             return order;
         }
+
+        public static Data_Access_Layer.Entity.Order AdminMappingOrder(AdminAddOrderDTO add,int statusId)
+        {
+            Data_Access_Layer.Entity.Order order = new Data_Access_Layer.Entity.Order
+            {
+                BranchID = add.BranchID,
+                ClientName = add.ClientName,
+                ClientNumber = add.ClientNumber,
+                ClientNumber2 = add.ClientNumber2,
+                Cost = add.Cost,
+                Email = add.Email,
+                GovernID = add.GovernID,
+                Weight = add.Weight,
+                VillageOrStreet = add.VillageOrStreet,
+                IsForVillage = add.IsForVillage,
+                TypeOfPaymentID = add.TypeOfPaymentID,
+                TypeOfChargeID = add.TypeOfChargeID,
+                SellerID = add.SellerID,
+                OrderStatusID = statusId,
+                TypeOfReceiptID = add.TypeOfReceiptID,
+                Note = add.Note,
+                CityID = add.CityID
+            };
+            return order;
+        }
+
+
+
         public static GetOrderDTO GetOrder(Data_Access_Layer.Entity.Order order)
         {
             GetOrderDTO getOrderDTO = new GetOrderDTO

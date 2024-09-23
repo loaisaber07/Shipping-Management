@@ -19,14 +19,16 @@ namespace Shippping_Managment.Controllers
         private readonly IProduct productRepo;
         private readonly IWeight weightRepo;
         private readonly ISpecialCharge specialRepo;
+        private readonly IOrderStatus orderStatusRepo;
 
         public OrderController(IOrder orderRepo, IProduct productRepo,IWeight weightRepo , 
-            ISpecialCharge specialRepo)
+            ISpecialCharge specialRepo,IOrderStatus orderStatusRepo)
         {
             this.orderRepo = orderRepo;
             this.productRepo = productRepo;
             this.weightRepo = weightRepo;
             this.specialRepo = specialRepo;
+            this.orderStatusRepo = orderStatusRepo;
         }
         [Authorize(Policy = "Admin")]
         [HttpGet]
@@ -52,9 +54,30 @@ namespace Shippping_Managment.Controllers
             GetOrderDTO orderDTO = OrderService.GetOrder(order);
             return Ok(orderDTO);
         }
+        [Authorize(Policy = "Admin")]
+        [HttpPost("AdminAddOrder")]
+        public async Task<ActionResult> AdminAddOrder(AdminAddOrderDTO orderDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Message = "Invalid Data !!" });
+            }
+           OrderStatus? status = await orderStatusRepo.GetByName("New");
+            if (status is null)
+            {
+                return BadRequest(new {Message = "Invalid Order Status Id !!" });
+            }
+            Order order = OrderService.AdminMappingOrder(orderDTO,status.ID);
+            await orderRepo.CreateAsync(order);
+            await orderRepo.SaveAsync();
+            IEnumerable<Product> products = ProductService.MappingProduct(order.ID, orderDTO.ProductList);
+            await productRepo.BulkInsert(products);
+            await productRepo.SaveAsync();
+            return Ok(new { Message = "Added Successfully " });
+
+        }
 
         [Authorize( Policy = "Seller")]
-
         [HttpPost]
         public async Task<ActionResult> AddOrder(AddOrderDTO orderDTO)
         {
@@ -95,7 +118,6 @@ await orderRepo.DeleteAsync(orderId);
         }
         [Authorize(Policy = "Seller")]
         [HttpPut]
-
         public async Task<ActionResult> UpdateOrder(UpdateOrderDTO orderDTO) {
         Order? order = await orderRepo.GetById(orderDTO.ID);
             if (order is null) {
@@ -129,24 +151,85 @@ await orderRepo.DeleteAsync(orderId);
             List<ReportOrderDTO> dtos = new List<ReportOrderDTO>();
             foreach (var order in orders)
             {
-                dtos.Add(new ReportOrderDTO
-                {
-                    OrderID = order.ID,
-                    OrderStatusName = order.OrderStatus.Name,
-                    SellerName = order.Seller.UserName,
-                    ClientName = order.ClientName,
-                    PhoneNumber = order.ClientNumber,
-                    ClientGover = order.Govern.Name,
-                    ClientCity = order.City.Name,
-                    OrderCost = order.Cost,
-                    ChargeCost = await GetShippingCost(order),
-                    OrderDate = order.DateAdding,
-                    CompanyAmount = (order?.Agent?.ThePrecentageOfCompanyFromOffer * order.Cost )?? 0
-                }); 
+                ReportOrderDTO report = new ReportOrderDTO();
+
+                report.OrderID = order.ID;
+                report.OrderStatusName = order.OrderStatus.Name;
+                report.SellerName = order.Seller.UserName;
+                report.ClientName = order.ClientName;
+                report.PhoneNumber = order.ClientNumber;
+                report.ClientGover = order.Govern.Name;
+                report.ClientCity = order.City.Name;
+                report.OrderCost = order.Cost;
+                report.ChargeCost = await GetShippingCost(order);
+                report.OrderDate = order.DateAdding;
+                if (order?.Agent?.TypeOfOffer.Name=="Percentage" && order.Agent is not null)
+                { 
+                    report.CompanyAmount = (order?.Agent?.ThePrecentageOfCompanyFromOffer / 100) * (report.ChargeCost) ?? 0;
+                }
+                report.CompanyAmount = order?.Agent?.ThePrecentageOfCompanyFromOffer ?? 0;
+                dtos.Add(report);
 
             }
             return Ok(dtos);
         }
+
+        [Authorize(Policy = ("AdminOrEmployee"))]
+        [HttpPut("EmployeeChangeOrderStatus")]
+        public async Task<ActionResult> EmployeeChangeOrderStatus(EmployeeUpdateOrderStatusDTO orderDTO)
+        {
+            Order? order = await orderRepo.GetById(orderDTO.ID);
+            if (order is null)
+            {
+                return BadRequest(new { Message = "Order Not found !" });
+            }
+           OrderStatus? modifiedStatus = await orderStatusRepo.GetAsyncById(orderDTO.OrderStatusID);
+            if (modifiedStatus is null)
+            {
+                return NotFound(new {Message="Order Status Not Found !!"});
+            }
+            if (modifiedStatus.Name != "Waiting")
+            {
+                return BadRequest(new { Message = "Can 't Update Status" });
+            }
+            order.OrderStatusID = orderDTO.OrderStatusID;
+                orderRepo.Update(order);
+                await orderRepo.SaveAsync();    
+            return Ok(new { Message = "Update Successfully" });
+        }
+        [Authorize(Roles =("Admin,Agent"))]
+        [HttpPut("AgentChangeOrderStatus")]
+        public async Task<ActionResult> AgentChangeOrderStatus(EmployeeUpdateOrderStatusDTO orderDTO)
+        {
+            Order? order = await orderRepo.GetById(orderDTO.ID);
+            if (order is null)
+            {
+                return BadRequest(new { Message = "Not found !" });
+            }
+            OrderStatus? modifiedStatus = await orderStatusRepo.GetAsyncById(orderDTO.OrderStatusID);
+            if (modifiedStatus is null)
+            {
+                return NotFound(new { Message = "Order Status Not Found !!" });
+            }
+            if (modifiedStatus.Name == "New" 
+                || modifiedStatus.Name == "UnReachable"
+                || modifiedStatus.Name == "AssignedToAgent")
+            {
+                
+             return BadRequest(new { Message = "Can 't Update Status" });
+            }
+            order.OrderStatusID=orderDTO.OrderStatusID;
+            orderRepo.Update(order);
+            await orderRepo.SaveAsync();
+            return Ok(new { Message = "Update Successfully" });
+        }
+
+        
+      
+
+
+
+
         private async Task<decimal> GetShippingCost(Order orders)
         {
             Order? order = orders;
