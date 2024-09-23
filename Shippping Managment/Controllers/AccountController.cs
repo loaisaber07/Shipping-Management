@@ -26,9 +26,9 @@ namespace Shippping_Managment.Controllers
         private readonly IFieldJob fieldJobRepo;
         private readonly ShippingDataBase context;
 
-        public AccountController(UserManager<ApplicationUser> userManager ,
-            IConfiguration configuration ,
-           RoleManager<IdentityRole> roleManager ,IFieldJob fieldJobRepo )
+        public AccountController(UserManager<ApplicationUser> userManager,
+            IConfiguration configuration,
+           RoleManager<IdentityRole> roleManager, IFieldJob fieldJobRepo)
         {
             this.userManager = userManager;
             this.configuration = configuration;
@@ -40,34 +40,64 @@ namespace Shippping_Managment.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(LoginRequestDTO log)
         {
-            if (!ModelState.IsValid) { 
-            return BadRequest( new {Messaga=$"Incorect Data " }) ;
-            }
-            if (log.Username is not null) {
-     ApplicationUser? user=await userManager.FindByNameAsync(log.Username);
-                if (user is null) {
-                    return BadRequest(new { Message = "No userName founded!" });
-                }
-                bool adminCheck = await userManager.IsInRoleAsync(user, "Admin");
-                if (!adminCheck) {
-                    return BadRequest(new { Message = $"you are not authorize to use this feature please use Email instead!" });
-                }
-                bool result = await userManager.CheckPasswordAsync(user ,log.Password);
-                if (!result) {
-                    return BadRequest(new { Message = "Incorrect Password" }); 
-                }
-                string token = await GetTokenAsync(user , user.Id);
-                return Ok(token);
+            if (!ModelState.IsValid) {
+                return BadRequest(new { Messaga = $"Incorect Data " });
             }
             if (log.Email is not null) {
 
                 ApplicationUser? user = await userManager.FindByEmailAsync(log.Email);
                 if (user is null) {
-                    return BadRequest(new { Message = "Incorrect Email Address" }); 
-                } 
-       bool result =await userManager.CheckPasswordAsync(user ,log.Password);
-                if (!result) {
-                    return BadRequest(new { Message = "Incorrect Password try again!" });
+                    return BadRequest(new { Message = "Incorrect Email Address" });
+                }
+                bool adminCheck = await userManager.IsInRoleAsync(user, "Admin");
+                if (adminCheck) {
+                    return BadRequest(new { Message = $"you are not authorize to use this feature please use Username instead!" }); 
+                }
+            
+            bool result = await userManager.CheckPasswordAsync(user, log.Password);
+            if (!result) {
+                return BadRequest(new { Message = "Incorrect Password try again!" });
+            }
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                if (role == "Employee")
+                {
+                    FieldJobDTO f = new FieldJobDTO();
+                    FieldJob? fieldJob = new FieldJob();
+                    if (user.FiledJobID is not null)
+                    {
+                        int fieldId = (int)user.FiledJobID;
+                        fieldJob = await fieldJobRepo.GetFieldJobById(fieldId);
+                        if (fieldJob is not null)
+                        {
+                            f = FieldJobService.MappingFieldJob(fieldJob);
+                        }
+                        else
+                        {
+                            return BadRequest(new { Message = "FieldJob NotFound" });
+                        }
+                        string Emptoken = await GetTokenAsync(user, user.Id);
+                        return Ok(new { token = Emptoken, Role = roles, ID = user.Id, FieldJob = f });
+                    }
+                }
+            }
+            string token1 = await GetTokenAsync(user, user.Id);
+            return Ok(new { token = token1, Role = roles, ID = user.Id });
+        } 
+            /*******************************************/
+            if (log.Username is not null)
+            {
+
+                ApplicationUser? user = await userManager.FindByNameAsync(log.Username);
+                if (user is null)
+                {
+                    return BadRequest(new { Message = "Incorrect UserName" });
+                }
+                bool result = await userManager.CheckPasswordAsync(user, log.Password);
+                if (!result)
+                {
+                    return BadRequest(new { Message = "Incorrect Password Or UserName try again!" });
                 }
                 var roles = await userManager.GetRolesAsync(user);
                 foreach (var role in roles)
@@ -93,11 +123,11 @@ namespace Shippping_Managment.Controllers
                         }
                     }
                 }
-                string token1 = await GetTokenAsync(user , user.Id);
-                return Ok(new { token=token1 , Role=roles , ID=user.Id });
+                string token1 = await GetTokenAsync(user, user.Id);
+                return Ok(new { token = token1, Role = roles, ID = user.Id });
             }
             return BadRequest();
-        }
+        } 
 
 
         private async Task<string> GetTokenAsync(ApplicationUser user , string id)
