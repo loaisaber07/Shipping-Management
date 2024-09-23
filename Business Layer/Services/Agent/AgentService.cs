@@ -50,6 +50,7 @@ namespace Business_Layer.Services.Agent
         }
         public static GetAgentDTO getAgentDTO(Agent agent)
         {
+            
             GetAgentDTO agentDTO = new GetAgentDTO
             {
                 ID = agent.Id,

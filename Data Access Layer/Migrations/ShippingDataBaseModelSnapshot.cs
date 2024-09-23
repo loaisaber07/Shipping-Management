@@ -134,7 +134,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 22, 19, 3, 49, 458, DateTimeKind.Local).AddTicks(8312));
+                        .HasDefaultValue(new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(4095));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -187,7 +187,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 22, 19, 3, 49, 459, DateTimeKind.Local).AddTicks(5580));
+                        .HasDefaultValue(new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(7724));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -279,7 +279,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 22, 19, 3, 49, 460, DateTimeKind.Local).AddTicks(1925));
+                        .HasDefaultValue(new DateTime(2024, 9, 23, 16, 19, 7, 381, DateTimeKind.Local).AddTicks(1508));
 
                     b.Property<string>("Email")
                         .IsRequired()

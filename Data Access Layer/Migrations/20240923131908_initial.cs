@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data_Access_Layer.Migrations
 {
     /// <inheritdoc />
-    public partial class v1 : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 18, 2, 29, 3, 391, DateTimeKind.Local).AddTicks(2912)),
+                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(4095)),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -47,7 +47,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 18, 2, 29, 3, 392, DateTimeKind.Local).AddTicks(28))
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(7724))
                 },
                 constraints: table =>
                 {
@@ -135,6 +135,19 @@ namespace Data_Access_Layer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "typeOfReceipts",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_typeOfReceipts", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "weights",
                 columns: table => new
                 {
@@ -167,52 +180,6 @@ namespace Data_Access_Layer.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Govern = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    FiledJobID = table.Column<int>(type: "int", nullable: true),
-                    BranchID = table.Column<int>(type: "int", nullable: false),
-                    UserType = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    StoreName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PickUp = table.Column<int>(type: "int", nullable: true),
-                    ValueOfRejectedOrder = table.Column<int>(type: "int", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_branches_BranchID",
-                        column: x => x.BranchID,
-                        principalTable: "branches",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_fieldJobs_FiledJobID",
-                        column: x => x.FiledJobID,
-                        principalTable: "fieldJobs",
-                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -266,37 +233,67 @@ namespace Data_Access_Layer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "agents",
+                name: "AspNetUsers",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ThePrecentageOfCompanyFromOffer = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Govern = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    FiledJobID = table.Column<int>(type: "int", nullable: true),
                     BranchID = table.Column<int>(type: "int", nullable: false),
-                    GovernID = table.Column<int>(type: "int", nullable: false),
-                    TypeOfOfferID = table.Column<int>(type: "int", nullable: false)
+                    UserType = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
+                    ThePrecentageOfCompanyFromOffer = table.Column<int>(type: "int", nullable: true),
+                    GovernID = table.Column<int>(type: "int", nullable: true),
+                    TypeOfOfferID = table.Column<int>(type: "int", nullable: true),
+                    StoreName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PickUp = table.Column<int>(type: "int", nullable: true),
+                    ValueOfRejectedOrder = table.Column<int>(type: "int", nullable: true),
+                    StoreCityId = table.Column<int>(type: "int", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_agents", x => x.ID);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_agents_branches_BranchID",
+                        name: "FK_AspNetUsers_Cities_StoreCityId",
+                        column: x => x.StoreCityId,
+                        principalTable: "Cities",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_branches_BranchID",
                         column: x => x.BranchID,
                         principalTable: "branches",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_agents_governs_GovernID",
+                        name: "FK_AspNetUsers_fieldJobs_FiledJobID",
+                        column: x => x.FiledJobID,
+                        principalTable: "fieldJobs",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_governs_GovernID",
                         column: x => x.GovernID,
                         principalTable: "governs",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_agents_typeOfOffers_TypeOfOfferID",
+                        name: "FK_AspNetUsers_typeOfOffers_TypeOfOfferID",
                         column: x => x.TypeOfOfferID,
                         principalTable: "typeOfOffers",
                         principalColumn: "ID",
@@ -402,19 +399,26 @@ namespace Data_Access_Layer.Migrations
                     IsForVillage = table.Column<bool>(type: "bit", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Weight = table.Column<int>(type: "int", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 18, 2, 29, 3, 392, DateTimeKind.Local).AddTicks(6062)),
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 16, 19, 7, 381, DateTimeKind.Local).AddTicks(1508)),
                     VillageOrStreet = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BranchID = table.Column<int>(type: "int", nullable: false),
                     GovernID = table.Column<int>(type: "int", nullable: false),
                     CityID = table.Column<int>(type: "int", nullable: false),
                     SellerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AgentID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TypeOfPaymentID = table.Column<int>(type: "int", nullable: false),
+                    TypeOfReceiptID = table.Column<int>(type: "int", nullable: false),
                     TypeOfChargeID = table.Column<int>(type: "int", nullable: false),
                     OrderStatusID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Order_AspNetUsers_AgentID",
+                        column: x => x.AgentID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Order_AspNetUsers_SellerID",
                         column: x => x.SellerID,
@@ -457,6 +461,12 @@ namespace Data_Access_Layer.Migrations
                         principalTable: "typeOfPayments",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Order_typeOfReceipts_TypeOfReceiptID",
+                        column: x => x.TypeOfReceiptID,
+                        principalTable: "typeOfReceipts",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -464,7 +474,8 @@ namespace Data_Access_Layer.Migrations
                 columns: table => new
                 {
                     SellerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CityID = table.Column<int>(type: "int", nullable: false)
+                    CityID = table.Column<int>(type: "int", nullable: false),
+                    SpecialChargeForSeller = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -504,21 +515,6 @@ namespace Data_Access_Layer.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_agents_BranchID",
-                table: "agents",
-                column: "BranchID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_agents_GovernID",
-                table: "agents",
-                column: "GovernID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_agents_TypeOfOfferID",
-                table: "agents",
-                column: "TypeOfOfferID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -563,6 +559,21 @@ namespace Data_Access_Layer.Migrations
                 column: "FiledJobID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_GovernID",
+                table: "AspNetUsers",
+                column: "GovernID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_StoreCityId",
+                table: "AspNetUsers",
+                column: "StoreCityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_TypeOfOfferID",
+                table: "AspNetUsers",
+                column: "TypeOfOfferID");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -578,6 +589,11 @@ namespace Data_Access_Layer.Migrations
                 name: "IX_fieldPrivileges_FieldJobID",
                 table: "fieldPrivileges",
                 column: "FieldJobID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_AgentID",
+                table: "Order",
+                column: "AgentID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_BranchID",
@@ -615,6 +631,11 @@ namespace Data_Access_Layer.Migrations
                 column: "TypeOfPaymentID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Order_TypeOfReceiptID",
+                table: "Order",
+                column: "TypeOfReceiptID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_products_OrderID",
                 table: "products",
                 column: "OrderID");
@@ -634,9 +655,6 @@ namespace Data_Access_Layer.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "agents");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -665,9 +683,6 @@ namespace Data_Access_Layer.Migrations
                 name: "weights");
 
             migrationBuilder.DropTable(
-                name: "typeOfOffers");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -680,9 +695,6 @@ namespace Data_Access_Layer.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Cities");
-
-            migrationBuilder.DropTable(
                 name: "productStatuses");
 
             migrationBuilder.DropTable(
@@ -692,10 +704,19 @@ namespace Data_Access_Layer.Migrations
                 name: "typeOfPayments");
 
             migrationBuilder.DropTable(
+                name: "typeOfReceipts");
+
+            migrationBuilder.DropTable(
+                name: "Cities");
+
+            migrationBuilder.DropTable(
                 name: "branches");
 
             migrationBuilder.DropTable(
                 name: "fieldJobs");
+
+            migrationBuilder.DropTable(
+                name: "typeOfOffers");
 
             migrationBuilder.DropTable(
                 name: "governs");

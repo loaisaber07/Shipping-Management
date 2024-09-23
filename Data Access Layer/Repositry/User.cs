@@ -155,8 +155,8 @@ namespace Data_Access_Layer.Repositry
         }
         public async Task<IEnumerable<Seller>> GetAllSellers()
         {
-            List<ApplicationUser> users = await userManager.Users.ToListAsync();
-            List<Seller> sellers = new List<Seller>();
+            IEnumerable<ApplicationUser> users = await userManager.Users.ToListAsync();
+            ICollection<Seller> sellers = new List<Seller>();
             foreach (ApplicationUser user in users)
             {
                 if (await userManager.IsInRoleAsync(user, "Seller"))
@@ -206,8 +206,8 @@ namespace Data_Access_Layer.Repositry
 
         public async Task<IEnumerable<Agent>> GetAllAgents()
         {
-            List<ApplicationUser> users =await userManager.Users.ToListAsync();
-            List<Agent> Agents = new List<Agent>();
+            IEnumerable<ApplicationUser> users =await userManager.Users.ToListAsync();
+            ICollection<Agent> Agents = new List<Agent>();
             foreach (ApplicationUser user in users)
             {
                 if (await userManager.IsInRoleAsync(user,"Agent"))
@@ -234,7 +234,7 @@ namespace Data_Access_Layer.Repositry
                     await userManager.DeleteAsync(entity);
                     return true;
                 }
-                catch (Exception ex)
+                catch 
                 {
                     return false;
                 }

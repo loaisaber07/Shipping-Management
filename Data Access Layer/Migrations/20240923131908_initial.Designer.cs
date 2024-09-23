@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    [Migration("20240918095915_v5")]
-    partial class v5
+    [Migration("20240923131908_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,53 +24,6 @@ namespace Data_Access_Layer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.Agent", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BranchID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GovernID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ThePrecentageOfCompanyFromOffer")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TypeOfOfferID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("BranchID");
-
-                    b.HasIndex("GovernID");
-
-                    b.HasIndex("TypeOfOfferID");
-
-                    b.ToTable("agents");
-                });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.ApplicationUser", b =>
                 {
@@ -88,7 +41,6 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -106,7 +58,6 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Govern")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -186,7 +137,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 248, DateTimeKind.Local).AddTicks(5158));
+                        .HasDefaultValue(new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(4095));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -239,7 +190,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 249, DateTimeKind.Local).AddTicks(1375));
+                        .HasDefaultValue(new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(7724));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -305,6 +256,9 @@ namespace Data_Access_Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<string>("AgentID")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("BranchID")
                         .HasColumnType("int");
 
@@ -328,7 +282,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 18, 12, 59, 14, 249, DateTimeKind.Local).AddTicks(7836));
+                        .HasDefaultValue(new DateTime(2024, 9, 23, 16, 19, 7, 381, DateTimeKind.Local).AddTicks(1508));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -366,6 +320,8 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AgentID");
 
                     b.HasIndex("BranchID");
 
@@ -692,11 +648,34 @@ namespace Data_Access_Layer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Data_Access_Layer.Entity.Agent", b =>
+                {
+                    b.HasBaseType("Data_Access_Layer.Entity.ApplicationUser");
+
+                    b.Property<int>("GovernID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ThePrecentageOfCompanyFromOffer")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeOfOfferID")
+                        .HasColumnType("int");
+
+                    b.HasIndex("GovernID");
+
+                    b.HasIndex("TypeOfOfferID");
+
+                    b.HasDiscriminator().HasValue("Agent");
+                });
+
             modelBuilder.Entity("Data_Access_Layer.Entity.Seller", b =>
                 {
                     b.HasBaseType("Data_Access_Layer.Entity.ApplicationUser");
 
                     b.Property<int>("PickUp")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoreCityId")
                         .HasColumnType("int");
 
                     b.Property<string>("StoreName")
@@ -706,34 +685,9 @@ namespace Data_Access_Layer.Migrations
                     b.Property<int>("ValueOfRejectedOrder")
                         .HasColumnType("int");
 
+                    b.HasIndex("StoreCityId");
+
                     b.HasDiscriminator().HasValue("Seller");
-                });
-
-            modelBuilder.Entity("Data_Access_Layer.Entity.Agent", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
-                        .WithMany("Agents")
-                        .HasForeignKey("BranchID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data_Access_Layer.Entity.Govern", "Govern")
-                        .WithMany("Agents")
-                        .HasForeignKey("GovernID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data_Access_Layer.Entity.TypeOfOffer", "TypeOfOffer")
-                        .WithMany("Agents")
-                        .HasForeignKey("TypeOfOfferID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Govern");
-
-                    b.Navigation("TypeOfOffer");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.ApplicationUser", b =>
@@ -785,6 +739,10 @@ namespace Data_Access_Layer.Migrations
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Order", b =>
                 {
+                    b.HasOne("Data_Access_Layer.Entity.Agent", "Agent")
+                        .WithMany("Orders")
+                        .HasForeignKey("AgentID");
+
                     b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
                         .WithMany("Orders")
                         .HasForeignKey("BranchID")
@@ -832,6 +790,8 @@ namespace Data_Access_Layer.Migrations
                         .HasForeignKey("TypeOfReceiptID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Agent");
 
                     b.Navigation("Branch");
 
@@ -931,10 +891,38 @@ namespace Data_Access_Layer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Data_Access_Layer.Entity.Agent", b =>
+                {
+                    b.HasOne("Data_Access_Layer.Entity.Govern", "Governs")
+                        .WithMany("Agents")
+                        .HasForeignKey("GovernID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data_Access_Layer.Entity.TypeOfOffer", "TypeOfOffer")
+                        .WithMany("Agents")
+                        .HasForeignKey("TypeOfOfferID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Governs");
+
+                    b.Navigation("TypeOfOffer");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.Seller", b =>
+                {
+                    b.HasOne("Data_Access_Layer.Entity.City", "StoreCity")
+                        .WithMany("Sellers")
+                        .HasForeignKey("StoreCityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StoreCity");
+                });
+
             modelBuilder.Entity("Data_Access_Layer.Entity.Branch", b =>
                 {
-                    b.Navigation("Agents");
-
                     b.Navigation("ApplicationUsers");
 
                     b.Navigation("Orders");
@@ -943,6 +931,8 @@ namespace Data_Access_Layer.Migrations
             modelBuilder.Entity("Data_Access_Layer.Entity.City", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("Sellers");
 
                     b.Navigation("SpecialCharges");
                 });
@@ -994,6 +984,11 @@ namespace Data_Access_Layer.Migrations
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfReceipt", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Data_Access_Layer.Entity.Agent", b =>
                 {
                     b.Navigation("Orders");
                 });
