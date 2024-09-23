@@ -26,6 +26,8 @@ namespace Shippping_Managment.Controllers
             return Ok(list);
         }
         [HttpPut]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> EditCity(EditCityDTO dto)
         {
             bool check = await cityRepo.IsExistById(dto.Id);

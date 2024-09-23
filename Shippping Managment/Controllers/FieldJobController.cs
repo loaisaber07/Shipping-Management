@@ -4,6 +4,7 @@ using Data_Access_Layer.DTO.FieldJob;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Data_Access_Layer.Repositry;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.WebRequestMethods;
@@ -45,6 +46,7 @@ namespace Shippping_Managment.Controllers
 
         }
         [HttpPost]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> AddField(AddFieldJob addFieldJob) {
             if (!ModelState.IsValid) {
                 return BadRequest(new { Message ="Inavlid sent Object something is missed! " }); 

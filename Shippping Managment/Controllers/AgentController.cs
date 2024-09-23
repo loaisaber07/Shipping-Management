@@ -4,6 +4,7 @@ using Data_Access_Layer.DTO.Agent;
 using Data_Access_Layer.DTO.Employee;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +28,8 @@ namespace Shippping_Managment.Controllers
             return Ok(get);
         }
         [HttpDelete("Delete/{id}")]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult>DeleteAgent(string id)
         {
             bool chick = await userRepo.DeleteAgentAsync(id);
@@ -49,6 +52,7 @@ namespace Shippping_Managment.Controllers
             return Ok(getAgentDTO);
         }
         [HttpPut]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> EditAgent(EditAgentDTO dto)
         {
             if (!ModelState.IsValid)

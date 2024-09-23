@@ -19,7 +19,7 @@ namespace Shippping_Managment.Controllers
         {
             this.userRepo = userRepo;
         }
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "AdminOrEmployee")]
         [HttpGet("getEmployee")]
 
         public async Task<ActionResult> GetEmployee() {
@@ -47,6 +47,7 @@ namespace Shippping_Managment.Controllers
 
         }
         [HttpDelete("{employeeId}")]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult> Delete(string employeeId)
         {
             bool chick = await userRepo.DeleteUserAsync(employeeId);

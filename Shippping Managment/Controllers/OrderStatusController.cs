@@ -2,6 +2,7 @@
 using Data_Access_Layer.DTO;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,8 @@ namespace Shippping_Managment.Controllers
             this.statusRepo = statusRepo;
         }
         [HttpPost]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> AddOrderStatus(AddOrderStatusDTO statusDTO)
         {
             if (!ModelState.IsValid)
@@ -65,6 +68,8 @@ namespace Shippping_Managment.Controllers
 
         }
         [HttpDelete("{OrderStatusId:int}")]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> DeleteOrderSatus(int OrderStatusId)
         {
           OrderStatus? orderStatus =  await statusRepo.GetAsyncById(OrderStatusId);

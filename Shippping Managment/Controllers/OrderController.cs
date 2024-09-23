@@ -13,7 +13,7 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "Seller")]
+    [Authorize(Policy = "AdminOrSeller")]
     public class OrderController : ControllerBase
     {
         private readonly IOrder orderRepo;

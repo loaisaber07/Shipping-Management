@@ -3,6 +3,7 @@ using Business_Layer.Services.Privileges;
 using Data_Access_Layer.DTO.Privilege;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,8 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> AddPrivilege(AddPrivilegeDTO addPrivilege)
         {
             if (!ModelState.IsValid) {
@@ -56,6 +59,8 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPut]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> EditPrivilege(EditPrivilegeDTO editPrivilege)
         {
             bool chick = await privilegeRepo.IsExsitsById(editPrivilege.ID);
@@ -82,6 +87,8 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpDelete("{privilegeId:int}")]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> DeletePrivilege(int privilegeId)
         {
             bool chick = await privilegeRepo.IsExsitsById(privilegeId);

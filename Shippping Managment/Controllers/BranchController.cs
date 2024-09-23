@@ -2,6 +2,7 @@
 using Data_Access_Layer.DTO.BatchDTO;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
@@ -26,6 +27,7 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPost]
+        [Authorize  (Policy = "Admin") ]
         public async Task<ActionResult> AddBranch(AddBranchDTO addBranch)
         {
             bool result = branchRepo.IsExist(addBranch.Name);
@@ -45,6 +47,7 @@ namespace Shippping_Managment.Controllers
             return BadRequest(new { Message = "Branch Allready Exsit" });
         }
         [HttpPut]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> Edit(EditBranchDTO dto)
         {
            Branch? branch= await branchRepo.GetAsyncById(dto.ID);
@@ -65,9 +68,11 @@ namespace Shippping_Managment.Controllers
             return Ok(dto);
         }
 
+        [Authorize(Policy = "Admin")]
 
 
-        [HttpDelete("{branchId:int}")]
+        [HttpDelete("{branchId:int}")] 
+
         public async Task<ActionResult> Delete(int branchId)
         {
            Branch? branch = await branchRepo.GetAsyncById(branchId);
