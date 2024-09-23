@@ -91,10 +91,13 @@ namespace Shippping_Managment
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Employee", policy => policy.RequireClaim(ClaimTypes.Role, "Employee"));
-                options.AddPolicy("Seller", policy => policy.RequireClaim(ClaimTypes.Role, "Seller"));
-                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
-                options.AddPolicy("Agent", policy => policy.RequireClaim(ClaimTypes.Role, "Agent"));
+                options.AddPolicy("AdminOrEmployee",policy=>policy.RequireAssertion(context=>
+                context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&(c.Value=="Employee"||c.Value=="Admin"))));
+                options.AddPolicy("AdminOrSeller", policy => policy.RequireAssertion(context =>
+                  context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Seller" || c.Value == "Admin"))));
+                options.AddPolicy("AdminOrAgent", policy => policy.RequireAssertion(context =>
+                     context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Agent" || c.Value == "Admin"))));
+            options.AddPolicy("Admin",policy=>policy.RequireAssertion(context=>context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&c.Value=="Admin")));
             });
 
             builder.Services.AddSwaggerGen(c =>
@@ -142,7 +145,7 @@ namespace Shippping_Managment
 
             });
             builder.Logging.AddConsole();
-                 var app = builder.Build();
+                 var app = builder.Build(); 
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

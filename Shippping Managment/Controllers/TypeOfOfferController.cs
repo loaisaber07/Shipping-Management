@@ -2,6 +2,7 @@
 using Data_Access_Layer.DTO.TypeOfOffer;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,8 @@ namespace Shippping_Managment.Controllers
             this.typeOfOfferRepo = typeOfOfferRepo;
         }
         [HttpPost]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult>AddTypeOfOffer(AddTypeOfOfferDTO offerDTO)
         {
             if(!ModelState.IsValid)
@@ -36,6 +39,8 @@ namespace Shippping_Managment.Controllers
             return Ok(get);
         }
         [HttpPut]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> EditTypeOfOffer(EditTypeOfOfferDTO edit)
         {
            TypeOfOffer? type= await typeOfOfferRepo.GetAsyncById(edit.ID);
@@ -60,6 +65,8 @@ namespace Shippping_Managment.Controllers
             return Ok(get);
         }
         [HttpDelete("{ID:int}")]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult>DeleteType(int ID)
         {
             TypeOfOffer? type = await typeOfOfferRepo.GetAsyncById(ID);

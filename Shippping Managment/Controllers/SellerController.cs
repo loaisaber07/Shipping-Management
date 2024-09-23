@@ -2,13 +2,15 @@
 using Data_Access_Layer.DTO.Seller;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] 
+
     public class SellerController : ControllerBase
     {
         private readonly IUser userRepo;
@@ -20,6 +22,8 @@ namespace Shippping_Managment.Controllers
             this.sellerRepo = sellerRepo;
         }
         [HttpDelete("{sellerId:alpha}")]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> Delete(string sellerId)
         {
            bool chick = await userRepo.DeleteSellerAsync(sellerId);

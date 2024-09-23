@@ -18,7 +18,7 @@ namespace Data_Access_Layer.DTO.Seller
         [RegularExpression(@"^01(0|1|2|5)\d{8}$", ErrorMessage = "Invalid phone number")]
         public string Phone { get; set; }
         [Required]
-        public int BranchID { get; set; }
+        public int? BranchID { get; set; }
         public string Govern { get; set; }
         public string City { get; set; }
         [Required]

@@ -59,9 +59,43 @@ namespace Data_Access_Layer.Entity
                 .WithMany(s=>s.Users)
                 .HasForeignKey(s=> s.FiledJobID)
                 .IsRequired(false);
+            builder.Entity<ApplicationUser>()
+                .HasOne(s => s.Branch)
+                .WithMany(s => s.ApplicationUsers)
+                .HasForeignKey(s => s.BranchID)
+                .IsRequired(false);
 
-            
-            
+            builder.Entity<IdentityRole>().HasData(
+          new IdentityRole
+          {
+              Id = "admin-role-id", // This should be a unique and valid ID
+              Name = "Admin",
+              NormalizedName = "ADMIN"
+          }
+      );
+            var hasher = new PasswordHasher<ApplicationUser>();
+            builder.Entity<ApplicationUser>().HasData(
+                new ApplicationUser
+                {
+                    Id = "admin-user-id", // Ensure this is a valid, unique ID
+                    UserName = "admin@example.com",
+                    NormalizedUserName = "ADMIN@EXAMPLE.COM",
+                    Email = "admin@example.com",
+                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                    EmailConfirmed = true,
+                    PhoneNumber="01004117527",
+                    PasswordHash = hasher.HashPassword(null, "Admin@123") // Hashed password
+                }
+            );
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>
+                {
+                    UserId = "admin-user-id", // ID of the user from AspNetUsers table
+                    RoleId = "admin-role-id"  // ID of the role from AspNetRoles table
+                }
+            );
+
+
             base.OnModelCreating(builder);
         }
     }

@@ -13,16 +13,21 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "Seller")]
+    [Authorize(Policy = "AdminOrSeller")]
     public class OrderController : ControllerBase
     {
         private readonly IOrder orderRepo;
         private readonly IProduct productRepo;
+        private readonly IWeight weightRepo;
+        private readonly ISpecialCharge specialRepo;
 
-        public OrderController(IOrder orderRepo, IProduct productRepo)
+        public OrderController(IOrder orderRepo, IProduct productRepo,IWeight weightRepo , 
+            ISpecialCharge specialRepo)
         {
             this.orderRepo = orderRepo;
             this.productRepo = productRepo;
+            this.weightRepo = weightRepo;
+            this.specialRepo = specialRepo;
         }
         [HttpGet]
         [Route("GetAll")]
@@ -97,6 +102,71 @@ await orderRepo.DeleteAsync(orderId);
             orderRepo.Update(order);
             await orderRepo.SaveAsync();
             return Ok(new { Message = "Update Successfully" });
+        }
+
+        [HttpGet]
+        [Route("GetShippingCost{beignningDate:datetime}/{endingDate:datetime}/{orderStatusId:int}")]
+        public async Task<ActionResult> ReportOrders(DateTime beignningDate, DateTime endingDate, int orderStatusId)
+        { 
+        IEnumerable<Order?>orders =await orderRepo.GetOrderByTimeAdding(beignningDate,endingDate,orderStatusId);
+            if (orders is null) {
+                return NotFound(new { Message = "There is no orders founded in this Date!" });
+            
+            }
+            List<ReportOrderDTO> dtos = new List<ReportOrderDTO>();
+            foreach (var order in orders)
+            {
+                dtos.Add(new ReportOrderDTO {
+                OrderID  = order.ID, 
+                OrderStatusName = order.OrderStatus.Name, 
+                SellerName = order.Seller.UserName,
+                ClientName = order.ClientName,
+                PhoneNumber = order.ClientNumber,
+                ClientGover = order.Govern.Name , 
+                ClientCity = order.City.Name ,
+                OrderCost = order.Cost,
+                ChargeCost =await GetShippingCost(order) ,
+                OrderDate = order.DateAdding ,
+                CompanyAmount = order.Agent.ThePrecentageOfCompanyFromOffer
+                }); 
+
+            }
+            return Ok(dtos);
+        }
+        private async Task<decimal> GetShippingCost(Order orders)
+        {
+            Order? order = orders;
+            if (order is null)
+            {
+                return 0;
+            }
+            decimal cost=0m; 
+            bool IsExist; 
+SpecialCharge? special =  specialRepo.GetSpecialCharge(order.SellerID,order.CityID ,out IsExist);
+            if (IsExist)
+            {
+                cost += (decimal)special.SpecialChargeForSeller;
+            }
+            if (order.IsForVillage) {
+                cost += 20; //Now i set the constatnt value for delivery to village 
+            } 
+            cost+= order.TypeOfCharge.Cost;
+            if (order.TypeOfReceipt.Name == "Branch")
+            {
+                cost += order.City.PickUpCharge; 
+            }
+            Weight weight = weightRepo.GetDefaultWeight(out IsExist);
+            if (IsExist)
+            {
+                if (order.Weight > weight.DefaultWeight)
+                { 
+    cost += (order.Weight - weight.DefaultWeight) * weight.AdditionalWeight;
+                }
+
+            }
+            cost += order.Cost;  
+
+return cost;                                   
         }
 
     }

@@ -19,15 +19,17 @@ namespace Shippping_Managment.Controllers
         {
             this.userRepo = userRepo;
         }
-        [Authorize(Roles = "Employee")]
-        [HttpGet]
 
+        [Authorize(Roles = "AdminOrEmployee")]
+        [HttpGet("getEmployee")]
         public async Task<ActionResult> GetEmployee() {
             IEnumerable<ApplicationUser> users = await userRepo.GetAllEmployee();
             IEnumerable<DisplayEmployeeDTO> dto = EmployeeServices.GetEmployees(users);
             return Ok(dto);
         }
         [HttpPut]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> EditEmployee(EditEmployeeDTO dto)
         {
             if (!ModelState.IsValid) {
@@ -47,6 +49,7 @@ namespace Shippping_Managment.Controllers
 
         }
         [HttpDelete("{employeeId}")]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult> Delete(string employeeId)
         {
             bool chick = await userRepo.DeleteUserAsync(employeeId);
