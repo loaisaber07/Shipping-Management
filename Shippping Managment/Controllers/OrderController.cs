@@ -141,7 +141,7 @@ await orderRepo.DeleteAsync(orderId);
                     OrderCost = order.Cost,
                     ChargeCost = await GetShippingCost(order),
                     OrderDate = order.DateAdding,
-                    CompanyAmount = order?.Agent?.ThePrecentageOfCompanyFromOffer ?? 0
+                    CompanyAmount = (order?.Agent?.ThePrecentageOfCompanyFromOffer * order.Cost )?? 0
                 }); 
 
             }
