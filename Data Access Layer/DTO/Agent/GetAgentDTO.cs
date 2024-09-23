@@ -18,5 +18,6 @@ namespace Data_Access_Layer.DTO.Agent
         public int ThePrecentageOfCompanyFromOffer { get; set; }
         public int GovernID { get; set; }
         public int TypeOfOfferID { get; set; }
+        public string Address  { get; set; }
     }
 }

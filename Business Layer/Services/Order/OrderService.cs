@@ -131,13 +131,6 @@ Quantity= p.Quantity
             }).ToList();
         return order;
         }
-        public static Task<IEnumerable<ReportOrderDTO>> MappingReportOrder(IEnumerable<Data_Access_Layer.Entity.Order> orders)
-        { 
-        List<ReportOrderDTO> dtos = new List<ReportOrderDTO>();
-            foreach (var order in orders) { 
-            
-            
-            }
-        }
+        
     }
 }

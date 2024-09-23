@@ -117,7 +117,7 @@ await orderRepo.DeleteAsync(orderId);
             foreach (var order in orders)
             {
                 dtos.Add(new ReportOrderDTO {
-                OrderID = order.ID, 
+                OrderID  = order.ID, 
                 OrderStatusName = order.OrderStatus.Name, 
                 SellerName = order.Seller.UserName,
                 ClientName = order.ClientName,

@@ -22,7 +22,8 @@ namespace Business_Layer.Services.Agent
                 BranchID=agentDTO.BranchID,
                 ThePrecentageOfCompanyFromOffer=agentDTO.ThePrecentageOfCompanyFromOffer,
                 GovernID=agentDTO.GovernID,
-                TypeOfOfferID=agentDTO.TypeOfOfferID,
+                TypeOfOfferID=agentDTO.TypeOfOfferID, 
+                Address = agentDTO.Address
             };
             return agent; 
         }
@@ -40,7 +41,8 @@ namespace Business_Layer.Services.Agent
                     ThePrecentageOfCompanyFromOffer=agent.ThePrecentageOfCompanyFromOffer,
                     GovernID = agent.GovernID,
                     BranchID=agent.BranchID,
-                    TypeOfOfferID= agent.TypeOfOfferID,
+                    TypeOfOfferID= agent.TypeOfOfferID, 
+                    Address = agent.Address
                 };
                 gets.Add(dTO);
             }
@@ -58,6 +60,7 @@ namespace Business_Layer.Services.Agent
                 GovernID = agent.GovernID,
                 BranchID = agent.BranchID,
                 TypeOfOfferID = agent.TypeOfOfferID,
+                Address = agent.Address
             };
             return agentDTO;
         }
@@ -69,7 +72,8 @@ namespace Business_Layer.Services.Agent
             agent.BranchID = dto.BranchID;
             agent.ThePrecentageOfCompanyFromOffer=dto.ThePrecentageOfCompanyFromOffer;
             agent.GovernID= dto.GovernID;
-            agent.TypeOfOfferID = dto.TypeOfOfferID;
+            agent.TypeOfOfferID = dto.TypeOfOfferID; 
+            agent.Address=dto.Address;
             return agent;
         }
     }
