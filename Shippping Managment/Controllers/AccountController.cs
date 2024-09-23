@@ -4,11 +4,13 @@ using Data_Access_Layer.DTO.FieldJob;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Data_Access_Layer.Repositry;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RTools_NTS.Util;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -43,8 +45,15 @@ namespace Shippping_Managment.Controllers
             if (!ModelState.IsValid) { 
             return BadRequest( new {Messaga=$"Incorect Data " }) ;
             }
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1)
+            };
+
             if (log.Username is not null) {
-     ApplicationUser? user=await userManager.FindByNameAsync(log.Username);
+                ApplicationUser? user=await userManager.FindByNameAsync(log.Username);
                 if (user is null) {
                     return BadRequest(new { Message = "No userName founded!" });
                 }
@@ -57,14 +66,16 @@ namespace Shippping_Managment.Controllers
                     return BadRequest(new { Message = "Incorrect Password" }); 
                 }
                 string token = await GetTokenAsync(user , user.Id);
-                return Ok(token);
+                Response.Cookies.Append("jwt", token, cookieOptions);
+
+                return Ok(new { Message = "Login Successful" ,Role = "Admin"});
             }
             if (log.Email is not null) {
                 ApplicationUser? user = await userManager.FindByEmailAsync(log.Email);
                 if (user is null) {
                     return BadRequest(new { Message = "Incorrect Email Address" }); 
                 } 
-       bool result =await userManager.CheckPasswordAsync(user ,log.Password);
+                bool result =await userManager.CheckPasswordAsync(user ,log.Password);
                 if (!result) {
                     return BadRequest(new { Message = "Incorrect Password try again!" });
                 }
@@ -88,25 +99,41 @@ namespace Shippping_Managment.Controllers
                                 return BadRequest(new { Message = "FieldJob NotFound" });
                             }
                             string Emptoken = await GetTokenAsync(user, user.Id);
-                            return Ok(new { token = Emptoken, Role = roles, ID = user.Id, FieldJob = f });
+                            Response.Cookies.Append("jwt", Emptoken, cookieOptions);
+
+                            return Ok(new { Role = roles, ID = user.Id, FieldJob = f });
                         }
                     }
                 }
                 string token1 = await GetTokenAsync(user , user.Id);
-                return Ok(new { token=token1 , Role=roles , ID=user.Id });
+                Response.Cookies.Append("jwt", token1, cookieOptions);
+                return Ok(new { Role=roles , ID=user.Id });
             }
             return BadRequest();
         }
 
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt");
+            return Ok(new { message = "Logout successful" });
+        }
+
+        [Authorize]
+        [HttpGet("auth/check")]
+        public IActionResult CheckAuth()
+        {
+            return Ok(new { isAuthenticated = true });
+        }
 
         private async Task<string> GetTokenAsync(ApplicationUser user , string id)
         {
             var userClaims = new List<Claim>
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim("userID",id)
-    };
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("userID",id)
+            };
             Console.WriteLine(user.Id);
 
             var roles = await userManager.GetRolesAsync(user);
