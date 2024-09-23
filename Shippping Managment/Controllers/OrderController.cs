@@ -28,20 +28,20 @@ namespace Shippping_Managment.Controllers
             this.weightRepo = weightRepo;
             this.specialRepo = specialRepo;
         }
+        [Authorize(Policy = "Admin")]
         [HttpGet]
         [Route("GetAll")]
-        [Authorize(Policy = "Admin")]
 
         public async Task<ActionResult> GetAll()
         {
             IQueryable<Order> orders = orderRepo.GetAll();
             IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
             return Ok(dto);
-        }
+        } 
+
+        [Authorize(Policy = "AdminOrSeller")]
         [HttpGet]
         [Route("GetOrderById{id:int}")]
-        [Authorize(Policy = "AdminOrSeller")]
-
         public async Task<ActionResult> GetOrderById(int id)
         {
            Order? order = await orderRepo.GetById(id);
@@ -53,8 +53,9 @@ namespace Shippping_Managment.Controllers
             return Ok(orderDTO);
         }
 
+        [Authorize( Policy = "Seller")]
+
         [HttpPost]
-        [Authorize(Policy = "Seller")]
         public async Task<ActionResult> AddOrder(AddOrderDTO orderDTO)
         {
             if(!ModelState.IsValid)
@@ -71,11 +72,11 @@ namespace Shippping_Managment.Controllers
 IEnumerable<Product> products =  ProductService.MappingProduct(order.ID ,orderDTO.ProductList);
             await productRepo.BulkInsert(products);
             await productRepo.SaveAsync();
-            return RedirectToAction("GetAll");
+            return Ok(new { Message="Added Successfully "});
 
         }
-        [HttpDelete("{orderId:int}")]
         [Authorize(Policy = "AdminOrSeller")]
+        [HttpDelete("{orderId:int}")]
 
         public async Task<ActionResult> Delete(int orderId) {
 
@@ -92,8 +93,8 @@ await orderRepo.DeleteAsync(orderId);
           await  orderRepo.SaveAsync();
             return Ok(new { Message="Deleted Successfully "});
         }
-        [HttpPut]
         [Authorize(Policy = "Seller")]
+        [HttpPut]
 
         public async Task<ActionResult> UpdateOrder(UpdateOrderDTO orderDTO) {
         Order? order = await orderRepo.GetById(orderDTO.ID);

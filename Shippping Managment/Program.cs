@@ -82,8 +82,14 @@ namespace Shippping_Managment
                 options.AddPolicy("AdminOrSeller", policy => policy.RequireAssertion(context =>
                   context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Seller" || c.Value == "Admin"))));
                 options.AddPolicy("AdminOrAgent", policy => policy.RequireAssertion(context =>
-                     context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Agent" || c.Value == "Admin"))));
-            options.AddPolicy("Admin",policy=>policy.RequireAssertion(context=>context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&c.Value=="Admin")));
+                context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Agent" || c.Value == "Admin"))));
+                options.AddPolicy("Admin",policy=>policy.RequireAssertion(context=>context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&c.Value=="Admin")));
+                options.AddPolicy("Seller",policy=>policy.RequireAssertion(context=>context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&c.Value=="Seller")));
+                options.AddPolicy("Employee", policy => policy.RequireAssertion(context => context.User.HasClaim(c => c.Type == ClaimTypes.Role && c.Value == "Employee")));
+                options.AddPolicy("Agent", policy => policy.RequireAssertion(context => context.User.HasClaim(c => c.Type == ClaimTypes.Role && c.Value == "Agent")));
+
+
+
             });
 
             builder.Services.AddSwaggerGen(c =>
