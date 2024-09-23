@@ -49,6 +49,7 @@ namespace Shippping_Managment
             builder.Services.AddScoped<IWeight,WeightRepository>();
             builder.Services.AddScoped<ITypeOfReceipt, TypeOfReceiptRepository>();
             builder.Services.AddScoped<ITypeOfOffer,TypeOfOfferRepository>();
+            builder.Services.AddScoped<IAgent, AgentRepository>();
             builder.Services.AddScoped<InvoiceService>();
             var jwtSetting = builder.Configuration.GetSection("JwtSetting");
             var keyBase64 = jwtSetting["SecretKey"];
@@ -96,8 +97,14 @@ namespace Shippping_Managment
                 options.AddPolicy("AdminOrSeller", policy => policy.RequireAssertion(context =>
                   context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Seller" || c.Value == "Admin"))));
                 options.AddPolicy("AdminOrAgent", policy => policy.RequireAssertion(context =>
-                     context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Agent" || c.Value == "Admin"))));
-            options.AddPolicy("Admin",policy=>policy.RequireAssertion(context=>context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&c.Value=="Admin")));
+                context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Agent" || c.Value == "Admin"))));
+                options.AddPolicy("Admin",policy=>policy.RequireAssertion(context=>context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&c.Value=="Admin")));
+                options.AddPolicy("Seller",policy=>policy.RequireAssertion(context=>context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&c.Value=="Seller")));
+                options.AddPolicy("Employee", policy => policy.RequireAssertion(context => context.User.HasClaim(c => c.Type == ClaimTypes.Role && c.Value == "Employee")));
+                options.AddPolicy("Agent", policy => policy.RequireAssertion(context => context.User.HasClaim(c => c.Type == ClaimTypes.Role && c.Value == "Agent")));
+
+
+
             });
 
             builder.Services.AddSwaggerGen(c =>

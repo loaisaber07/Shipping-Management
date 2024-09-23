@@ -19,7 +19,7 @@ namespace Data_Access_Layer.DTO.Order
         public int AmountRecive { get; set; } = 0; 
         public decimal ChargeCost { get; set; }
         public int PaidCharge { get; set; } = 0; 
-        public int CompanyAmount { get; set; }
+        public decimal? CompanyAmount { get; set; }
         public DateTime OrderDate { get; set; }
 
     }

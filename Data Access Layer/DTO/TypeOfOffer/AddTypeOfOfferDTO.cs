@@ -12,6 +12,7 @@ namespace Data_Access_Layer.DTO.TypeOfOffer
     {
         [Required]
         [UniqueTypeOfOffer]
+        [AllowedValues("Percentage","FixedAmmount")]
         public string Name { get; set; }
     }
 }

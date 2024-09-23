@@ -7,6 +7,7 @@ using Data_Access_Layer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
 
 namespace Shippping_Managment.Controllers
 {
@@ -15,10 +16,14 @@ namespace Shippping_Managment.Controllers
     public class AgentController : ControllerBase
     {
         private readonly IUser userRepo;
+        private readonly IOrder orderRepo;
+        private readonly IAgent agentRepo;
 
-        public AgentController(IUser userRepo)
+        public AgentController(IUser userRepo,IOrder orderRepo,IAgent agentRepo)
         {
             this.userRepo = userRepo;
+            this.orderRepo = orderRepo;
+            this.agentRepo = agentRepo;
         }
         [HttpGet("GetAll")]
         public async Task<ActionResult>GetAllAgent()
@@ -75,6 +80,23 @@ namespace Shippping_Managment.Controllers
             return Ok(getAgentDTO);
             
 
+        }
+        [Authorize(Policy = "Employee")]
+        [HttpGet("GetAgents/{orderID:int}")]
+        public async Task<ActionResult> GetAgentsToAsigenOrder(int orderID)
+        {
+            string? employeeId = HttpContext.User.FindFirst("userID")?.Value;
+            if (employeeId == null)
+            {
+                return Unauthorized();
+            }
+          Order? order = await orderRepo.GetAsyncById(orderID);
+            if (order is null)
+            {
+                return NotFound(new { Message = "Order Nout Found !!" });
+            }
+           IEnumerable<GetAgentsToAsigenOrderDTO> agents= await agentRepo.GetAgent(order);
+            return Ok(agents);
         }
 
     }

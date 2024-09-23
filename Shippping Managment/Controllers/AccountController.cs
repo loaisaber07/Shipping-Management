@@ -28,9 +28,9 @@ namespace Shippping_Managment.Controllers
         private readonly IFieldJob fieldJobRepo;
         private readonly ShippingDataBase context;
 
-        public AccountController(UserManager<ApplicationUser> userManager ,
-            IConfiguration configuration ,
-           RoleManager<IdentityRole> roleManager ,IFieldJob fieldJobRepo )
+        public AccountController(UserManager<ApplicationUser> userManager,
+            IConfiguration configuration,
+           RoleManager<IdentityRole> roleManager, IFieldJob fieldJobRepo)
         {
             this.userManager = userManager;
             this.configuration = configuration;
@@ -42,8 +42,8 @@ namespace Shippping_Managment.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(LoginRequestDTO log)
         {
-            if (!ModelState.IsValid) { 
-            return BadRequest( new {Messaga=$"Incorect Data " }) ;
+            if (!ModelState.IsValid) {
+                return BadRequest(new { Messaga = $"Incorect Data " });
             }
             var cookieOptions = new CookieOptions
             {
@@ -52,32 +52,65 @@ namespace Shippping_Managment.Controllers
                 Expires = DateTime.UtcNow.AddHours(1)
             };
 
-            if (log.Username is not null) {
-                ApplicationUser? user=await userManager.FindByNameAsync(log.Username);
+            if (log.Email is not null) {
+
+                ApplicationUser? user = await userManager.FindByEmailAsync(log.Email);
+
                 if (user is null) {
-                    return BadRequest(new { Message = "No userName founded!" });
+                    return BadRequest(new { Message = "Incorrect Email Address" });
                 }
                 bool adminCheck = await userManager.IsInRoleAsync(user, "Admin");
-                if (!adminCheck) {
-                    return BadRequest(new { Message = $"you are not authorize to use this feature please use Email instead!" });
+                if (adminCheck) {
+                    return BadRequest(new { Message = $"you are not authorize to use this feature please use Username instead!" }); 
                 }
-                bool result = await userManager.CheckPasswordAsync(user ,log.Password);
-                if (!result) {
-                    return BadRequest(new { Message = "Incorrect Password" }); 
+            
+            bool result = await userManager.CheckPasswordAsync(user, log.Password);
+            if (!result) {
+                return BadRequest(new { Message = "Incorrect Password try again!" });
+            }
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                if (role == "Employee")
+                {
+                    FieldJobDTO f = new FieldJobDTO();
+                    FieldJob? fieldJob = new FieldJob();
+                    if (user.FiledJobID is not null)
+                    {
+                        int fieldId = (int)user.FiledJobID;
+                        fieldJob = await fieldJobRepo.GetFieldJobById(fieldId);
+                        if (fieldJob is not null)
+                        {
+                            f = FieldJobService.MappingFieldJob(fieldJob);
+                        }
+                        else
+                        {
+                            return BadRequest(new { Message = "FieldJob NotFound" });
+                        }
+                        string Emptoken = await GetTokenAsync(user, user.Id);
+                        return Ok(new { token = Emptoken, Role = roles, ID = user.Id, FieldJob = f });
+                    }
                 }
+
                 string token = await GetTokenAsync(user , user.Id);
                 Response.Cookies.Append("jwt", token, cookieOptions);
 
                 return Ok(new { Message = "Login Successful" ,Role = "Admin",UserName = user.UserName });
             }
-            if (log.Email is not null) {
-                ApplicationUser? user = await userManager.FindByEmailAsync(log.Email);
-                if (user is null) {
-                    return BadRequest(new { Message = "Incorrect Email Address" }); 
-                } 
-                bool result =await userManager.CheckPasswordAsync(user ,log.Password);
-                if (!result) {
-                    return BadRequest(new { Message = "Incorrect Password try again!" });
+
+            if (log.Username is not null)
+            {
+
+                ApplicationUser? user = await userManager.FindByNameAsync(log.Username);
+                if (user is null)
+                {
+                    return BadRequest(new { Message = "Incorrect UserName" });
+                }
+                bool result = await userManager.CheckPasswordAsync(user, log.Password);
+                if (!result)
+                {
+                    return BadRequest(new { Message = "Incorrect Password Or UserName try again!" });
+
                 }
                 var roles = await userManager.GetRolesAsync(user);
                 foreach (var role in roles)
@@ -105,12 +138,13 @@ namespace Shippping_Managment.Controllers
                         }
                     }
                 }
+
                 string token1 = await GetTokenAsync(user , user.Id);
                 Response.Cookies.Append("jwt", token1, cookieOptions);
                 return Ok(new { Role=roles , ID=user.Id , UserName = user.UserName });
             }
             return BadRequest();
-        }
+        } 
 
         [HttpGet("logout")]
         public IActionResult Logout()
