@@ -13,7 +13,6 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "AdminOrSeller")]
     public class OrderController : ControllerBase
     {
         private readonly IOrder orderRepo;
@@ -31,6 +30,8 @@ namespace Shippping_Managment.Controllers
         }
         [HttpGet]
         [Route("GetAll")]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> GetAll()
         {
             IQueryable<Order> orders = orderRepo.GetAll();
@@ -39,6 +40,8 @@ namespace Shippping_Managment.Controllers
         }
         [HttpGet]
         [Route("GetOrderById{id:int}")]
+        [Authorize(Policy = "AdminOrSeller")]
+
         public async Task<ActionResult> GetOrderById(int id)
         {
            Order? order = await orderRepo.GetById(id);
@@ -51,7 +54,7 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPost]
-       
+        [Authorize(Policy = "Seller")]
         public async Task<ActionResult> AddOrder(AddOrderDTO orderDTO)
         {
             if(!ModelState.IsValid)
@@ -72,6 +75,8 @@ IEnumerable<Product> products =  ProductService.MappingProduct(order.ID ,orderDT
 
         }
         [HttpDelete("{orderId:int}")]
+        [Authorize(Policy = "AdminOrSeller")]
+
         public async Task<ActionResult> Delete(int orderId) {
 
         bool check= orderRepo.ISEXIST(orderId);
@@ -88,6 +93,8 @@ await orderRepo.DeleteAsync(orderId);
             return Ok(new { Message="Deleted Successfully "});
         }
         [HttpPut]
+        [Authorize(Policy = "Seller")]
+
         public async Task<ActionResult> UpdateOrder(UpdateOrderDTO orderDTO) {
         Order? order = await orderRepo.GetById(orderDTO.ID);
             if (order is null) {
@@ -105,6 +112,7 @@ await orderRepo.DeleteAsync(orderId);
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("GetShippingCost{beignningDate:datetime}/{endingDate:datetime}/{orderStatusId:int}")]
         public async Task<ActionResult> ReportOrders(DateTime beignningDate, DateTime endingDate, int orderStatusId)
         { 
@@ -113,21 +121,26 @@ await orderRepo.DeleteAsync(orderId);
                 return NotFound(new { Message = "There is no orders founded in this Date!" });
             
             }
+            if (!orders.Any()) {
+                return NotFound(new { Message="No Order Founded"});
+            } 
+            
             List<ReportOrderDTO> dtos = new List<ReportOrderDTO>();
             foreach (var order in orders)
             {
-                dtos.Add(new ReportOrderDTO {
-                OrderID  = order.ID, 
-                OrderStatusName = order.OrderStatus.Name, 
-                SellerName = order.Seller.UserName,
-                ClientName = order.ClientName,
-                PhoneNumber = order.ClientNumber,
-                ClientGover = order.Govern.Name , 
-                ClientCity = order.City.Name ,
-                OrderCost = order.Cost,
-                ChargeCost =await GetShippingCost(order) ,
-                OrderDate = order.DateAdding ,
-                CompanyAmount = order.Agent.ThePrecentageOfCompanyFromOffer
+                dtos.Add(new ReportOrderDTO
+                {
+                    OrderID = order.ID,
+                    OrderStatusName = order.OrderStatus.Name,
+                    SellerName = order.Seller.UserName,
+                    ClientName = order.ClientName,
+                    PhoneNumber = order.ClientNumber,
+                    ClientGover = order.Govern.Name,
+                    ClientCity = order.City.Name,
+                    OrderCost = order.Cost,
+                    ChargeCost = await GetShippingCost(order),
+                    OrderDate = order.DateAdding,
+                    CompanyAmount = order?.Agent?.ThePrecentageOfCompanyFromOffer ?? 0
                 }); 
 
             }
@@ -147,11 +160,15 @@ SpecialCharge? special =  specialRepo.GetSpecialCharge(order.SellerID,order.City
             {
                 cost += (decimal)special.SpecialChargeForSeller;
             }
+            else 
+            {
+                cost += order.City.NormalCharge; 
+            }
             if (order.IsForVillage) {
                 cost += 20; //Now i set the constatnt value for delivery to village 
             } 
             cost+= order.TypeOfCharge.Cost;
-            if (order.TypeOfReceipt.Name == "Branch")
+            if (order.TypeOfReceipt.Name == "Store")
             {
                 cost += order.City.PickUpCharge; 
             }
@@ -164,10 +181,10 @@ SpecialCharge? special =  specialRepo.GetSpecialCharge(order.SellerID,order.City
                 }
 
             }
-            cost += order.Cost;  
-
 return cost;                                   
         }
+         
+
 
     }
 }

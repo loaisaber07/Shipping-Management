@@ -60,6 +60,7 @@ namespace Shippping_Managment.Controllers
                 return Ok(token);
             }
             if (log.Email is not null) {
+
                 ApplicationUser? user = await userManager.FindByEmailAsync(log.Email);
                 if (user is null) {
                     return BadRequest(new { Message = "Incorrect Email Address" }); 

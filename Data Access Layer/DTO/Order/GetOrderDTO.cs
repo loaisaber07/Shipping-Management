@@ -38,6 +38,7 @@ namespace Data_Access_Layer.DTO.Order
         public int TypeOfChargeID { get; set; }
         public int OrderStatusID { get; set; }
         public int TypeOfReceiptID { get; set; }
+        public DateTime Date { get; set; }
         public ICollection<GetProductDTO>? ProductList { get; set; }
     }
 }

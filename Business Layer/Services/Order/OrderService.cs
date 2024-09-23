@@ -93,7 +93,8 @@ namespace Business_Layer.Services.Order
                 TypeOfPaymentID = s.TypeOfPaymentID,
                 VillageOrStreet = s.VillageOrStreet,
                 TypeOfReceiptID =s.TypeOfReceiptID,
-                Weight = s.Weight,
+                Weight = s.Weight, 
+                Date=s.DateAdding,
                 ProductList = s.Products.Select(p => new GetProductDTO {
                 Id= p.ID,
                 Name= p.Name,
