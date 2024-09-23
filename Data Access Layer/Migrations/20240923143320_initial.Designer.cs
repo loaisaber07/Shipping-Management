@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    [Migration("20240923131908_initial")]
+    [Migration("20240923143320_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace Data_Access_Layer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("BranchID")
+                    b.Property<int?>("BranchID")
                         .HasColumnType("int");
 
                     b.Property<string>("City")
@@ -124,6 +124,26 @@ namespace Data_Access_Layer.Migrations
                     b.HasDiscriminator<string>("UserType").HasValue("ApplicationUser");
 
                     b.UseTphMappingStrategy();
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "admin-user-id",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0d47aac2-6178-4def-a929-c1e27e80da9d",
+                            Email = "admin@example.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                            NormalizedUserName = "ADMIN@EXAMPLE.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFQuo7CBHDVPoW7q7/sMw1hoUxRnfnkSaR1gH30KbhLmfRcBZbyOmEvdhWu5mtwD9g==",
+                            PhoneNumber = "01004117527",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "192ff414-474c-43c2-8300-13ee37564d74",
+                            Status = true,
+                            TwoFactorEnabled = false,
+                            UserName = "admin@example.com"
+                        });
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Branch", b =>
@@ -137,7 +157,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(4095));
+                        .HasDefaultValue(new DateTime(2024, 9, 23, 17, 33, 19, 881, DateTimeKind.Local).AddTicks(1330));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -190,7 +210,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(7724));
+                        .HasDefaultValue(new DateTime(2024, 9, 23, 17, 33, 19, 881, DateTimeKind.Local).AddTicks(6076));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -282,7 +302,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 23, 16, 19, 7, 381, DateTimeKind.Local).AddTicks(1508));
+                        .HasDefaultValue(new DateTime(2024, 9, 23, 17, 33, 19, 882, DateTimeKind.Local).AddTicks(240));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -540,6 +560,14 @@ namespace Data_Access_Layer.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "admin-role-id",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -627,6 +655,13 @@ namespace Data_Access_Layer.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "admin-user-id",
+                            RoleId = "admin-role-id"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -694,9 +729,7 @@ namespace Data_Access_Layer.Migrations
                 {
                     b.HasOne("Data_Access_Layer.Entity.Branch", "Branch")
                         .WithMany("ApplicationUsers")
-                        .HasForeignKey("BranchID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BranchID");
 
                     b.HasOne("Data_Access_Layer.Entity.FieldJob", "FieldJob")
                         .WithMany("Users")

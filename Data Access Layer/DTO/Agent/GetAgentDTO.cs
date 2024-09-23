@@ -14,7 +14,7 @@ namespace Data_Access_Layer.DTO.Agent
         public string Name { get; set; }       
         public string Email { get; set; }       
         public string Phone { get; set; }        
-        public int BranchID { get; set; }        
+        public int? BranchID { get; set; }        
         public int ThePrecentageOfCompanyFromOffer { get; set; }
         public int GovernID { get; set; }
         public int TypeOfOfferID { get; set; }

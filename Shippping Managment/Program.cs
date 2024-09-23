@@ -130,7 +130,7 @@ namespace Shippping_Managment
 
             });
             builder.Logging.AddConsole();
-                 var app = builder.Build();
+                 var app = builder.Build(); 
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

@@ -32,7 +32,7 @@ namespace Data_Access_Layer.Entity
 
         #region mapping the relation between employee and branch 
         [ForeignKey("Branch")]
-        public int BranchID { get; set; }
+        public int? BranchID { get; set; }
         [ForeignKey("BranchID")]
 
         public virtual Branch Branch { get; set; }

@@ -28,6 +28,8 @@ namespace Shippping_Managment.Controllers
             return Ok(dto);
         }
         [HttpPut]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> EditEmployee(EditEmployeeDTO dto)
         {
             if (!ModelState.IsValid) {

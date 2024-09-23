@@ -32,7 +32,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(4095)),
+                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 17, 33, 19, 881, DateTimeKind.Local).AddTicks(1330)),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -47,7 +47,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 16, 19, 7, 380, DateTimeKind.Local).AddTicks(7724))
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 17, 33, 19, 881, DateTimeKind.Local).AddTicks(6076))
                 },
                 constraints: table =>
                 {
@@ -244,7 +244,7 @@ namespace Data_Access_Layer.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     FiledJobID = table.Column<int>(type: "int", nullable: true),
-                    BranchID = table.Column<int>(type: "int", nullable: false),
+                    BranchID = table.Column<int>(type: "int", nullable: true),
                     UserType = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     ThePrecentageOfCompanyFromOffer = table.Column<int>(type: "int", nullable: true),
                     GovernID = table.Column<int>(type: "int", nullable: true),
@@ -279,8 +279,7 @@ namespace Data_Access_Layer.Migrations
                         name: "FK_AspNetUsers_branches_BranchID",
                         column: x => x.BranchID,
                         principalTable: "branches",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_AspNetUsers_fieldJobs_FiledJobID",
                         column: x => x.FiledJobID,
@@ -399,7 +398,7 @@ namespace Data_Access_Layer.Migrations
                     IsForVillage = table.Column<bool>(type: "bit", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Weight = table.Column<int>(type: "int", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 16, 19, 7, 381, DateTimeKind.Local).AddTicks(1508)),
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 17, 33, 19, 882, DateTimeKind.Local).AddTicks(240)),
                     VillageOrStreet = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BranchID = table.Column<int>(type: "int", nullable: false),
                     GovernID = table.Column<int>(type: "int", nullable: false),
@@ -515,6 +514,21 @@ namespace Data_Access_Layer.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "admin-role-id", null, "Admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "Address", "BranchID", "City", "ConcurrencyStamp", "Email", "EmailConfirmed", "FiledJobID", "Govern", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Status", "TwoFactorEnabled", "UserName", "UserType" },
+                values: new object[] { "admin-user-id", 0, null, null, null, "0d47aac2-6178-4def-a929-c1e27e80da9d", "admin@example.com", true, null, null, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEFQuo7CBHDVPoW7q7/sMw1hoUxRnfnkSaR1gH30KbhLmfRcBZbyOmEvdhWu5mtwD9g==", "01004117527", false, "192ff414-474c-43c2-8300-13ee37564d74", true, false, "admin@example.com", "ApplicationUser" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "admin-role-id", "admin-user-id" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
