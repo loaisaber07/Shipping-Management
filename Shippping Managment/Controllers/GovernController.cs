@@ -21,10 +21,30 @@ namespace Shippping_Managment.Controllers
             this.cityRepo = cityRepo;
         }
         [HttpGet]
-        public async Task<ActionResult> GetAllgovern() {
-         IEnumerable<GovernDTO>DTO= await govern.GetGovernWithCities();
+        public async Task<ActionResult> GetAllgovern() 
+        {
+            IEnumerable<GovernDTO>DTO= await govern.GetGovernWithCities();
             return Ok(DTO);
-        
+        }
+
+        [HttpGet("{governID:int}")]
+        public ActionResult GetGovernWithItsCities(int governID) { 
+            Govern? g = govern.GetWithID(governID);
+            if (g is null) {
+                return NotFound(new { Message = "Govern Not Found" });
+            }
+            GovernDTO DTO = new()
+            {
+                ID = g.ID,
+                Name = g.Name,
+                Status = g.Status,
+                cities = g.Cities.Select(city => new CityDTO
+                {
+                    ID = city.ID,
+                    Name = city.Name,
+                }).ToList()
+            };
+            return Ok(DTO);
         }
         [HttpPost("AddGovernWithCity")]
         public async Task <ActionResult> AddGovernWithCity(AddGovernWithCities gov) {
@@ -42,7 +62,7 @@ namespace Shippping_Managment.Controllers
                 return BadRequest(new { Message = "Not Add Correctly!" }); 
             }
             List<City> cities = new List<City>();
-            foreach(var city in gov.cities)
+            foreach (var city in gov.cities)
             {
                 cities.Add(new City { 
                 Name=city.Name,
@@ -58,20 +78,21 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpDelete("{governID:int}")]
-        public async Task<ActionResult> DeleteGovernWithItsCities(int governID) { 
-   Govern? gov = govern.GetWithID(governID);
+        public async Task<ActionResult> DeleteGovernWithItsCities(int governID) 
+        { 
+            Govern? gov = govern.GetWithID(governID);
             if (gov is null) {
                 return BadRequest(new { Message = "No Govern Founded" }); 
             }
-   IEnumerable<City> cities=await cityRepo.BulkSelect(governID);
-        bool result=    cityRepo.BulkRemove(cities);
+            IEnumerable<City> cities=await cityRepo.BulkSelect(governID);
+            bool result=    cityRepo.BulkRemove(cities);
             if (!result) {
                 return BadRequest(new { Message = "Can't delete Cities" });
             }
            await cityRepo.SaveAsync();
-       await   govern.DeleteAsync(governID); 
-         await govern.SaveAsync();
-            return Ok(new { Message = "Successfully Deleted" });  
+           await   govern.DeleteAsync(governID); 
+           await govern.SaveAsync();
+           return Ok(new { Message = "Successfully Deleted" });  
         }
     }
 }

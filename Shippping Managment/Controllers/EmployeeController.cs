@@ -20,7 +20,7 @@ namespace Shippping_Managment.Controllers
             this.userRepo = userRepo;
         }
         [Authorize(Roles = "Employee")]
-        [HttpGet("getEmployee")]
+        [HttpGet]
 
         public async Task<ActionResult> GetEmployee() {
             IEnumerable<ApplicationUser> users = await userRepo.GetAllEmployee();
@@ -59,13 +59,13 @@ namespace Shippping_Managment.Controllers
         }
         [HttpGet("{employeeId}")]
         public async Task<ActionResult> GetEmployeeById(string employeeId) { 
-    ApplicationUser? user = await userRepo.GetUserAsyncById(employeeId);
+            ApplicationUser? user = await userRepo.GetUserAsyncById(employeeId);
             if (user is null)
             {
                 return NotFound(new { Message="Cant find Employee!"});
             }
-      DisplayEmployeeDTO dto =  EmployeeServices.MapEmployeeforDisplay(user);
-        return Ok(dto);
+            DisplayEmployeeDTO dto =  EmployeeServices.MapEmployeeforDisplay(user);
+            return Ok(dto);
         }
     }
 

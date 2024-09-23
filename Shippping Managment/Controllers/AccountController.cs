@@ -68,7 +68,7 @@ namespace Shippping_Managment.Controllers
                 string token = await GetTokenAsync(user , user.Id);
                 Response.Cookies.Append("jwt", token, cookieOptions);
 
-                return Ok(new { Message = "Login Successful" ,Role = "Admin"});
+                return Ok(new { Message = "Login Successful" ,Role = "Admin",UserName = user.UserName });
             }
             if (log.Email is not null) {
                 ApplicationUser? user = await userManager.FindByEmailAsync(log.Email);
@@ -101,18 +101,18 @@ namespace Shippping_Managment.Controllers
                             string Emptoken = await GetTokenAsync(user, user.Id);
                             Response.Cookies.Append("jwt", Emptoken, cookieOptions);
 
-                            return Ok(new { Role = roles, ID = user.Id, FieldJob = f });
+                            return Ok(new { Role = roles, ID = user.Id, FieldJob = f , UserName = user.UserName });
                         }
                     }
                 }
                 string token1 = await GetTokenAsync(user , user.Id);
                 Response.Cookies.Append("jwt", token1, cookieOptions);
-                return Ok(new { Role=roles , ID=user.Id });
+                return Ok(new { Role=roles , ID=user.Id , UserName = user.UserName });
             }
             return BadRequest();
         }
 
-        [HttpPost("logout")]
+        [HttpGet("logout")]
         public IActionResult Logout()
         {
             Response.Cookies.Delete("jwt");

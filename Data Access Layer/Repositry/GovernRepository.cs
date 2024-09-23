@@ -42,7 +42,7 @@ namespace Data_Access_Layer.Repositry
 
         public Govern? GetWithID(int id)
         {
-        return dataBase.governs.AsNoTracking().FirstOrDefault(s => s.ID == id);
+        return dataBase.governs.Include(c => c.Cities).AsNoTracking().FirstOrDefault(s => s.ID == id);
         }
 
         public bool IsExist(string govern)
