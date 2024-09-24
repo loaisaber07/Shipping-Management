@@ -80,6 +80,30 @@ namespace Shippping_Managment.Controllers
         
         }
 
+        [HttpPut]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult>EditGovern(EditGovernDTO edit)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Message = "invalid data" });
+            }
+            Govern? govern1 =await govern.GetAsyncById(edit.ID);
+            if (govern1 is null)
+            {
+                return NotFound(new {Message="Govern Not Found"});
+            }
+            govern1.Name = edit.Name;
+            govern1.Status = edit.Status;
+            if (!govern.Update(govern1))
+            {
+                return BadRequest(new{Message="Failed To Update Try Again" });
+            }
+          await govern.SaveAsync();
+            return Ok(new { Message = "Govren Updated" });
+
+        }
+
         [HttpDelete("{governID:int}")]
         public async Task<ActionResult> DeleteGovernWithItsCities(int governID) 
         { 
