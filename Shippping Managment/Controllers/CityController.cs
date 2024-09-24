@@ -26,6 +26,24 @@ namespace Shippping_Managment.Controllers
             IEnumerable<GetCityDTO> list=CityService.MappingCity(cities);
             return Ok(list);
         }
+        [HttpGet("{cityId:int}")]
+        public async Task<ActionResult> GetCityByID(int cityId)
+        {
+            bool exists = await cityRepo.IsExistById(cityId);
+            if (!exists)
+            {
+                return NotFound(new { Message = "City not found" });
+            }
+
+            City city = await cityRepo.GetAsyncById(cityId);
+            if (city == null)
+            {
+                return NotFound(new { Message = "City not found" });
+            }
+
+            GetCityDTO cityDTO = CityService.MappingById(city);
+            return Ok(cityDTO);
+        }
         [HttpPut]
         [Authorize(Policy = "Admin")]
 
