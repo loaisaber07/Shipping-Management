@@ -28,7 +28,7 @@ namespace Data_Access_Layer.Custom_Validation
                     if (existingEntity.ID != (int?)currentEntityId)
                     {
                         // Validation failed, return error message
-                        return new ValidationResult("Name must be unique");
+                        return new ValidationResult("Name must be unique or may another field have the same value");
                     }
                 }
             }

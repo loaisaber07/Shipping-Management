@@ -26,7 +26,6 @@ namespace Shippping_Managment.Controllers
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IFieldJob fieldJobRepo;
-        private readonly ShippingDataBase context;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
@@ -36,7 +35,6 @@ namespace Shippping_Managment.Controllers
             this.configuration = configuration;
             this.roleManager = roleManager;
             this.fieldJobRepo = fieldJobRepo;
-            this.context = context;
         }
 
         [HttpPost]

@@ -29,7 +29,7 @@ namespace Business_Layer.Services.Order
                 TypeOfPaymentID = add.TypeOfPaymentID,
                 TypeOfChargeID = add.TypeOfChargeID,
                 SellerID = sellerId,
-                OrderStatusID = add.OrderStatusID,
+                OrderStatusID = 1,
                 TypeOfReceiptID = add.TypeOfReceiptID,
                 Note = add.Note,
                 CityID=add.CityID
@@ -54,7 +54,7 @@ namespace Business_Layer.Services.Order
                 TypeOfPaymentID = add.TypeOfPaymentID,
                 TypeOfChargeID = add.TypeOfChargeID,
                 SellerID = add.SellerID,
-                OrderStatusID = statusId,
+                OrderStatusID = 1,
                 TypeOfReceiptID = add.TypeOfReceiptID,
                 Note = add.Note,
                 CityID = add.CityID

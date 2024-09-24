@@ -34,17 +34,17 @@ namespace Data_Access_Layer.Entity
         public DbSet<Weight> weights { get; set; }       
         public DbSet<Product> products { get; set; }
         public DbSet<FieldPrivilege> fieldPrivileges { get; set; }
-        public DbSet<TypeOfReceipt> typeOfReceipts { get; set; } 
+        public DbSet<TypeOfReceipt> typeOfReceipts { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ApplicationUser>().Property<bool>("Status").IsRequired()
-                .HasDefaultValue(true);  
+                .HasDefaultValue(true);
             builder.Entity<Order>().ToTable("Order");
             builder.Entity<OrderStatus>().HasIndex(s => s.Name).IsUnique();
             builder.Entity<Branch>().Property(s => s.DataAdding).HasDefaultValue(DateTime.Now);
             builder.Entity<FieldPrivilege>().HasKey(s => new { s.PrivilegeID, s.FieldJobID });
-            builder.Entity<FieldJob>().Property(s => s.DateAdding).HasDefaultValue(DateTime.Now); 
-            builder.Entity<Order>().Property(s=>s.DateAdding).IsRequired().HasDefaultValue(DateTime.Now);
+            builder.Entity<FieldJob>().Property(s => s.DateAdding).HasDefaultValue(DateTime.Now);
+            builder.Entity<Order>().Property(s => s.DateAdding).IsRequired().HasDefaultValue(DateTime.Now);
             builder.Entity<SpecialCharge>().HasKey(s => new { s.CityID, s.SellerID });
             builder.Entity<ApplicationUser>()
                  .HasDiscriminator<string>("UserType")
@@ -55,15 +55,18 @@ namespace Data_Access_Layer.Entity
                 .HasValue<ApplicationUser>("ApplicationUser")
                 .HasValue<Agent>("Agent");
             builder.Entity<ApplicationUser>()
-                .HasOne(s=>s.FieldJob)
-                .WithMany(s=>s.Users)
-                .HasForeignKey(s=> s.FiledJobID)
+                .HasOne(s => s.FieldJob)
+                .WithMany(s => s.Users)
+                .HasForeignKey(s => s.FiledJobID)
                 .IsRequired(false);
             builder.Entity<ApplicationUser>()
                 .HasOne(s => s.Branch)
                 .WithMany(s => s.ApplicationUsers)
                 .HasForeignKey(s => s.BranchID)
                 .IsRequired(false);
+
+            #region Add Manualy Data To DataBase
+            #region AddAdmin
 
             builder.Entity<IdentityRole>().HasData(
           new IdentityRole
@@ -83,7 +86,7 @@ namespace Data_Access_Layer.Entity
                     Email = "admin@example.com",
                     NormalizedEmail = "ADMIN@EXAMPLE.COM",
                     EmailConfirmed = true,
-                    PhoneNumber="01004117527",
+                    PhoneNumber = "01004117527",
                     PasswordHash = hasher.HashPassword(null, "Admin@123") // Hashed password
                 }
             );
@@ -94,7 +97,75 @@ namespace Data_Access_Layer.Entity
                     RoleId = "admin-role-id"  // ID of the role from AspNetRoles table
                 }
             );
-
+            #endregion
+            #region Add 12 OrderStatus
+            builder.Entity<OrderStatus>().HasData(new OrderStatus { 
+            ID=1 , 
+            Name="New", 
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 2,
+                Name = "Wating",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 3,
+                Name = "AssignedToAgent",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 4,
+                Name = "UnReachable",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 5,
+                Name = "Postponed",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 6,
+                Name = "PartiallyDelivered",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 7,
+                Name = "Canceled",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 8,
+                Name = "RejectedWithPayment",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 9,
+                Name = "RejectWithPartialPayment",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 10,
+                Name = "RejectedWithoutPayment",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 11,
+                Name = "Delivered",
+            });
+            #endregion
+            #region Add  2 TypeOfOffer
+            builder.Entity<TypeOfOffer>().HasData(new TypeOfOffer { 
+            ID=1 , 
+            Name="Precentage"
+            });
+            builder.Entity<TypeOfOffer>().HasData(new TypeOfOffer
+            {
+                ID = 2,
+                Name = "FixedAmount"
+            });
+            #endregion
+            #endregion
 
             base.OnModelCreating(builder);
         }

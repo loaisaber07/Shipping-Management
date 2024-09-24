@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    [Migration("20240923143320_initial")]
-    partial class initial
+    [Migration("20240924184520_initialdatabase")]
+    partial class initialdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,16 +130,16 @@ namespace Data_Access_Layer.Migrations
                         {
                             Id = "admin-user-id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0d47aac2-6178-4def-a929-c1e27e80da9d",
+                            ConcurrencyStamp = "01a2c379-249e-4a68-85b3-379e98db5131",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFQuo7CBHDVPoW7q7/sMw1hoUxRnfnkSaR1gH30KbhLmfRcBZbyOmEvdhWu5mtwD9g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAC9UHL7Gm+Vu4GAv2BCP/ZcUbD7YHd/vm/0+fO3CN45QWstjtLzIxI0dPsJsbohSQ==",
                             PhoneNumber = "01004117527",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "192ff414-474c-43c2-8300-13ee37564d74",
+                            SecurityStamp = "90242347-1b6d-42aa-a5cc-7594790affcc",
                             Status = true,
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
@@ -157,7 +157,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 23, 17, 33, 19, 881, DateTimeKind.Local).AddTicks(1330));
+                        .HasDefaultValue(new DateTime(2024, 9, 24, 21, 45, 18, 486, DateTimeKind.Local).AddTicks(492));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -210,7 +210,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 23, 17, 33, 19, 881, DateTimeKind.Local).AddTicks(6076));
+                        .HasDefaultValue(new DateTime(2024, 9, 24, 21, 45, 18, 486, DateTimeKind.Local).AddTicks(8953));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -302,7 +302,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 23, 17, 33, 19, 882, DateTimeKind.Local).AddTicks(240));
+                        .HasDefaultValue(new DateTime(2024, 9, 24, 21, 45, 18, 487, DateTimeKind.Local).AddTicks(9943));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -380,6 +380,63 @@ namespace Data_Access_Layer.Migrations
                         .IsUnique();
 
                     b.ToTable("productStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Name = "New"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Name = "Wating"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Name = "AssignedToAgent"
+                        },
+                        new
+                        {
+                            ID = 4,
+                            Name = "UnReachable"
+                        },
+                        new
+                        {
+                            ID = 5,
+                            Name = "Postponed"
+                        },
+                        new
+                        {
+                            ID = 6,
+                            Name = "PartiallyDelivered"
+                        },
+                        new
+                        {
+                            ID = 7,
+                            Name = "Canceled"
+                        },
+                        new
+                        {
+                            ID = 8,
+                            Name = "RejectedWithPayment"
+                        },
+                        new
+                        {
+                            ID = 9,
+                            Name = "RejectWithPartialPayment"
+                        },
+                        new
+                        {
+                            ID = 10,
+                            Name = "RejectedWithoutPayment"
+                        },
+                        new
+                        {
+                            ID = 11,
+                            Name = "Delivered"
+                        });
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.Privilege", b =>
@@ -480,6 +537,18 @@ namespace Data_Access_Layer.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("typeOfOffers");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Name = "Precentage"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Name = "FixedAmount"
+                        });
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entity.TypeOfPayment", b =>

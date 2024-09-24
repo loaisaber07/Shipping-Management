@@ -16,6 +16,7 @@ namespace Data_Access_Layer.Interfaces
         Task<SpecialCharge?> GetSpecialForSeller(int id, string sellerId);
         Task<Weight?> GetWeight();
         Task<IEnumerable<Order?>> GetOrderByTimeAdding(DateTime begin, DateTime end, int statusId);
-        bool ISEXIST(int id);
+        bool ISEXIST(int id); 
+        IQueryable<Order> GetOrderByBranch(int? branchId);
     }
 }

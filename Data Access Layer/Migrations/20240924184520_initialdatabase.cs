@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Data_Access_Layer.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initialdatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +34,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 17, 33, 19, 881, DateTimeKind.Local).AddTicks(1330)),
+                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 24, 21, 45, 18, 486, DateTimeKind.Local).AddTicks(492)),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -47,7 +49,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 17, 33, 19, 881, DateTimeKind.Local).AddTicks(6076))
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 24, 21, 45, 18, 486, DateTimeKind.Local).AddTicks(8953))
                 },
                 constraints: table =>
                 {
@@ -398,7 +400,7 @@ namespace Data_Access_Layer.Migrations
                     IsForVillage = table.Column<bool>(type: "bit", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Weight = table.Column<int>(type: "int", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 23, 17, 33, 19, 882, DateTimeKind.Local).AddTicks(240)),
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 24, 21, 45, 18, 487, DateTimeKind.Local).AddTicks(9943)),
                     VillageOrStreet = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BranchID = table.Column<int>(type: "int", nullable: false),
                     GovernID = table.Column<int>(type: "int", nullable: false),
@@ -523,7 +525,34 @@ namespace Data_Access_Layer.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Address", "BranchID", "City", "ConcurrencyStamp", "Email", "EmailConfirmed", "FiledJobID", "Govern", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Status", "TwoFactorEnabled", "UserName", "UserType" },
-                values: new object[] { "admin-user-id", 0, null, null, null, "0d47aac2-6178-4def-a929-c1e27e80da9d", "admin@example.com", true, null, null, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEFQuo7CBHDVPoW7q7/sMw1hoUxRnfnkSaR1gH30KbhLmfRcBZbyOmEvdhWu5mtwD9g==", "01004117527", false, "192ff414-474c-43c2-8300-13ee37564d74", true, false, "admin@example.com", "ApplicationUser" });
+                values: new object[] { "admin-user-id", 0, null, null, null, "01a2c379-249e-4a68-85b3-379e98db5131", "admin@example.com", true, null, null, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEAC9UHL7Gm+Vu4GAv2BCP/ZcUbD7YHd/vm/0+fO3CN45QWstjtLzIxI0dPsJsbohSQ==", "01004117527", false, "90242347-1b6d-42aa-a5cc-7594790affcc", true, false, "admin@example.com", "ApplicationUser" });
+
+            migrationBuilder.InsertData(
+                table: "productStatuses",
+                columns: new[] { "ID", "Name" },
+                values: new object[,]
+                {
+                    { 1, "New" },
+                    { 2, "Wating" },
+                    { 3, "AssignedToAgent" },
+                    { 4, "UnReachable" },
+                    { 5, "Postponed" },
+                    { 6, "PartiallyDelivered" },
+                    { 7, "Canceled" },
+                    { 8, "RejectedWithPayment" },
+                    { 9, "RejectWithPartialPayment" },
+                    { 10, "RejectedWithoutPayment" },
+                    { 11, "Delivered" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "typeOfOffers",
+                columns: new[] { "ID", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Precentage" },
+                    { 2, "FixedAmount" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

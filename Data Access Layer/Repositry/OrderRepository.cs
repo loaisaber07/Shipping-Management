@@ -36,6 +36,15 @@ namespace Data_Access_Layer.Repositry
             return order;
         }
 
+        public IQueryable<Order> GetOrderByBranch(int? branchId)
+        { 
+            dataBase.Orders
+                .AsNoTracking()
+                .Include(s=>s.Products)
+                .Where(s => s.BranchID == branchId);
+            return dataBase.Orders;
+        }
+
         public async Task<IEnumerable<Order?>> GetOrderByTimeAdding(DateTime begin, DateTime end, int statusId)
         {
         return    await dataBase.Orders

@@ -17,7 +17,7 @@ namespace Data_Access_Layer.DTO
             "PartiallyDelivered",
             "Canceled", "RejectedWithPayment",
             "RejectWithPartialPayment",
-            "RejectedAndNotPaid")]
+            "RejectWithPartialPayment")]
         public string Name { get; set; }
     }
 }

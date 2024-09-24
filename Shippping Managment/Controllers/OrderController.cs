@@ -5,6 +5,7 @@ using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Security.Claims;
@@ -20,15 +21,18 @@ namespace Shippping_Managment.Controllers
         private readonly IWeight weightRepo;
         private readonly ISpecialCharge specialRepo;
         private readonly IOrderStatus orderStatusRepo;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public OrderController(IOrder orderRepo, IProduct productRepo,IWeight weightRepo , 
-            ISpecialCharge specialRepo,IOrderStatus orderStatusRepo)
+            ISpecialCharge specialRepo,IOrderStatus orderStatusRepo ,
+            UserManager<ApplicationUser> userManager)
         {
             this.orderRepo = orderRepo;
             this.productRepo = productRepo;
             this.weightRepo = weightRepo;
             this.specialRepo = specialRepo;
             this.orderStatusRepo = orderStatusRepo;
+            this.userManager = userManager;
         }
         [Authorize(Policy = "AdminOrEmployee")]
         [HttpGet]
@@ -36,9 +40,28 @@ namespace Shippping_Managment.Controllers
 
         public async Task<ActionResult> GetAll()
         {
-            IQueryable<Order> orders = orderRepo.GetAll();
-            IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
-            return Ok(dto);
+        string? userId=HttpContext.User.FindFirst("userID")?.Value;
+       ApplicationUser? user =   await userManager.FindByIdAsync(userId);
+            if (user is null)
+            {
+                return Unauthorized(new { Message="Can't find the User!"});
+            }
+            bool check = await userManager.IsInRoleAsync(user, "Admin");
+            if (check) {
+                IQueryable<Order> orders = orderRepo.GetAll();
+                IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
+                return Ok(dto);
+            } 
+            check = await userManager.IsInRoleAsync(user, "Employee");
+            if (check)
+            {
+                IQueryable<Order> orders = orderRepo.GetOrderByBranch(user.BranchID);
+                IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
+            }
+            return Unauthorized(); 
+            //    IQueryable<Order> orders = orderRepo.GetAll();
+            //IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
+            //return Ok(dto);
         } 
 
         [Authorize(Policy = "AdminOrSeller")]
