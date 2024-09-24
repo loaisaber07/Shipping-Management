@@ -9,5 +9,6 @@ namespace Data_Access_Layer.Interfaces
 {
     public interface IWeight:IRepositry<Weight>
     {
+        Weight GetDefaultWeight(out bool IsExist); 
     }
 }

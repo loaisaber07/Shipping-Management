@@ -15,7 +15,7 @@ namespace Data_Access_Layer.Custom_Validation
             if (value != null)
             {
                 var context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
-                var entity = context.Cities.FirstOrDefault(s => s.Name == value.ToString());
+                var entity = context?.Cities.FirstOrDefault(s => s.Name == value.ToString());
                 if (entity != null)
                 {
                     return new ValidationResult("City Name must be unique ");

@@ -30,5 +30,7 @@ namespace Data_Access_Layer.DTO.Agent
         public int GovernID { get; set; }
         [Required]
         public int TypeOfOfferID { get; set; }
+        [Required]
+        public string Address { get; set; }
     }
 }

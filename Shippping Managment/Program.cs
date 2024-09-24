@@ -49,6 +49,7 @@ namespace Shippping_Managment
             builder.Services.AddScoped<IWeight,WeightRepository>();
             builder.Services.AddScoped<ITypeOfReceipt, TypeOfReceiptRepository>();
             builder.Services.AddScoped<ITypeOfOffer,TypeOfOfferRepository>();
+            builder.Services.AddScoped<IAgent, AgentRepository>();
             builder.Services.AddScoped<InvoiceService>();
             var jwtSetting = builder.Configuration.GetSection("JwtSetting");
             var keyBase64 = jwtSetting["SecretKey"];
@@ -72,15 +73,38 @@ namespace Shippping_Managment
                     RoleClaimType = ClaimTypes.Role, 
                     ClockSkew = TimeSpan.FromMinutes(5),
                     ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha512 }
+
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        // Read the JWT token from the HttpOnly cookie named "jwt"
+                        var token = context.Request.Cookies["jwt"];
+                        if (!string.IsNullOrEmpty(token))
+                        {
+                            context.Token = token;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Employee", policy => policy.RequireClaim(ClaimTypes.Role, "Employee"));
-                options.AddPolicy("Seller", policy => policy.RequireClaim(ClaimTypes.Role, "Seller"));
-                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
-                options.AddPolicy("Agent", policy => policy.RequireClaim(ClaimTypes.Role, "Agent"));
+                options.AddPolicy("AdminOrEmployee",policy=>policy.RequireAssertion(context=>
+                context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&(c.Value=="Employee"||c.Value=="Admin"))));
+                options.AddPolicy("AdminOrSeller", policy => policy.RequireAssertion(context =>
+                  context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Seller" || c.Value == "Admin"))));
+                options.AddPolicy("AdminOrAgent", policy => policy.RequireAssertion(context =>
+                context.User.HasClaim(c => c.Type == ClaimTypes.Role && (c.Value == "Agent" || c.Value == "Admin"))));
+                options.AddPolicy("Admin",policy=>policy.RequireAssertion(context=>context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&c.Value=="Admin")));
+                options.AddPolicy("Seller",policy=>policy.RequireAssertion(context=>context.User.HasClaim(c=>c.Type==ClaimTypes.Role&&c.Value=="Seller")));
+                options.AddPolicy("Employee", policy => policy.RequireAssertion(context => context.User.HasClaim(c => c.Type == ClaimTypes.Role && c.Value == "Employee")));
+                options.AddPolicy("Agent", policy => policy.RequireAssertion(context => context.User.HasClaim(c => c.Type == ClaimTypes.Role && c.Value == "Agent")));
+
+
+
             });
 
             builder.Services.AddSwaggerGen(c =>
@@ -119,15 +143,16 @@ namespace Shippping_Managment
             {
                 option.AddPolicy("Allow", builder =>
                 {
-                    builder.AllowAnyOrigin();
-                    builder.AllowAnyMethod();
-                    builder.AllowAnyHeader();
+                    builder.SetIsOriginAllowed(origin => true)
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
 
                 });
 
             });
             builder.Logging.AddConsole();
-                 var app = builder.Build();
+                 var app = builder.Build(); 
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

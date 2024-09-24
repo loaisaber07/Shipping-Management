@@ -4,11 +4,13 @@ using Data_Access_Layer.DTO.FieldJob;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Data_Access_Layer.Repositry;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RTools_NTS.Util;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -26,9 +28,9 @@ namespace Shippping_Managment.Controllers
         private readonly IFieldJob fieldJobRepo;
         private readonly ShippingDataBase context;
 
-        public AccountController(UserManager<ApplicationUser> userManager ,
-            IConfiguration configuration ,
-           RoleManager<IdentityRole> roleManager ,IFieldJob fieldJobRepo )
+        public AccountController(UserManager<ApplicationUser> userManager,
+            IConfiguration configuration,
+           RoleManager<IdentityRole> roleManager, IFieldJob fieldJobRepo)
         {
             this.userManager = userManager;
             this.configuration = configuration;
@@ -40,33 +42,75 @@ namespace Shippping_Managment.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(LoginRequestDTO log)
         {
-            if (!ModelState.IsValid) { 
-            return BadRequest( new {Messaga=$"Incorect Data " }) ;
+            if (!ModelState.IsValid) {
+                return BadRequest(new { Messaga = $"Incorect Data " });
             }
-            if (log.Username is not null) {
-     ApplicationUser? user=await userManager.FindByNameAsync(log.Username);
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1)
+            };
+
+            if (log.Email is not null) {
+
+                ApplicationUser? user = await userManager.FindByEmailAsync(log.Email);
+
                 if (user is null) {
-                    return BadRequest(new { Message = "No userName founded!" });
+                    return BadRequest(new { Message = "Incorrect Email Address" });
                 }
                 bool adminCheck = await userManager.IsInRoleAsync(user, "Admin");
-                if (!adminCheck) {
-                    return BadRequest(new { Message = $"you are not authorize to use this feature please use Email instead!" });
+                if (adminCheck) {
+                    return BadRequest(new { Message = $"you are not authorize to use this feature please use Username instead!" }); 
                 }
-                bool result = await userManager.CheckPasswordAsync(user ,log.Password);
-                if (!result) {
-                    return BadRequest(new { Message = "Incorrect Password" }); 
-                }
-                string token = await GetTokenAsync(user , user.Id);
-                return Ok(token);
+            
+            bool result = await userManager.CheckPasswordAsync(user, log.Password);
+            if (!result) {
+                return BadRequest(new { Message = "Incorrect Password try again!" });
             }
-            if (log.Email is not null) {
-                ApplicationUser? user = await userManager.FindByEmailAsync(log.Email);
-                if (user is null) {
-                    return BadRequest(new { Message = "Incorrect Email Address" }); 
-                } 
-       bool result =await userManager.CheckPasswordAsync(user ,log.Password);
-                if (!result) {
-                    return BadRequest(new { Message = "Incorrect Password try again!" });
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                if (role == "Employee")
+                {
+                    FieldJobDTO f = new FieldJobDTO();
+                    FieldJob? fieldJob = new FieldJob();
+                    if (user.FiledJobID is not null)
+                    {
+                        int fieldId = (int)user.FiledJobID;
+                        fieldJob = await fieldJobRepo.GetFieldJobById(fieldId);
+                        if (fieldJob is not null)
+                        {
+                            f = FieldJobService.MappingFieldJob(fieldJob);
+                        }
+                        else
+                        {
+                            return BadRequest(new { Message = "FieldJob NotFound" });
+                        }
+                        string Emptoken = await GetTokenAsync(user, user.Id);
+                        return Ok(new { token = Emptoken, Role = roles, ID = user.Id, FieldJob = f });
+                    }
+                }
+
+                string token = await GetTokenAsync(user , user.Id);
+                Response.Cookies.Append("jwt", token, cookieOptions);
+
+                return Ok(new { Message = "Login Successful" ,Role = "Admin",UserName = user.UserName });
+            }
+
+            if (log.Username is not null)
+            {
+
+                ApplicationUser? user = await userManager.FindByNameAsync(log.Username);
+                if (user is null)
+                {
+                    return BadRequest(new { Message = "Incorrect UserName" });
+                }
+                bool result = await userManager.CheckPasswordAsync(user, log.Password);
+                if (!result)
+                {
+                    return BadRequest(new { Message = "Incorrect Password Or UserName try again!" });
+
                 }
                 var roles = await userManager.GetRolesAsync(user);
                 foreach (var role in roles)
@@ -88,25 +132,42 @@ namespace Shippping_Managment.Controllers
                                 return BadRequest(new { Message = "FieldJob NotFound" });
                             }
                             string Emptoken = await GetTokenAsync(user, user.Id);
-                            return Ok(new { token = Emptoken, Role = roles, ID = user.Id, FieldJob = f });
+                            Response.Cookies.Append("jwt", Emptoken, cookieOptions);
+
+                            return Ok(new { Role = roles, ID = user.Id, FieldJob = f , UserName = user.UserName });
                         }
                     }
                 }
+
                 string token1 = await GetTokenAsync(user , user.Id);
-                return Ok(new { token=token1 , Role=roles , ID=user.Id });
+                Response.Cookies.Append("jwt", token1, cookieOptions);
+                return Ok(new { Role=roles , ID=user.Id , UserName = user.UserName });
             }
             return BadRequest();
+        } 
+
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt");
+            return Ok(new { message = "Logout successful" });
         }
 
+        [Authorize]
+        [HttpGet("auth/check")]
+        public IActionResult CheckAuth()
+        {
+            return Ok(new { isAuthenticated = true });
+        }
 
         private async Task<string> GetTokenAsync(ApplicationUser user , string id)
         {
             var userClaims = new List<Claim>
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim("userID",id)
-    };
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("userID",id)
+            };
             Console.WriteLine(user.Id);
 
             var roles = await userManager.GetRolesAsync(user);

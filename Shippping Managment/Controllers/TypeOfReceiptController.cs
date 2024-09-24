@@ -2,6 +2,7 @@
 using Data_Access_Layer.DTO.TypeOfReceipt;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,8 @@ namespace Shippping_Managment.Controllers
             return Ok(get);
         }
         [HttpPost]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> Add(AddTypeOfReceiptDTO add)
         {
             if (!ModelState.IsValid)
@@ -47,6 +50,8 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPut]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> Edit(EditTypeOfReceiptDTO editType)
         {
             if (!ModelState.IsValid)
@@ -69,6 +74,8 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> Delete(int id)
         {
            TypeOfReceipt? type = await typeOfReceiptRepo.GetAsyncById(id);

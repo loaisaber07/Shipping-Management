@@ -2,6 +2,7 @@
 using Data_Access_Layer.DTO;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +28,8 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> AddTypeOfPayment(AddTypeOfPaymentDTO addType)
         {
             if (!ModelState.IsValid)
@@ -49,6 +52,8 @@ namespace Shippping_Managment.Controllers
 
         }
         [HttpPut]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> EditePaymentTypes(EditPaymentDTO edit)
         {
             if (!ModelState.IsValid)
@@ -72,6 +77,8 @@ namespace Shippping_Managment.Controllers
 
         }
         [HttpDelete("{typeId:int}")]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> DeleteType(int typeId)
         {
           TypeOfPayment? type =  await paymentRepo.GetAsyncById(typeId);

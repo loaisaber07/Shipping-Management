@@ -2,6 +2,7 @@
 using Data_Access_Layer.DTO.WeightDTO;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class WeightController : ControllerBase
     {
         private readonly IWeight weightRepo;
@@ -26,6 +28,8 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> AddWeightSettings(AddWeightSettingsDTO settingsDTO)
         {
            IEnumerable<Weight> weightList= await weightRepo.GetAllAsync();
@@ -40,6 +44,8 @@ namespace Shippping_Managment.Controllers
             return Ok(dTO);
         }
         [HttpDelete("{settingId:int}")]
+        [Authorize(Policy = "Admin")]
+
         public async Task<ActionResult> Delete(int settingId)
         {
             Weight? weight= await weightRepo.GetAsyncById(settingId);
@@ -52,7 +58,9 @@ namespace Shippping_Managment.Controllers
             return Ok();
         }
         [HttpPut]
-         public async Task<ActionResult> Edit(WeightDTO dTO)
+        [Authorize(Policy = "Admin")]
+
+        public async Task<ActionResult> Edit(WeightDTO dTO)
          {
             Weight? weight = await weightRepo.GetAsyncById(dTO.ID);
             if (weight is null)
