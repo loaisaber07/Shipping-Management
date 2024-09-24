@@ -65,5 +65,17 @@ namespace Business_Layer.Services
             };
             return cityDTO;
         }
+        public static GetCityDTO MappingById(City city)
+        {
+            GetCityDTO dto = new GetCityDTO
+            {
+                ID = city.ID,
+                Name = city.Name,
+                NormalCharge = city.NormalCharge,
+                PickUpCharge = city.PickUpCharge,
+                GovernID = city.GovernID
+            };
+            return dto;
+        }
     }
 }
