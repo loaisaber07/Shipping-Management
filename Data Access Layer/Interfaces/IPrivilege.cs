@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Interfaces
 {
-    public interface IPrivilege:IRepositry<Privilege>
+    public interface IPrivilege : IRepositry<Privilege>
     {
         Task<bool> IsExsitsByName(string Name);
         Task<bool> IsExsitsById(int Id);
-        Task<string> GetNameById(int Id); 
+        Task<string> GetNameById(int Id);
         Task<Privilege>? GetByName(string Name);
+        Task<IEnumerable<int>> GetPrivilegeIds();
     }
 }

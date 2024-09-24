@@ -51,12 +51,14 @@ namespace Data_Access_Layer.Repositry
                 .Where(s => s.DateAdding >= begin && s.DateAdding <= end && s.OrderStatusID == statusId)
                 .Include(o => o.Seller)
                 .Include(s=>s.Agent)
-                .Include(s=>s.Agent).ThenInclude(t=>t.TypeOfOffer)
+                .Include(s=>s.Agent)
+                .ThenInclude(t=>t.TypeOfOffer)
                 .Include(o => o.OrderStatus)
                 .Include(c => c.City)
                 .Include(s => s.Govern)
                 .Include(t => t.TypeOfCharge)
                 .Include(t => t.TypeOfReceipt)
+                .AsSplitQuery()
                 .ToListAsync();
 
         }

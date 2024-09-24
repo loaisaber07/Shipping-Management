@@ -27,6 +27,21 @@ namespace Business_Layer.Services
             }
             return list;
         }
+        public static IEnumerable<FieldPrivilege> MappingAddFieldJob(int filedId, IEnumerable<int> privilegeIdS)
+        {
+            List<FieldPrivilege> FBS = new List<FieldPrivilege>();
+            foreach (int privilegeId in privilegeIdS)
+            {
+                FBS.Add(new FieldPrivilege
+                {
+                    FieldJobID = filedId,
+                    PrivilegeID = privilegeId
+                });
+
+            }
+            return FBS;
+
+        }
 
 
         public static IEnumerable<FieldPrivilege> EditListOfFieldPrivilege(EditFieldPrivilege fieldPrivilege)

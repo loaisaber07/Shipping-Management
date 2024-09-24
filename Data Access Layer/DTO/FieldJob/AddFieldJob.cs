@@ -11,8 +11,6 @@ namespace Data_Access_Layer.DTO.FieldJob
     {
         [Required]
         public string Name { get; set; }
-        [Required] 
-        
-        public ICollection<AddFieldPrivilegeDTO> FieldPrivilegeDTo { get; set; }
+
     }
 }

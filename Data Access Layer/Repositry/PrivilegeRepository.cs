@@ -34,6 +34,14 @@ namespace Data_Access_Layer.Repositry
             return string.Empty;
         }
 
+        public async Task<IEnumerable<int>> GetPrivilegeIds()
+        {
+      return  await    dataBase.privileges
+                .AsNoTracking()
+                .Select(s => s.ID)
+                .ToListAsync();
+        }
+
         public async Task<bool> IsExsitsById(int Id)
         {
            Privilege? privilege = await dataBase.privileges.AsNoTracking().FirstOrDefaultAsync(p => p.ID==Id);

@@ -61,11 +61,8 @@ namespace Shippping_Managment.Controllers
                 Name = addFieldJob.Name };
          await  fieldRepo.CreateAsync(b);
          await fieldRepo.SaveAsync();
-        b= fieldRepo.GetByName(addFieldJob.Name);
-            if (b is null) {
-                return NotFound(new { Message="Field to save Fieldjob!"});
-            }
- IEnumerable<FieldPrivilege>FB= FieldPrivilegeService.CreateListOfFieldPrivilege(b.ID, addFieldJob.FieldPrivilegeDTo);
+      IEnumerable<int> privilegeIds = await privilegeRepo.GetPrivilegeIds();
+ IEnumerable<FieldPrivilege>FB= FieldPrivilegeService.MappingAddFieldJob(b.ID,privilegeIds );
           await  fieldprivilegeRepo.BulkInsert(FB);
           await  fieldprivilegeRepo.SaveAsync();
             return RedirectToAction("Get");

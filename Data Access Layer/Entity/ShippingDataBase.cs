@@ -165,6 +165,18 @@ namespace Data_Access_Layer.Entity
                 Name = "FixedAmount"
             });
             #endregion
+            #region Add 2 Type Of Receipt
+            builder.Entity<TypeOfReceipt>().HasData(new TypeOfOffer
+            {
+                ID=1 , 
+                Name="Branch"
+            });
+            builder.Entity<TypeOfReceipt>().HasData(new TypeOfOffer
+            {
+                ID = 2,
+                Name = "Store"
+            });
+            #endregion
             #endregion
 
             base.OnModelCreating(builder);
