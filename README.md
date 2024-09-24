@@ -14,6 +14,7 @@ Backend: ASP.NET Core
 Database: SQL Server
 Authentication: ASP.NET Core Identity
 Additional Libraries: Entity Framework Core, BulkExtensions (for bulk operations) 
+Authorization : Bearer Token Used for authentication
 
 -Usage
 After running the project, access it in your browser at https://localhost:5001. From here, you can:
