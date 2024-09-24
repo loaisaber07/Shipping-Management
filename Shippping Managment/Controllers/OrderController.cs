@@ -186,11 +186,15 @@ await orderRepo.DeleteAsync(orderId);
                 report.OrderCost = order.Cost;
                 report.ChargeCost = await GetShippingCost(order);
                 report.OrderDate = order.DateAdding;
-                if (order?.Agent?.TypeOfOffer.Name=="Percentage" && order.Agent is not null)
+                if (order?.Agent?.TypeOfOffer.Name== "Precentage" && order.Agent is not null)
                 { 
-                    report.CompanyAmount = (order?.Agent?.ThePrecentageOfCompanyFromOffer / 100) * (report.ChargeCost) ?? 0;
+                    report.CompanyAmount = (order?.Agent?.ThePrecentageOfCompanyFromOffer *report.ChargeCost) / 100;
                 }
+                else
+                {
+
                 report.CompanyAmount = order?.Agent?.ThePrecentageOfCompanyFromOffer ?? 0;
+                }
                 dtos.Add(report);
 
             }
