@@ -39,9 +39,9 @@ namespace Business_Layer.Services.Agent
                     Email= agent.Email,
                     Phone=agent.PhoneNumber,
                     ThePrecentageOfCompanyFromOffer=agent.ThePrecentageOfCompanyFromOffer,
-                    GovernID = agent.GovernID,
-                    BranchID=agent.BranchID,
-                    TypeOfOfferID= agent.TypeOfOfferID, 
+                    Govern = agent.Governs.Name,
+                    Branch=agent.Branch.Name,
+                    TypeOfOffer= agent.TypeOfOffer.Name, 
                     Address = agent.Address
                 };
                 gets.Add(dTO);
@@ -58,9 +58,9 @@ namespace Business_Layer.Services.Agent
                 Email = agent.Email,
                 Phone = agent.PhoneNumber,
                 ThePrecentageOfCompanyFromOffer = agent.ThePrecentageOfCompanyFromOffer,
-                GovernID = agent.GovernID,
-                BranchID = agent.BranchID,
-                TypeOfOfferID = agent.TypeOfOfferID,
+                Govern = agent.Governs.Name,
+                Branch = agent.Branch.Name,
+                TypeOfOffer = agent.TypeOfOffer.Name,
                 Address = agent.Address
             };
             return agentDTO;

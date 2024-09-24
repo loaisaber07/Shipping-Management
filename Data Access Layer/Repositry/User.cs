@@ -206,14 +206,17 @@ namespace Data_Access_Layer.Repositry
 
         public async Task<IEnumerable<Agent>> GetAllAgents()
         {
-            IEnumerable<ApplicationUser> users =await userManager.Users.ToListAsync();
+            IEnumerable<Agent> users =await db.agents
+                .Include(b=>b.Branch)
+                .Include(g=>g.Governs)
+                .Include(t=>t.TypeOfOffer)
+                .ToListAsync();
             ICollection<Agent> Agents = new List<Agent>();
-            foreach (ApplicationUser user in users)
+            foreach (Agent user in users)
             {
                 if (await userManager.IsInRoleAsync(user,"Agent"))
                 {
-                    Agent agent = (Agent)user;
-                    Agents.Add(agent);
+                    Agents.Add(user);
                 }
             }
             return Agents;
@@ -246,6 +249,9 @@ namespace Data_Access_Layer.Repositry
         {
             Agent? agent = await db.agents
                 .Include(o=>o.Orders)
+                .Include(b => b.Branch)
+                .Include(g => g.Governs)
+                .Include(t => t.TypeOfOffer)
                 .FirstOrDefaultAsync(a=>a.Id==id);
             if (agent is not null)
             {
