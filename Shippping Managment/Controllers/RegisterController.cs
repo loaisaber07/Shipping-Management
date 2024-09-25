@@ -16,7 +16,7 @@ namespace Shippping_Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy ="Admin")]
+    [Authorize(Policy ="AdminOrEmployee")]
     public class RegisterController : ControllerBase
     {
         private readonly IBranch branchRepo;
