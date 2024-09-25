@@ -14,6 +14,7 @@ namespace Data_Access_Layer.Entity
     public  class ApplicationUser : IdentityUser
     {
         [Required]
+
         public override string UserName { get; set; }
         [RegularExpression(@"^01(0|1|2|5)\d{8}$", ErrorMessage = "Invalid phone number")]
         [Required]

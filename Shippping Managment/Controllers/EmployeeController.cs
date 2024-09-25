@@ -20,7 +20,7 @@ namespace Shippping_Managment.Controllers
             this.userRepo = userRepo;
         }
 
-        [Authorize(Roles = "AdminOrEmployee")]
+        [Authorize(Policy = "AdminOrEmployee")]
         [HttpGet("getEmployee")]
         public async Task<ActionResult> GetEmployee() {
             IEnumerable<ApplicationUser> users = await userRepo.GetAllEmployee();

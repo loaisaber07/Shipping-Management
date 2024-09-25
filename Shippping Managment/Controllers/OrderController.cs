@@ -281,7 +281,14 @@ SpecialCharge? special =  specialRepo.GetSpecialCharge(order.SellerID,order.City
             cost+= order.TypeOfCharge.Cost;
             if (order.TypeOfReceipt.Name == "Store")
             {
+                if (order.Seller.PickUp > 0)
+                {
+                    cost += order.Seller.PickUp;
+                }
+                else 
+                { 
                 cost += order.City.PickUpCharge; 
+                }
             }
             Weight weight = weightRepo.GetDefaultWeight(out IsExist);
             if (IsExist)
