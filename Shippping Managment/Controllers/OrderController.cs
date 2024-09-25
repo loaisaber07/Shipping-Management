@@ -23,8 +23,8 @@ namespace Shippping_Managment.Controllers
         private readonly IOrderStatus orderStatusRepo;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public OrderController(IOrder orderRepo, IProduct productRepo,IWeight weightRepo , 
-            ISpecialCharge specialRepo,IOrderStatus orderStatusRepo ,
+        public OrderController(IOrder orderRepo, IProduct productRepo, IWeight weightRepo,
+            ISpecialCharge specialRepo, IOrderStatus orderStatusRepo,
             UserManager<ApplicationUser> userManager)
         {
             this.orderRepo = orderRepo;
@@ -34,45 +34,59 @@ namespace Shippping_Managment.Controllers
             this.orderStatusRepo = orderStatusRepo;
             this.userManager = userManager;
         }
-        [Authorize(Policy = "AdminOrEmployee")]
+        [Authorize]
         [HttpGet]
         [Route("GetAll")]
 
         public async Task<ActionResult> GetAll()
         {
-        string? userId=HttpContext.User.FindFirst("userID")?.Value;
-       ApplicationUser? user =   await userManager.FindByIdAsync(userId);
+            string? userId = HttpContext.User.FindFirst("userID")?.Value;
+            ApplicationUser? user = await userManager.FindByIdAsync(userId);
             if (user is null)
             {
-                return Unauthorized(new { Message="Can't find the User!"});
+                return Unauthorized(new { Message = "Can't find the User!" });
             }
             bool check = await userManager.IsInRoleAsync(user, "Admin");
             if (check) {
                 IQueryable<Order> orders = orderRepo.GetAll();
                 IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
                 return Ok(dto);
-            } 
+            }
             check = await userManager.IsInRoleAsync(user, "Employee");
             if (check)
             {
                 IQueryable<Order> orders = orderRepo.GetOrderByBranch(user.BranchID);
                 IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
+                return Ok(dto);
             }
-            return Unauthorized(); 
-            //    IQueryable<Order> orders = orderRepo.GetAll();
-            //IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
-            //return Ok(dto);
-        } 
+            check = await userManager.IsInRoleAsync(user, "Seller");
+            if (check)
+            {
+                IQueryable<Order> orders = orderRepo.GetOrdersBySellerId(user.Id);
+                IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
+                return Ok(dto);
+            }
+            check = await userManager.IsInRoleAsync(user, "Agent");
+            if (check)
+            {
+
+                IQueryable<Order> orders = orderRepo.GetOrdersByAgentId(user.Id);
+                IEnumerable<GetOrderDTO> dto = OrderService.GetAllOrder(orders);
+                return Ok(dto);
+            }
+            return Unauthorized();
+
+        }
 
         [Authorize(Policy = "AdminOrSeller")]
         [HttpGet]
         [Route("GetOrderById{id:int}")]
         public async Task<ActionResult> GetOrderById(int id)
         {
-           Order? order = await orderRepo.GetById(id);
+            Order? order = await orderRepo.GetById(id);
             if (order == null)
             {
-                return NotFound();  
+                return NotFound();
             }
             GetOrderDTO orderDTO = OrderService.GetOrder(order);
             return Ok(orderDTO);
@@ -85,40 +99,44 @@ namespace Shippping_Managment.Controllers
             {
                 return BadRequest(new { Message = "Invalid Data !!" });
             }
-           OrderStatus? status = await orderStatusRepo.GetByName("New");
-            if (status is null)
-            {
-                return BadRequest(new {Message = "Invalid Order Status Id !!" });
-            }
-            Order order = OrderService.AdminMappingOrder(orderDTO,status.ID);
+
+            Order? order = OrderService.AdminMappingOrder(orderDTO, 1);
             await orderRepo.CreateAsync(order);
             await orderRepo.SaveAsync();
             IEnumerable<Product> products = ProductService.MappingProduct(order.ID, orderDTO.ProductList);
             await productRepo.BulkInsert(products);
             await productRepo.SaveAsync();
+            order = await orderRepo.GetOrderForGetChargeCost(order.ID);
+            order.chargeCost = await GetShippingCost(order);
+            orderRepo.Update(order);
+            await orderRepo.SaveAsync();
             return Ok(new { Message = "Added Successfully " });
 
         }
 
-        [Authorize( Policy = "Seller")]
+        [Authorize(Policy = "AdminAddOrder Seller")]
         [HttpPost]
         public async Task<ActionResult> AddOrder(AddOrderDTO orderDTO)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new {Message="Invalid Data !!"});
+                return BadRequest(new { Message = "Invalid Data !!" });
             }
-        string? sellerId=  HttpContext.User.FindFirst("userID")?.Value;
-            if (sellerId == null) { 
-            return Unauthorized();
+            string? sellerId = HttpContext.User.FindFirst("userID")?.Value;
+            if (sellerId == null) {
+                return Unauthorized();
             }
-            Order order = OrderService.MappingOrder(sellerId,orderDTO);
+            Order? order = OrderService.MappingOrder(sellerId, orderDTO);
             await orderRepo.CreateAsync(order);
             await orderRepo.SaveAsync();
-IEnumerable<Product> products =  ProductService.MappingProduct(order.ID ,orderDTO.ProductList);
+            IEnumerable<Product> products = ProductService.MappingProduct(order.ID, orderDTO.ProductList);
             await productRepo.BulkInsert(products);
             await productRepo.SaveAsync();
-            return Ok(new { Message="Added Successfully "});
+            order = await orderRepo.GetOrderForGetChargeCost(order.ID);
+            order.chargeCost = await GetShippingCost(order);
+            orderRepo.Update(order);
+            await orderRepo.SaveAsync();
+            return Ok(new { Message = "Added Successfully " });
 
         }
         [Authorize(Policy = "AdminOrSeller")]
@@ -126,32 +144,32 @@ IEnumerable<Product> products =  ProductService.MappingProduct(order.ID ,orderDT
 
         public async Task<ActionResult> Delete(int orderId) {
 
-        bool check= orderRepo.ISEXIST(orderId);
+            bool check = orderRepo.ISEXIST(orderId);
             if (!check) {
-                return BadRequest(new { Message = "There No Order Hava this id" }); 
-            } 
-check = await productRepo.BulkDelete(orderId);
-            if (!check) { 
-            return StatusCode(500, new { Message = "Can't Delete Try Again" });
+                return BadRequest(new { Message = "There No Order Hava this id" });
             }
-        await productRepo.SaveAsync();
-await orderRepo.DeleteAsync(orderId);
-          await  orderRepo.SaveAsync();
-            return Ok(new { Message="Deleted Successfully "});
+            check = await productRepo.BulkDelete(orderId);
+            if (!check) {
+                return StatusCode(500, new { Message = "Can't Delete Try Again" });
+            }
+            await productRepo.SaveAsync();
+            await orderRepo.DeleteAsync(orderId);
+            await orderRepo.SaveAsync();
+            return Ok(new { Message = "Deleted Successfully " });
         }
         [Authorize(Policy = "Seller")]
         [HttpPut]
         public async Task<ActionResult> UpdateOrder(UpdateOrderDTO orderDTO) {
-        Order? order = await orderRepo.GetById(orderDTO.ID);
+            Order? order = await orderRepo.GetById(orderDTO.ID);
             if (order is null) {
-                return BadRequest(new { Message = "Not found !" }); 
-            } 
-            order = OrderService.MappingOrderForUpdate(order,orderDTO);
-     bool check=      await productRepo.BulkUpdate(order.Products);
-            if (!check) { 
-            return StatusCode(500, new { Message = "Can't Update Try Again" });
+                return BadRequest(new { Message = "Not found !" });
             }
-            await productRepo.SaveAsync(); 
+            order = OrderService.MappingOrderForUpdate(order, orderDTO);
+            bool check = await productRepo.BulkUpdate(order.Products);
+            if (!check) {
+                return StatusCode(500, new { Message = "Can't Update Try Again" });
+            }
+            await productRepo.SaveAsync();
             orderRepo.Update(order);
             await orderRepo.SaveAsync();
             return Ok(new { Message = "Update Successfully" });
@@ -161,16 +179,16 @@ await orderRepo.DeleteAsync(orderId);
         [AllowAnonymous]
         [Route("GetShippingCost{beignningDate:datetime}/{endingDate:datetime}/{orderStatusId:int}")]
         public async Task<ActionResult> ReportOrders(DateTime beignningDate, DateTime endingDate, int orderStatusId)
-        { 
-        IEnumerable<Order?>orders =await orderRepo.GetOrderByTimeAdding(beignningDate,endingDate,orderStatusId);
+        {
+            IEnumerable<Order?> orders = await orderRepo.GetOrderByTimeAdding(beignningDate, endingDate, orderStatusId);
             if (orders is null) {
                 return NotFound(new { Message = "There is no orders founded in this Date!" });
-            
+
             }
             if (!orders.Any()) {
-                return NotFound(new { Message="No Order Founded"});
-            } 
-            
+                return NotFound(new { Message = "No Order Founded" });
+            }
+
             List<ReportOrderDTO> dtos = new List<ReportOrderDTO>();
             foreach (var order in orders)
             {
@@ -186,14 +204,14 @@ await orderRepo.DeleteAsync(orderId);
                 report.OrderCost = order.Cost;
                 report.ChargeCost = await GetShippingCost(order);
                 report.OrderDate = order.DateAdding;
-                if (order?.Agent?.TypeOfOffer.Name== "Precentage" && order.Agent is not null)
-                { 
-                    report.CompanyAmount = (order?.Agent?.ThePrecentageOfCompanyFromOffer *report.ChargeCost) / 100;
+                if (order?.Agent?.TypeOfOffer.Name == "Precentage" && order.Agent is not null)
+                {
+                    report.CompanyAmount = (order?.Agent?.ThePrecentageOfCompanyFromOffer * report.ChargeCost) / 100;
                 }
                 else
                 {
 
-                report.CompanyAmount = order?.Agent?.ThePrecentageOfCompanyFromOffer ?? 0;
+                    report.CompanyAmount = order?.Agent?.ThePrecentageOfCompanyFromOffer ?? 0;
                 }
                 dtos.Add(report);
 
@@ -210,21 +228,21 @@ await orderRepo.DeleteAsync(orderId);
             {
                 return BadRequest(new { Message = "Order Not found !" });
             }
-           OrderStatus? modifiedStatus = await orderStatusRepo.GetAsyncById(orderDTO.OrderStatusID);
+            OrderStatus? modifiedStatus = await orderStatusRepo.GetAsyncById(orderDTO.OrderStatusID);
             if (modifiedStatus is null)
             {
-                return NotFound(new {Message="Order Status Not Found !!"});
+                return NotFound(new { Message = "Order Status Not Found !!" });
             }
             if (modifiedStatus.Name != "Waiting")
             {
                 return BadRequest(new { Message = "Can 't Update Status" });
             }
             order.OrderStatusID = orderDTO.OrderStatusID;
-                orderRepo.Update(order);
-                await orderRepo.SaveAsync();    
+            orderRepo.Update(order);
+            await orderRepo.SaveAsync();
             return Ok(new { Message = "Update Successfully" });
         }
-        [Authorize(Roles =("Admin,Agent"))]
+        [Authorize(Roles = ("Admin,Agent"))]
         [HttpPut("AgentChangeOrderStatus")]
         public async Task<ActionResult> AgentChangeOrderStatus(EmployeeUpdateOrderStatusDTO orderDTO)
         {
@@ -238,21 +256,21 @@ await orderRepo.DeleteAsync(orderId);
             {
                 return NotFound(new { Message = "Order Status Not Found !!" });
             }
-            if (modifiedStatus.Name == "New" 
+            if (modifiedStatus.Name == "New"
                 || modifiedStatus.Name == "UnReachable"
                 || modifiedStatus.Name == "AssignedToAgent")
             {
-                
-             return BadRequest(new { Message = "Can 't Update Status" });
+
+                return BadRequest(new { Message = "Can 't Update Status" });
             }
-            order.OrderStatusID=orderDTO.OrderStatusID;
+            order.OrderStatusID = orderDTO.OrderStatusID;
             orderRepo.Update(order);
             await orderRepo.SaveAsync();
             return Ok(new { Message = "Update Successfully" });
         }
 
-        
-      
+
+
 
 
 
@@ -264,45 +282,53 @@ await orderRepo.DeleteAsync(orderId);
             {
                 return 0;
             }
-            decimal cost=0m; 
-            bool IsExist; 
-SpecialCharge? special =  specialRepo.GetSpecialCharge(order.SellerID,order.CityID ,out IsExist);
+            decimal cost = 0m;
+            bool IsExist;
+            SpecialCharge? special = specialRepo.GetSpecialCharge(order.SellerID, order.CityID, out IsExist);
             if (IsExist)
             {
                 cost += (decimal)special.SpecialChargeForSeller;
             }
-            else 
+            else
             {
-                cost += order.City.NormalCharge; 
+                cost += order.City.NormalCharge;
             }
             if (order.IsForVillage) {
                 cost += 20; //Now i set the constatnt value for delivery to village 
-            } 
-            cost+= order.TypeOfCharge.Cost;
+            }
+            cost += order.TypeOfCharge.Cost;
             if (order.TypeOfReceipt.Name == "Store")
             {
                 if (order.Seller.PickUp > 0)
                 {
                     cost += order.Seller.PickUp;
                 }
-                else 
-                { 
-                cost += order.City.PickUpCharge; 
+                else
+                {
+                    cost += order.City.PickUpCharge;
                 }
             }
             Weight weight = weightRepo.GetDefaultWeight(out IsExist);
             if (IsExist)
             {
                 if (order.Weight > weight.DefaultWeight)
-                { 
-    cost += (order.Weight - weight.DefaultWeight) * weight.AdditionalWeight;
+                {
+                    cost += (order.Weight - weight.DefaultWeight) * weight.AdditionalWeight;
                 }
 
             }
-return cost;                                   
+            return cost;
         }
-         
 
+        [HttpPut("RejectOrder")]
+        public ActionResult RejectOrder(RejectDTO dto)
+        {
+            if (!ModelState.IsValid)
+            { 
+            
+            }
+            return NoContent(); 
+        }
 
     }
 }

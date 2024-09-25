@@ -11,13 +11,7 @@ namespace Data_Access_Layer.DTO
     public class AddOrderStatusDTO
     {
         [UniqueOrderStatus]
-        [AllowedValues("New", "Waiting",
-            "AssignedToAgent", "Delivered",
-            "UnReachable", "Postponed", 
-            "PartiallyDelivered",
-            "Canceled", "RejectedWithPayment",
-            "RejectWithPartialPayment",
-            "RejectWithPartialPayment")]
+       
         public string Name { get; set; }
     }
 }
