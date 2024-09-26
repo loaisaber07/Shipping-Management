@@ -55,10 +55,11 @@ namespace Shippping_Managment.Controllers
             IEnumerable<GetSellerDTO> get = SellerService.GetAllSellers(sellerList);
             return Ok(get);
         }
+        
         [HttpGet]
-        [Route("ScreenForSeller")]
+        [Route("ScreenForSeller{id}")]
         public async Task<ActionResult> ScreenForSeller(string id) {
-          Seller? seller=await sellerRepo.DisplayScreenForSeller(id);
+            Seller? seller=await sellerRepo.DisplayScreenForSeller(id);
             if (seller is null) {
                 return BadRequest();
             }
