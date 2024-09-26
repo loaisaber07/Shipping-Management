@@ -35,7 +35,7 @@ namespace Shippping_Managment.Controllers
             return Ok(new {Message="Seller Deleted"});
 
         }
-        [HttpGet]
+        [HttpGet("{sellerId}")]
         public async Task<ActionResult> GetSellerById(string sellerId)
         {
            Seller? seller = await userRepo.GetSellerAsyncById(sellerId);

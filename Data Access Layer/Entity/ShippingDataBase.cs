@@ -82,9 +82,9 @@ namespace Data_Access_Layer.Entity
                 {
                     Id = "admin-user-id", // Ensure this is a valid, unique ID
                     UserName = "admin",
-                    NormalizedUserName = "ADMIN@EXAMPLE.COM",
+                    NormalizedUserName = "ADMIN",
                     Email = "admin@example.com",
-                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                    NormalizedEmail = "ADMIN",
                     EmailConfirmed = true,
                     PhoneNumber = "01004117527",
                     PasswordHash = hasher.HashPassword(null, "Admin@123") // Hashed password
