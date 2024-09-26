@@ -27,6 +27,21 @@ namespace Shippping_Managment.Controllers
             return Ok(DTO);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetPaymentByID(int id)
+        {
+            TypeOfPayment? p = await paymentRepo.GetAsyncById(id);
+            if(p == null)
+            {
+                return NotFound(new { Message = "Type of Payment Not Found" });
+            }
+            GetTypeOfPaymentDTO dto = new()
+            {
+                Id = p.ID,
+                Name = p.Name
+            };
+            return Ok(dto);
+        }
         [HttpPost]
         [Authorize(Policy = "Admin")]
 
