@@ -74,7 +74,7 @@ namespace Shippping_Managment.Controllers
             ApplicationUser? user = await userManager.FindByIdAsync(id);
             if (user is null)
             {
-                return NotFound(); 
+                return Unauthorized(); 
             }
             #region for seller
             bool check = await userManager.IsInRoleAsync(user, "Seller");
