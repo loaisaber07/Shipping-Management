@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ShippingDataBase))]
-    [Migration("20240924200347_v1")]
-    partial class v1
+    [Migration("20240926155713_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,19 +130,19 @@ namespace Data_Access_Layer.Migrations
                         {
                             Id = "admin-user-id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f76a459f-198f-4942-82c8-a2f1e617df84",
+                            ConcurrencyStamp = "aaf6313f-49ae-44a1-a21e-edb630ac5f1c",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELSix7VHICH8EN4VDsVk4H6HR6QcF652iJhrrWhY23nWKjztsq/GS17WSQZyp/ElMA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOAg412cHTOkmyeQnnQ+wOyb0SkS/AxClJUq3JfQ6sDEHAzZPWxxP6vF9Cv+9HbPfQ==",
                             PhoneNumber = "01004117527",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "34c8a389-5127-4d0e-abb5-6bd284ab3d81",
+                            SecurityStamp = "e844f55a-d139-4b6b-97a7-ea74197dbcb8",
                             Status = true,
                             TwoFactorEnabled = false,
-                            UserName = "admin@example.com"
+                            UserName = "admin"
                         });
                 });
 
@@ -157,7 +157,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 24, 23, 3, 46, 6, DateTimeKind.Local).AddTicks(8091));
+                        .HasDefaultValue(new DateTime(2024, 9, 26, 18, 57, 11, 874, DateTimeKind.Local).AddTicks(3155));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -210,7 +210,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 24, 23, 3, 46, 7, DateTimeKind.Local).AddTicks(4478));
+                        .HasDefaultValue(new DateTime(2024, 9, 26, 18, 57, 11, 875, DateTimeKind.Local).AddTicks(2628));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -302,7 +302,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 24, 23, 3, 46, 8, DateTimeKind.Local).AddTicks(669));
+                        .HasDefaultValue(new DateTime(2024, 9, 26, 18, 57, 11, 876, DateTimeKind.Local).AddTicks(1107));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -319,6 +319,12 @@ namespace Data_Access_Layer.Migrations
 
                     b.Property<int>("OrderStatusID")
                         .HasColumnType("int");
+
+                    b.Property<string>("ReasonOfReject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Rejected")
+                        .HasColumnType("bit");
 
                     b.Property<string>("SellerID")
                         .IsRequired()
@@ -338,6 +344,9 @@ namespace Data_Access_Layer.Migrations
 
                     b.Property<int>("Weight")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("chargeCost")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ID");
 
@@ -436,6 +445,11 @@ namespace Data_Access_Layer.Migrations
                         {
                             ID = 11,
                             Name = "Delivered"
+                        },
+                        new
+                        {
+                            ID = 12,
+                            Name = "Rejected"
                         });
                 });
 

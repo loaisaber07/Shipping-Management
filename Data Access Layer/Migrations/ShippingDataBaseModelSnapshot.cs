@@ -127,19 +127,19 @@ namespace Data_Access_Layer.Migrations
                         {
                             Id = "admin-user-id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cc2654f2-72b1-4e86-a70a-eab622dc0ac7",
+                            ConcurrencyStamp = "aaf6313f-49ae-44a1-a21e-edb630ac5f1c",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELzyGxeNenbIrc8Nuc0hDcd7ECo2sQfB3nf6zS0Hjck8zs8ytCwX81gc9IJGTdYcuw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOAg412cHTOkmyeQnnQ+wOyb0SkS/AxClJUq3JfQ6sDEHAzZPWxxP6vF9Cv+9HbPfQ==",
                             PhoneNumber = "01004117527",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1256d92b-52c7-411c-b33e-0b7f789b077c",
+                            SecurityStamp = "e844f55a-d139-4b6b-97a7-ea74197dbcb8",
                             Status = true,
                             TwoFactorEnabled = false,
-                            UserName = "admin@example.com"
+                            UserName = "admin"
                         });
                 });
 
@@ -154,7 +154,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DataAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 25, 20, 51, 25, 407, DateTimeKind.Local).AddTicks(8180));
+                        .HasDefaultValue(new DateTime(2024, 9, 26, 18, 57, 11, 874, DateTimeKind.Local).AddTicks(3155));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -207,7 +207,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 25, 20, 51, 25, 408, DateTimeKind.Local).AddTicks(848));
+                        .HasDefaultValue(new DateTime(2024, 9, 26, 18, 57, 11, 875, DateTimeKind.Local).AddTicks(2628));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -299,7 +299,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<DateTime>("DateAdding")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 25, 20, 51, 25, 408, DateTimeKind.Local).AddTicks(3544));
+                        .HasDefaultValue(new DateTime(2024, 9, 26, 18, 57, 11, 876, DateTimeKind.Local).AddTicks(1107));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -442,6 +442,11 @@ namespace Data_Access_Layer.Migrations
                         {
                             ID = 11,
                             Name = "Delivered"
+                        },
+                        new
+                        {
+                            ID = 12,
+                            Name = "Rejected"
                         });
                 });
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data_Access_Layer.Migrations
 {
     /// <inheritdoc />
-    public partial class initialdatabase : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,7 +34,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 24, 21, 45, 18, 486, DateTimeKind.Local).AddTicks(492)),
+                    DataAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 26, 18, 57, 11, 874, DateTimeKind.Local).AddTicks(3155)),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -49,7 +49,7 @@ namespace Data_Access_Layer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 24, 21, 45, 18, 486, DateTimeKind.Local).AddTicks(8953))
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 26, 18, 57, 11, 875, DateTimeKind.Local).AddTicks(2628))
                 },
                 constraints: table =>
                 {
@@ -400,8 +400,11 @@ namespace Data_Access_Layer.Migrations
                     IsForVillage = table.Column<bool>(type: "bit", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Weight = table.Column<int>(type: "int", nullable: false),
-                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 24, 21, 45, 18, 487, DateTimeKind.Local).AddTicks(9943)),
+                    DateAdding = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 26, 18, 57, 11, 876, DateTimeKind.Local).AddTicks(1107)),
                     VillageOrStreet = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Rejected = table.Column<bool>(type: "bit", nullable: false),
+                    ReasonOfReject = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    chargeCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     BranchID = table.Column<int>(type: "int", nullable: false),
                     GovernID = table.Column<int>(type: "int", nullable: false),
                     CityID = table.Column<int>(type: "int", nullable: false),
@@ -525,7 +528,7 @@ namespace Data_Access_Layer.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Address", "BranchID", "City", "ConcurrencyStamp", "Email", "EmailConfirmed", "FiledJobID", "Govern", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Status", "TwoFactorEnabled", "UserName", "UserType" },
-                values: new object[] { "admin-user-id", 0, null, null, null, "01a2c379-249e-4a68-85b3-379e98db5131", "admin@example.com", true, null, null, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEAC9UHL7Gm+Vu4GAv2BCP/ZcUbD7YHd/vm/0+fO3CN45QWstjtLzIxI0dPsJsbohSQ==", "01004117527", false, "90242347-1b6d-42aa-a5cc-7594790affcc", true, false, "admin@example.com", "ApplicationUser" });
+                values: new object[] { "admin-user-id", 0, null, null, null, "aaf6313f-49ae-44a1-a21e-edb630ac5f1c", "admin@example.com", true, null, null, false, null, "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEOAg412cHTOkmyeQnnQ+wOyb0SkS/AxClJUq3JfQ6sDEHAzZPWxxP6vF9Cv+9HbPfQ==", "01004117527", false, "e844f55a-d139-4b6b-97a7-ea74197dbcb8", true, false, "admin", "ApplicationUser" });
 
             migrationBuilder.InsertData(
                 table: "productStatuses",
@@ -542,7 +545,8 @@ namespace Data_Access_Layer.Migrations
                     { 8, "RejectedWithPayment" },
                     { 9, "RejectWithPartialPayment" },
                     { 10, "RejectedWithoutPayment" },
-                    { 11, "Delivered" }
+                    { 11, "Delivered" },
+                    { 12, "Rejected" }
                 });
 
             migrationBuilder.InsertData(
@@ -552,6 +556,15 @@ namespace Data_Access_Layer.Migrations
                 {
                     { 1, "Precentage" },
                     { 2, "FixedAmount" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "typeOfReceipts",
+                columns: new[] { "ID", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Branch" },
+                    { 2, "Store" }
                 });
 
             migrationBuilder.InsertData(
