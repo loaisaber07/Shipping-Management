@@ -38,6 +38,9 @@ namespace Data_Access_Layer.Entity
         public int Weight { get; set; }
         public DateTime DateAdding { get;}
         public string? VillageOrStreet { get; set; }
+        public bool Rejected { get; set; } = false;
+        public string? ReasonOfReject { get; set; } = string.Empty;
+        public decimal chargeCost { get; set; } = 0;
 
         #region mapping the relation between product and branch 
         [ForeignKey("Branch")]

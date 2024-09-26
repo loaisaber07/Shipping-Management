@@ -98,7 +98,7 @@ namespace Shippping_Managment.Controllers
                     string token = await GetTokenAsync(user, user.Id);
                     Response.Cookies.Append("jwt", token, cookieOptions);
 
-                 return Ok(new { Message = "Login Successful" ,Role = "Admin",UserName = user.UserName });
+                 return Ok(new { Message = "Login Successful" ,Role = roles,UserName = user.UserName });
                 }
             }
             if (log.Username is not null)

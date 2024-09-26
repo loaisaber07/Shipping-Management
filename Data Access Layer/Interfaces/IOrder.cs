@@ -18,5 +18,8 @@ namespace Data_Access_Layer.Interfaces
         Task<IEnumerable<Order?>> GetOrderByTimeAdding(DateTime begin, DateTime end, int statusId);
         bool ISEXIST(int id); 
         IQueryable<Order> GetOrderByBranch(int? branchId);
+        IQueryable<Order> GetOrdersBySellerId(string? sellerId);
+        IQueryable<Order> GetOrdersByAgentId(string? agentId);
+        Task<Order?> GetOrderForGetChargeCost(int id); 
     }
 }

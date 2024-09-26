@@ -98,7 +98,7 @@ namespace Data_Access_Layer.Entity
                 }
             );
             #endregion
-            #region Add 12 OrderStatus
+            #region Add 13 OrderStatus
             builder.Entity<OrderStatus>().HasData(new OrderStatus { 
             ID=1 , 
             Name="New", 
@@ -152,6 +152,11 @@ namespace Data_Access_Layer.Entity
             {
                 ID = 11,
                 Name = "Delivered",
+            });
+            builder.Entity<OrderStatus>().HasData(new OrderStatus
+            {
+                ID = 12,
+                Name = "Rejected",
             });
             #endregion
             #region Add  2 TypeOfOffer

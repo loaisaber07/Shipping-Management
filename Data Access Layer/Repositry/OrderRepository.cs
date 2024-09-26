@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Data_Access_Layer.Repositry
 {
@@ -63,6 +64,22 @@ namespace Data_Access_Layer.Repositry
 
         }
 
+        public async  Task<Order?> GetOrderForGetChargeCost(int id)
+        {
+ return    await     dataBase.Orders
+                  .Include(o => o.Seller)
+                  .Include(s => s.Agent)
+                  .Include(s => s.Agent)
+                  .ThenInclude(t => t.TypeOfOffer)
+                  .Include(o => o.OrderStatus)
+                  .Include(c => c.City)
+                  .Include(s => s.Govern)
+                  .Include(t => t.TypeOfCharge)
+                  .Include(t => t.TypeOfReceipt)
+                  .AsSplitQuery()
+                  .FirstOrDefaultAsync(s=>s.ID ==id);
+        }
+
         public async Task<Order?> GetOrderForShippinCost(int id)
         {
             Order? order = await dataBase.Orders
@@ -74,6 +91,25 @@ namespace Data_Access_Layer.Repositry
                 .Include(t=>t.TypeOfReceipt)
                 .FirstOrDefaultAsync (o=>o.ID==id);
             return order;
+        }
+
+        public IQueryable<Order> GetOrdersByAgentId(string? agentId)
+        {
+          return  dataBase
+                .Orders
+               .AsNoTracking()
+               .Include(s => s.Products)
+               .Where(s => s.AgentID == agentId);
+        }
+
+        public   IQueryable<Order> GetOrdersBySellerId(string? sellerId)
+        {
+            return       dataBase
+                         .Orders
+                         .AsNoTracking()
+                         .Include(s => s.Products)
+                         .Where(s => s.SellerID == sellerId);
+                        
         }
 
         public async Task<SpecialCharge?> GetSpecialForSeller(int id,string sellerId)
