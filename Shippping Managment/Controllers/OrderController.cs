@@ -114,7 +114,7 @@ namespace Shippping_Managment.Controllers
 
         }
 
-        [Authorize(Policy = "AdminAddOrder Seller")]
+        [Authorize(Policy = "Seller")]
         [HttpPost]
         public async Task<ActionResult> AddOrder(AddOrderDTO orderDTO)
         {
