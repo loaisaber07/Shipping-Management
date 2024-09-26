@@ -49,9 +49,9 @@ namespace Shippping_Managment.Controllers
         }
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult>GetAllSellers()
+        public ActionResult GetAllSellers()
         {
-           IEnumerable<Seller> sellerList= await userRepo.GetAllSellers();
+           IEnumerable<Seller> sellerList=  userRepo.GetAllSellers();
             IEnumerable<GetSellerDTO> get = SellerService.GetAllSellers(sellerList);
             return Ok(get);
         }

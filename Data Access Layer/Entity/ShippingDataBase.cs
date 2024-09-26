@@ -81,7 +81,7 @@ namespace Data_Access_Layer.Entity
                 new ApplicationUser
                 {
                     Id = "admin-user-id", // Ensure this is a valid, unique ID
-                    UserName = "admin@example.com",
+                    UserName = "admin",
                     NormalizedUserName = "ADMIN@EXAMPLE.COM",
                     Email = "admin@example.com",
                     NormalizedEmail = "ADMIN@EXAMPLE.COM",

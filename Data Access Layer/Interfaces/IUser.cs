@@ -22,7 +22,7 @@ namespace Data_Access_Layer.Interfaces
         Task<bool>CreateAgent(Agent agent,string password);
         Task<bool> AddRole(string Email, string roleName);
         Task<IEnumerable<ApplicationUser>> GetAllEmployee();
-        Task<IEnumerable<Seller>> GetAllSellers();
+        IEnumerable<Seller> GetAllSellers();
         Task<IEnumerable<Agent>> GetAllAgents();
         Task<bool> UpdateUser(ApplicationUser user);
 

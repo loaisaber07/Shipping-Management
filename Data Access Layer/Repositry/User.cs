@@ -137,36 +137,44 @@ namespace Data_Access_Layer.Repositry
 
         public async Task<Seller?> GetSellerAsyncById(string id)
         {
-            Seller? user = await db.sellers
-                 .Include(s => s.Orders)
+      return   await    db.sellers
+                .Include(s => s.Branch)
+                .Include(s => s.Orders)
                  .Include(s => s.SpecialCharges)
-                 .FirstOrDefaultAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == id);
+            //Seller? user = await db.sellers
+            //     .Include(s => s.Orders)
+            //     .Include(s => s.SpecialCharges)
+            //     .FirstOrDefaultAsync(s => s.Id == id);
 
 
-            if (user is not null)
-            {
-                bool chickRole = await userManager.IsInRoleAsync(user, "Seller");
-                if (chickRole)
-                {
-                    return user;
-                }
-            }
-            return null;
+            //if (user is not null)
+            //{
+            //    bool chickRole = await userManager.IsInRoleAsync(user, "Seller");
+            //    if (chickRole)
+            //    {
+            //        return user;
+            //    }
+            //}
+            //return null;
         }
-        public async Task<IEnumerable<Seller>> GetAllSellers()
+        public IEnumerable<Seller> GetAllSellers()
         {
-            IEnumerable<ApplicationUser> users = await userManager.Users.ToListAsync();
-            ICollection<Seller> sellers = new List<Seller>();
-            foreach (ApplicationUser user in users)
-            {
-                if (await userManager.IsInRoleAsync(user, "Seller"))
-                {
+        return    db.sellers
+                .Include(s => s.Branch)
+                .AsEnumerable<Seller>();
+            //IEnumerable<ApplicationUser> users = await userManager.Users.ToListAsync();
+            //ICollection<Seller> sellers = new List<Seller>();
+            //foreach (ApplicationUser user in users)
+            //{
+            //    if (await userManager.IsInRoleAsync(user, "Seller"))
+            //    {
 
-                    Seller seller = (Seller)user;
-                    sellers.Add(seller);
-                }
-            }
-            return sellers;
+            //        Seller seller = (Seller)user;
+            //        sellers.Add(seller);
+            //    }
+            //}
+            //return sellers;
         }
         public async Task<bool> UpdateUser(ApplicationUser user)
         {

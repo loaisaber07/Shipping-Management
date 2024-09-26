@@ -202,7 +202,7 @@ namespace Shippping_Managment.Controllers
                 report.ClientGover = order.Govern.Name;
                 report.ClientCity = order.City.Name;
                 report.OrderCost = order.Cost;
-                report.ChargeCost = await GetShippingCost(order);
+                report.ChargeCost = order.chargeCost;
                 report.OrderDate = order.DateAdding;
                 if (order?.Agent?.TypeOfOffer.Name == "Precentage" && order.Agent is not null)
                 {
@@ -321,13 +321,22 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPut("RejectOrder")]
-        public ActionResult RejectOrder(RejectDTO dto)
+        public async Task<ActionResult> RejectOrder(RejectDTO dto)
         {
             if (!ModelState.IsValid)
-            { 
-            
+            {
+                return BadRequest(new { Message = "Invalid Data! " }); 
             }
-            return NoContent(); 
+      Order? order =await orderRepo.GetById(dto.OrderId);
+            if (order is null) {
+                return NotFound(new { Message = "There is no Order meet this id!" }); 
+            }
+            order.OrderStatusID = 12;
+            order.ReasonOfReject = dto.Message;  
+            order.Rejected=true;
+orderRepo.Update(order); 
+            await orderRepo.SaveAsync();
+            return Ok(new { Message = "Successfully Rejected!" });
         }
 
     }

@@ -39,7 +39,8 @@ namespace Business_Layer.Services.Seller
                 Name=seller.UserName,
                 Phone=seller.PhoneNumber,
                 ValueOfRejectedOrder = seller.ValueOfRejectedOrder,
-                PickUp = seller.PickUp
+                PickUp = seller.PickUp , 
+                BranchName = seller.Branch.Name
 
             };
             return dto;
@@ -59,7 +60,8 @@ namespace Business_Layer.Services.Seller
                     Govern = dto.Govern,
                     Name = dto.UserName,
                     Phone = dto.PhoneNumber,
-                    PickUp = dto.PickUp
+                    PickUp = dto.PickUp , 
+                    BranchName = dto.Branch.Name
                 };
                 getSellerDTOs.Add(getSeller);
             }

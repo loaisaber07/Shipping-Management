@@ -31,14 +31,17 @@ namespace Data_Access_Layer.DTO.Order
 
         public int BranchID { get; set; }
 
-        public int GovernID { get; set; }
-        public int CityID { get; set; }
+        public string GovernName { get; set; }
+        public string CityName { get; set; }
         public string SellerID { get; set; }
         public int TypeOfPaymentID { get; set; }
         public int TypeOfChargeID { get; set; }
         public int OrderStatusID { get; set; }
         public int TypeOfReceiptID { get; set; }
         public DateTime Date { get; set; }
+        public decimal ChargeCost { get; set; }
+        public bool Rejected { get; set; }=false;
+        public string? ReasonForRjected { get; set; } = string.Empty;
         public ICollection<GetProductDTO>? ProductList { get; set; }
     }
 }

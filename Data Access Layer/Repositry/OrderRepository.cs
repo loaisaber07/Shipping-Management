@@ -25,7 +25,9 @@ namespace Data_Access_Layer.Repositry
             return    dataBase
                         .Orders
                         .AsNoTracking()
-                        .Include(s => s.Products);
+                        .Include(s => s.Products)
+                        .Include(s=>s.City)
+                        .Include(s=>s.Govern);
         }
 
         public async Task<Order?> GetById(int id)

@@ -74,7 +74,7 @@ namespace Business_Layer.Services.Order
                 ClientNumber2 = order.ClientNumber2,
                 Cost = order.Cost,
                 Email = order.Email,
-                GovernID= order.GovernID,
+                GovernName= order.Govern.Name,
                 Weight = order.Weight,
                 Id=order.ID,
                 IsForVillage= order.IsForVillage,
@@ -85,7 +85,10 @@ namespace Business_Layer.Services.Order
                 TypeOfPaymentID= order.TypeOfPaymentID,
                 TypeOfReceiptID=order.TypeOfReceiptID,
                 Note= order.Note,
-                CityID = order.CityID,
+                CityName = order.City.Name, 
+                ChargeCost=order.chargeCost, 
+                Rejected = order.Rejected,
+                ReasonForRjected = order.ReasonOfReject,
                 ProductList = order.Products.Select(p => new GetProductDTO {
                     Id = p.ID,
                     Name = p.Name,
@@ -110,8 +113,8 @@ namespace Business_Layer.Services.Order
                 Email = s.Email,
                 Cost = s.Cost,
                 BranchID = s.BranchID,
-                CityID = s.CityID,
-                GovernID = s.GovernID,
+                CityName = s.City.Name,
+                GovernName = s.Govern.Name,
                 Id = s.ID,
                 IsForVillage = s.IsForVillage,
                 Note = s.Note,
@@ -122,13 +125,16 @@ namespace Business_Layer.Services.Order
                 VillageOrStreet = s.VillageOrStreet,
                 TypeOfReceiptID =s.TypeOfReceiptID,
                 Weight = s.Weight, 
-                Date=s.DateAdding,
+                Date=s.DateAdding, 
+                ChargeCost=s.chargeCost, 
+                Rejected = s.Rejected,
+                ReasonForRjected = s.ReasonOfReject,
                 ProductList = s.Products.Select(p => new GetProductDTO {
                 Id= p.ID,
                 Name= p.Name,
                 OrderId= p.OrderID,
                 ProductWeight= p.Weight,
-                Quantity= p.Quantity
+                Quantity= p.Quantity 
                 }).ToList()
 
 
