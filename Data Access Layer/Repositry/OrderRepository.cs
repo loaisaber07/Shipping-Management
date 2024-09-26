@@ -66,6 +66,14 @@ namespace Data_Access_Layer.Repositry
 
         }
 
+        public async Task<IEnumerable<Order?>> GetOrderForAdmin()
+        {
+            return await dataBase.Orders
+                     .AsNoTracking()
+                     .Include(s => s.OrderStatus)
+                     .ToListAsync();
+        }
+
         public async  Task<Order?> GetOrderForGetChargeCost(int id)
         {
  return    await     dataBase.Orders
@@ -85,6 +93,7 @@ namespace Data_Access_Layer.Repositry
         public async Task<Order?> GetOrderForShippinCost(int id)
         {
             Order? order = await dataBase.Orders
+                .AsNoTracking()
                 .Include(o=>o.Seller)
                 .Include(o=>o.OrderStatus)
                 .Include(c=>c.City)
@@ -93,6 +102,15 @@ namespace Data_Access_Layer.Repositry
                 .Include(t=>t.TypeOfReceipt)
                 .FirstOrDefaultAsync (o=>o.ID==id);
             return order;
+        }
+
+        public async Task<IEnumerable<Order?>> GetOrderForSpecificAgent(string agentId)
+        {
+      return  await   dataBase.Orders 
+                .AsNoTracking()
+                .Include(s=>s.OrderStatus)
+                .Where(s=>s.AgentID ==agentId)
+                .ToListAsync();
         }
 
         public IQueryable<Order> GetOrdersByAgentId(string? agentId)

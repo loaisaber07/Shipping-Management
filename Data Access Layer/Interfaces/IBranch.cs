@@ -15,5 +15,6 @@ namespace Data_Access_Layer.Interfaces
         IEnumerable<BranchDTO> GetAll();
         Task<bool> IsExistByID(int id);  
         void AddBranch(string branch);
+        Task<Branch?> GetOrdersInBranch(int? branchId);
     }
 }

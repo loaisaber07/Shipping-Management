@@ -20,6 +20,8 @@ namespace Data_Access_Layer.Interfaces
         IQueryable<Order> GetOrderByBranch(int? branchId);
         IQueryable<Order> GetOrdersBySellerId(string? sellerId);
         IQueryable<Order> GetOrdersByAgentId(string? agentId);
-        Task<Order?> GetOrderForGetChargeCost(int id); 
+        Task<Order?> GetOrderForGetChargeCost(int id);  
+        Task<IEnumerable<Order?>> GetOrderForSpecificAgent(string agentId); 
+        Task<IEnumerable<Order?>> GetOrderForAdmin();
     }
 }

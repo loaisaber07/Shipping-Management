@@ -28,8 +28,8 @@ namespace Data_Access_Layer.Repositry
                     .Include(s => s.Orders)
                     .ThenInclude(s => s.OrderStatus)
                     .AsSplitQuery()
-                    .Where(s => s.Id == id)
-                    .FirstOrDefaultAsync();  
+                    .FirstOrDefaultAsync(s => s.Id == id);  
+                    
                 
         }
     }
