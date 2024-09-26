@@ -84,7 +84,7 @@ namespace Data_Access_Layer.Entity
                     UserName = "admin",
                     NormalizedUserName = "ADMIN",
                     Email = "admin@example.com",
-                    NormalizedEmail = "ADMIN",
+                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
                     EmailConfirmed = true,
                     PhoneNumber = "01004117527",
                     PasswordHash = hasher.HashPassword(null, "Admin@123") // Hashed password
