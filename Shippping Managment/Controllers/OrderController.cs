@@ -3,6 +3,7 @@ using Business_Layer.Services.Products;
 using Data_Access_Layer.DTO.Order;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
+using Data_Access_Layer.Repositry;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -80,7 +81,7 @@ namespace Shippping_Managment.Controllers
 
         [Authorize(Policy = "AdminOrSeller")]
         [HttpGet]
-        [Route("GetOrderById{id:int}")]
+        [Route("GetOrderById/{id:int}")]
         public async Task<ActionResult> GetOrderById(int id)
         {
             Order? order = await orderRepo.GetById(id);
@@ -213,64 +214,56 @@ namespace Shippping_Managment.Controllers
 
                     report.CompanyAmount = order?.Agent?.ThePrecentageOfCompanyFromOffer ?? 0;
                 }
+                if(order.OrderStatusID==11|| order.OrderStatusID == 8)
+                {
+                    report.PaidCharge=order.chargeCost;
+                }
                 dtos.Add(report);
 
             }
             return Ok(dtos);
         }
 
-        [Authorize(Policy = ("AdminOrEmployee"))]
-        [HttpPut("EmployeeChangeOrderStatus")]
-        public async Task<ActionResult> EmployeeChangeOrderStatus(EmployeeUpdateOrderStatusDTO orderDTO)
+        [Authorize(Roles ="Admin,Employee,Agent")]
+        [HttpPut("ChangeOrderStatus")]
+        public async Task<ActionResult> ChangeOrderStatus(EmployeeUpdateOrderStatusDTO orderDTO)
         {
             Order? order = await orderRepo.GetById(orderDTO.ID);
             if (order is null)
             {
                 return BadRequest(new { Message = "Order Not found !" });
             }
-            OrderStatus? modifiedStatus = await orderStatusRepo.GetAsyncById(orderDTO.OrderStatusID);
-            if (modifiedStatus is null)
-            {
-                return NotFound(new { Message = "Order Status Not Found !!" });
-            }
-            if (modifiedStatus.Name != "Waiting")
-            {
-                return BadRequest(new { Message = "Can 't Update Status" });
-            }
             order.OrderStatusID = orderDTO.OrderStatusID;
             orderRepo.Update(order);
             await orderRepo.SaveAsync();
             return Ok(new { Message = "Update Successfully" });
         }
-        [Authorize(Roles = ("Admin,Agent"))]
-        [HttpPut("AgentChangeOrderStatus")]
-        public async Task<ActionResult> AgentChangeOrderStatus(EmployeeUpdateOrderStatusDTO orderDTO)
+
+        
+        [HttpPut("AssignToAgent")]
+        [Authorize(Policy ="AdminOrEmployee")]
+        public async Task<ActionResult> AssignToAgent(AssignToAgentDTO asignTo)
         {
-            Order? order = await orderRepo.GetById(orderDTO.ID);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Message = "Invalid Data" });
+            }
+           Order? order = await orderRepo.GetAsyncById(asignTo.OrderID);
             if (order is null)
             {
-                return BadRequest(new { Message = "Not found !" });
+                return NotFound(new { Message = "Order Not Found !!" });
             }
-            OrderStatus? modifiedStatus = await orderStatusRepo.GetAsyncById(orderDTO.OrderStatusID);
-            if (modifiedStatus is null)
+            ApplicationUser? agent = await userManager.FindByIdAsync(asignTo.agentID);
+            if (agent is null)
             {
-                return NotFound(new { Message = "Order Status Not Found !!" });
+                return NotFound(new { Message = "Agent Not Found !!" });
             }
-            if (modifiedStatus.Name == "New"
-                || modifiedStatus.Name == "UnReachable"
-                || modifiedStatus.Name == "AssignedToAgent")
-            {
-
-                return BadRequest(new { Message = "Can 't Update Status" });
-            }
-            order.OrderStatusID = orderDTO.OrderStatusID;
+            order.AgentID=asignTo.agentID;
+            order.OrderStatusID = 3;
             orderRepo.Update(order);
             await orderRepo.SaveAsync();
-            return Ok(new { Message = "Update Successfully" });
+            return Ok(new { Message = "Order Assigned To Agent" });
         }
-
-
-
 
 
 
