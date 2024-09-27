@@ -178,7 +178,7 @@ namespace Shippping_Managment.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("GetShippingCost{beignningDate:datetime}/{endingDate:datetime}/{orderStatusId:int}")]
+        [Route("Report/{beignningDate:datetime}/{endingDate:datetime}/{orderStatusId:int}")]
         public async Task<ActionResult> ReportOrders(DateTime beignningDate, DateTime endingDate, int orderStatusId)
         {
             IEnumerable<Order?> orders = await orderRepo.GetOrderByTimeAdding(beignningDate, endingDate, orderStatusId);
