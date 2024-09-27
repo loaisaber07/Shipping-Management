@@ -24,7 +24,8 @@ namespace Data_Access_Layer.Interfaces
         Task<IEnumerable<ApplicationUser>> GetAllEmployee();
         IEnumerable<Seller> GetAllSellers();
         Task<IEnumerable<Agent>> GetAllAgents();
-        Task<bool> UpdateUser(ApplicationUser user);
+        Task<bool> UpdateUser(ApplicationUser user); 
+
 
     }
 }

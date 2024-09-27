@@ -55,6 +55,15 @@ Status=s.Status
                 
                 }
 
+        public async Task<Branch?> GetOrdersInBranch(int? branchId)
+        {
+    return    await    dataBase.branches
+                .Include(s=>s.Orders)
+                .ThenInclude(s=>s.OrderStatus)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(s=>s.ID == branchId);
+        }
+
         public bool IsExist(string name)
         {
         Branch? b=    dataBase.branches

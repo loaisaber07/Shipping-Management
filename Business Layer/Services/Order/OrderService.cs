@@ -1,5 +1,7 @@
 ﻿using Data_Access_Layer.DTO.Order;
+using Data_Access_Layer.DTO.Seller;
 using Data_Access_Layer.Entity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -165,6 +167,19 @@ namespace Business_Layer.Services.Order
 Quantity= p.Quantity
             }).ToList();
         return order;
+        }
+
+        public static IEnumerable<DisplayScreenForSeller> GetDasboardForEmployee(IEnumerable<Data_Access_Layer.Entity.Order> orders)
+        {
+            ICollection<DisplayScreenForSeller> dtos = new List<DisplayScreenForSeller>();
+            foreach (var order in orders)
+            {
+                dtos.Add(new DisplayScreenForSeller { 
+                StatusName = order.OrderStatus.Name,
+                StatusId=order.OrderStatusID
+                });
+            }
+            return  dtos;   
         }
         
     }
