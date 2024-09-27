@@ -35,6 +35,8 @@ namespace Data_Access_Layer.Repositry
            Order? order = await dataBase
                 .Orders
                 .Include(o=>o.Products)
+                .Include(g=>g.Govern)
+                .Include (s=>s.City)
                 .FirstOrDefaultAsync(o=>o.ID==id);
             return order;
         }
