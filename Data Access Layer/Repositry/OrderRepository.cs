@@ -34,7 +34,11 @@ namespace Data_Access_Layer.Repositry
         {
            Order? order = await dataBase
                 .Orders
+                .AsNoTracking()
                 .Include(o=>o.Products)
+                .Include(g=>g.Govern)
+                .Include (s=>s.City)
+                .Include(s=>s.Seller)
                 .FirstOrDefaultAsync(o=>o.ID==id);
             return order;
         }
@@ -78,6 +82,8 @@ namespace Data_Access_Layer.Repositry
         {
  return    await     dataBase.Orders
                   .Include(o => o.Seller)
+                  .ThenInclude(c=>c.StoreCity)
+                  .AsSplitQuery()
                   .Include(s => s.Agent)
                   .Include(s => s.Agent)
                   .ThenInclude(t => t.TypeOfOffer)
