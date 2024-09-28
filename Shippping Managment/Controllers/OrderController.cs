@@ -298,7 +298,7 @@ namespace Shippping_Managment.Controllers
                 }
                 else
                 {
-                    cost += order.City.PickUpCharge;
+                    cost += order.Seller.StoreCity.PickUpCharge;
                 }
             }
             Weight weight = weightRepo.GetDefaultWeight(out IsExist);
