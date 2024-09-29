@@ -158,7 +158,7 @@ namespace Shippping_Managment.Controllers
             await orderRepo.SaveAsync();
             return Ok(new { Message = "Deleted Successfully " });
         }
-        [Authorize(Policy = "Seller")]
+        [Authorize(Policy = "AdminOrSeller")]
         [HttpPut]
         public async Task<ActionResult> UpdateOrder(UpdateOrderDTO orderDTO) {
             Order? order = await orderRepo.GetById(orderDTO.ID);
