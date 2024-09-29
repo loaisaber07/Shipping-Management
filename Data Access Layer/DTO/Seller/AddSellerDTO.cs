@@ -27,6 +27,8 @@ namespace Data_Access_Layer.DTO.Seller
         public string Password { get; set; }
         [Required]
         public string StoreName { get; set; }
+        public string Govern { get; set; }
+        public string City { get; set; }
         public int StoreCityId { get; set; }
         public int PickUp { get; set; } = 0;
         public int ValueOfRejectedOrder { get; set; } = 0;

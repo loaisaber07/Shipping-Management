@@ -32,7 +32,7 @@ namespace Shippping_Managment.Controllers
             this.branchRepo = branchRepo;
             this.orderRepo = orderRepo;
         }
-        [HttpDelete("{sellerId:alpha}")]
+        [HttpDelete("{sellerId}")]
         [Authorize(Policy = "Admin")]
 
         public async Task<ActionResult> Delete(string sellerId)

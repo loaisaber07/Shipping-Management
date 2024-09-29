@@ -22,6 +22,8 @@ namespace Business_Layer.Services.Seller
                 BranchID=dto.BranchID,
                 StoreCityId=dto.StoreCityId,
                 StoreName=dto.StoreName,
+                Govern=dto.Govern,
+                City=dto.City,
                 PickUp=dto.PickUp,
                 ValueOfRejectedOrder=dto.ValueOfRejectedOrder
             };
