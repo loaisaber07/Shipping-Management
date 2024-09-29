@@ -36,7 +36,7 @@ namespace Data_Access_Layer.Entity
         public string? Note { get; set; }
         [Required]
         public int Weight { get; set; }
-        public DateTime DateAdding { get;}
+        public DateTime DateAdding { get; set; }
         public string? VillageOrStreet { get; set; }
         public bool Rejected { get; set; } = false;
         public string? ReasonOfReject { get; set; } = string.Empty;
