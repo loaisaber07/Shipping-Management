@@ -79,7 +79,7 @@ namespace Shippping_Managment.Controllers
 
         }
 
-        [Authorize(Policy = "AdminOrSeller")]
+        [Authorize(Roles = "Admin,Employee,Seller")]
         [HttpGet]
         [Route("GetOrderById/{id:int}")]
         public async Task<ActionResult> GetOrderById(int id)

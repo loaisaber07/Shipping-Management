@@ -134,6 +134,7 @@ namespace Data_Access_Layer.Repositry
                          .Orders
                          .AsNoTracking()
                          .Include(s => s.Products)
+                         .Include(s => s.OrderStatus)
                          .Where(s => s.SellerID == sellerId);
                         
         }
