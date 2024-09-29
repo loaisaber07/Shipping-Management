@@ -68,7 +68,7 @@ namespace Shippping_Managment.Controllers
         }
         
         [HttpGet]
-        [Route("Dashboard")]
+        [Route("/Dashboard")]
         public async Task<ActionResult> Dashboard() { 
             string? id = HttpContext.User.FindFirst("userID")?.Value;
             ApplicationUser? user = await userManager.FindByIdAsync(id);

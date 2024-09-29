@@ -121,6 +121,7 @@ namespace Business_Layer.Services.Order
                 IsForVillage = s.IsForVillage,
                 Note = s.Note,
                 OrderStatusID = s.OrderStatusID,
+                OrderStatusName = s.OrderStatus.Name,
                 SellerID = s.SellerID,
                 TypeOfChargeID = s.TypeOfChargeID,
                 TypeOfPaymentID = s.TypeOfPaymentID,

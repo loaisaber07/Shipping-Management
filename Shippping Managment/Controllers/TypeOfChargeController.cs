@@ -47,6 +47,22 @@ namespace Shippping_Managment.Controllers
             IEnumerable<GetTypeOfChargeDTO> get = TypeOfChargeService.getTypeOfChargeDTOs(typeOfCharges);
             return Ok(get);
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GettypeOfChargeByID(int id)
+        {
+            TypeOfCharge? c = await chargeRepo.GetAsyncById(id);
+            if (c == null)
+            {
+                return NotFound(new { Message = "Type of Payment Not Found" });
+            }
+            GetTypeOfChargeDTO dto = new()
+            {
+                Id = c.ID,
+                Name = c.Name,
+                Cost = c.Cost
+            };
+            return Ok(dto);
+        }
         [HttpPut]
         [Authorize(Policy = "Admin")]
 

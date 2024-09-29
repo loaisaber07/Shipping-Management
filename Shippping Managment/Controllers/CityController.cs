@@ -26,6 +26,22 @@ namespace Shippping_Managment.Controllers
             IEnumerable<GetCityDTO> list=CityService.MappingCity(cities);
             return Ok(list);
         }
+        [HttpGet("{id}")]
+        [Authorize(Policy = "AdminOrEmployee")]
+        public async Task<ActionResult> GetCityById(int id)
+        {
+            City? city = await cityRepo.GetAsyncById(id);
+            if (city is null) return NotFound(new {Message = "City Not Found"});
+            EditCityDTO dto = new()
+            {
+                Id = city.ID,
+                Name = city.Name,
+                NormalCharge = city.NormalCharge,
+                PickUpCharge = city.PickUpCharge,
+                GovernID = city.GovernID
+            };
+            return Ok(dto);
+        }
         [HttpPut]
         [Authorize(Policy = "Admin")]
 
