@@ -14,7 +14,7 @@ namespace Data_Access_Layer.Custom_Validation
         {
             if (value != null)
             {
-                var context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
+                ShippingDataBase? context = (ShippingDataBase)validationContext.GetService(typeof(ShippingDataBase));
                 string? id = context?.agents.FirstOrDefault(s => s.UserName == value.ToString())?.Id;
                 if (id is null)
                 {
