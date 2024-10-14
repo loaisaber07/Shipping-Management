@@ -18,7 +18,8 @@ using System.Text;
 
 namespace Shippping_Managment.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -38,6 +39,7 @@ namespace Shippping_Managment.Controllers
         }
 
         [HttpPost]
+       
         public async Task<ActionResult> Login(LoginRequestDTO log)
         {
             if (!ModelState.IsValid)

@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Shippping_Managment.RepositoyContainer;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Shippping_Managment
 {
@@ -23,7 +24,17 @@ namespace Shippping_Managment
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(op => {
+                    op.JsonSerializerOptions.PropertyNamingPolicy = null;
+                    op.JsonSerializerOptions.PropertyNameCaseInsensitive = true; 
+                    op.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                });
+            builder.Services.AddApiVersioning(op => { 
+            op.DefaultApiVersion=new Microsoft.AspNetCore.Mvc.ApiVersion(1,0);
+                op.AssumeDefaultVersionWhenUnspecified = true; 
+            
+            }); 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -52,7 +63,7 @@ namespace Shippping_Managment
             //builder.Services.AddScoped<ITypeOfOffer,TypeOfOfferRepository>();
             //builder.Services.AddScoped<IAgent, AgentRepository>();
             //builder.Services.AddScoped<InvoiceService>(); 
-            builder.Services.AddRepository(); 
+            builder.Services.AddRepository();
             var jwtSetting = builder.Configuration.GetSection("JwtSetting");
             var keyBase64 = jwtSetting["SecretKey"];
             var key = Convert.FromBase64String(keyBase64);

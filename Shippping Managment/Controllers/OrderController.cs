@@ -93,7 +93,8 @@ namespace Shippping_Managment.Controllers
             return Ok(orderDTO);
         }
         [Authorize(Policy = "Admin")]
-        [HttpPost("AdminAddOrder")]
+        [HttpPost]
+        [Route("AdimnAddOrder")]
         public async Task<ActionResult> AdminAddOrder(AdminAddOrderDTO orderDTO)
         {
             if (!ModelState.IsValid)
