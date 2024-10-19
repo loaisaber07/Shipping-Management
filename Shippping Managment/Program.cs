@@ -1,5 +1,6 @@
 using Business_Layer.Services;
 using Data_Access_Layer;
+using Data_Access_Layer.AppSetting;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
 using Data_Access_Layer.Repositry;
@@ -36,7 +37,8 @@ namespace Shippping_Managment
             
             }); 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddEndpointsApiExplorer(); 
+          
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ShippingDataBase>(option => {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("default"));
@@ -44,31 +46,12 @@ namespace Shippping_Managment
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ShippingDataBase>();
             builder.Services.AddScoped<ICity,CityRepository>();
-
-            //builder.Services.AddScoped<IGovern,GovernRepository>();
-            //builder.Services.AddScoped<IBranch, BranchRepository>();
-            //builder.Services.AddScoped<IFieldJob, FieldJobRepository>();
-            //builder.Services.AddScoped<IFieldPrivilege, FiledPrivilegeRepository>();
-            //builder.Services.AddScoped<IPrivilege, PrivilegeRepository>();
-            //builder.Services.AddScoped<IUser, User>();
-            //builder.Services.AddScoped<IProduct, ProductRepository>();
-            //builder.Services.AddScoped<ITypeOfPayment, TypeOfPaymentRepository>();
-            //builder.Services.AddScoped<ITypeOfCharge, TypeOfChargeRepository>();
-            //builder.Services.AddScoped<IOrderStatus, OrderStatusRepository>();
-            //builder.Services.AddScoped<IOrder,OrderRepository>();
-            //builder.Services.AddScoped<ISpecialCharge, SpecialChargeRepo>();
-            //builder.Services.AddScoped<ISeller, SellerRepository>();
-            //builder.Services.AddScoped<IWeight,WeightRepository>();
-            //builder.Services.AddScoped<ITypeOfReceipt, TypeOfReceiptRepository>();
-            //builder.Services.AddScoped<ITypeOfOffer,TypeOfOfferRepository>();
-            //builder.Services.AddScoped<IAgent, AgentRepository>();
-            //builder.Services.AddScoped<InvoiceService>(); 
             builder.Services.AddRepository();
+            builder.Services.Configure<JwtSetting>(builder.Configuration.GetSection("JwtSetting"));
             var jwtSetting = builder.Configuration.GetSection("JwtSetting");
             var keyBase64 = jwtSetting["SecretKey"];
             var key = Convert.FromBase64String(keyBase64);
             var secretKey = new SymmetricSecurityKey(key);
-
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -178,7 +161,7 @@ namespace Shippping_Managment
             app.UseAuthorization();
 
 
-            app.MapControllers();
+            app.MapControllers(); 
 
             app.Run();
         }

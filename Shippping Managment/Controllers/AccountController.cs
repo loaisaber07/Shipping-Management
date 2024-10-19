@@ -1,5 +1,6 @@
     using Business_Layer.DTO;
 using Business_Layer.Services.FieldJob;
+using Data_Access_Layer.AppSetting;
 using Data_Access_Layer.DTO.FieldJob;
 using Data_Access_Layer.Entity;
 using Data_Access_Layer.Interfaces;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RTools_NTS.Util;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,15 +29,19 @@ namespace Shippping_Managment.Controllers
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IFieldJob fieldJobRepo;
+        private readonly JwtSetting config;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
-           RoleManager<IdentityRole> roleManager, IFieldJob fieldJobRepo)
+           RoleManager<IdentityRole> roleManager,
+           IFieldJob fieldJobRepo , 
+           IOptions<JwtSetting> _config)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
             this.fieldJobRepo = fieldJobRepo;
+            config = _config.Value;
         }
 
         [HttpPost]
@@ -181,8 +187,8 @@ namespace Shippping_Managment.Controllers
                 userClaims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var jwtSetting = configuration.GetSection("JwtSetting");
-            var keyBase64 = jwtSetting["SecretKey"];
+            //var jwtSetting = configuration.GetSection("JwtSetting");
+            var keyBase64 = config.SecretKey; 
             var key = Convert.FromBase64String(keyBase64);
             var secretKey = new SymmetricSecurityKey(key);
 
